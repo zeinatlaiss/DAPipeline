@@ -224,94 +224,6 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe", "Aggregated grouping by"))
 
-    # def create_tablewidget(self):
-    #     file = self.lineEdit_filepath.text()
-    #     df = pd.read_csv(file)
-
-    #     nRows = len(df.index)
-    #     nColumns = len(df.columns)
-    #     self.tableWidget_toaddclasses.setRowCount(nRows)
-    #     self.tableWidget_toaddclasses.setColumnCount(nColumns)
-    #     self.tableWidget_toaddclasses.setItemDelegate(FloatDelegate())
-    #     for i in range(self.rowCount()):
-    #         for j in range(self.columnCount()):
-    #             x = '{:.3f}'.format(self.df.iloc[i, j])
-    #             self.setItem(i, j, QTableWidgetItem(x))
-
-    # def on_addclasses_clicked(self):
-    #     print('pressed')
-
-    # def on_addclasses_clicked(self):
-    #     print('1')
-    #     file = self.lineEdit_filepath.text()
-    #     Ui_form_table_addclasses.sh
-    #
-
-    # my_dir = QFileDialog.getExistingDirectory(
-    #     None,
-    #     "Select input folder",
-    #     "",
-    #     QFileDialog.ShowDirsOnly)
-    # if my_dir:
-    #     list_files = []
-    #     for root, dirs, files in os.walk(my_dir):
-    #         i = 0
-    #         if len(files) >= 2:
-    #             df_test = pd.read_csv(root + '\\' + files[1])
-    #             if 'Class' in df_test.columns:
-    #                 QMessageBox.information(None, "Error ",
-    #                                         "The column class already exists in one of your files!\nNo file to save.",
-    #                                         QMessageBox.Ok)
-    #             if 'Class' not in df_test.columns:
-    #                 out_dir = QFileDialog.getExistingDirectory(
-    #                     None,
-    #                     "Select output folder",
-    #                     "",
-    #                     QFileDialog.ShowDirsOnly)
-    #                 if out_dir:
-    #                     for file_read in files:
-    #                         df_filebyfile = pd.read_csv(root + '\\' + file_read)
-    #                         df_filebyfile['Class'] = 3
-    #                         df_filebyfile.loc[df_filebyfile['Well'].str.contains('01'), 'Class'] = 0
-    #                         df_filebyfile.loc[df_filebyfile['Well'].str.contains('02'), 'Class'] = 0
-    #                         df_filebyfile.loc[df_filebyfile.Well.str.contains('03'), 'Class'] = 1
-    #                         df_filebyfile.loc[df_filebyfile.Well.str.contains('04'), 'Class'] = 2
-    #                         df_filebyfile.to_csv(out_dir + '\\' + 'withclasses_' + file_read, index=None)
-    #                         list_files.append(df_filebyfile)
-    #                         i += 1
-    #                         b = pd.DataFrame(pd.concat(list_files, axis=0))
-    #                     buttonReply = QMessageBox.question(None, 'Concatenated file',
-    #                                                        "Press Yes if you want to save the concatenated file.\n"
-    #                                                        "Press No to ignore.",
-    #                                                        # "Do you like PyQt5?",
-    #                                                        QMessageBox.Yes | QMessageBox.No,
-    #                                                        QMessageBox.Yes)
-    #                     if buttonReply == QMessageBox.Yes:
-    #                         b.to_csv(out_dir + '\\' + 'Concat_withclasses.csv', index=None)
-    #                         self.reloaddata_fromfilepath(out_dir +
-    #                                                      '\\' + 'Concat_withclasses.csv')
-    #                     if buttonReply == QMessageBox.No:
-    #                         self.reloaddata_fromdataframe(b, 9)
-    #         if len(files) < 2:
-    #             df_test = pd.read_csv(root + '\\' + files[0])
-    #             if 'Class' in df_test.columns:
-    #                 QMessageBox.information(None, "Error ",
-    #                                         "The column class already exists in the file\nNo file to save",
-    #                                         QMessageBox.Ok)
-    #             if 'Class' not in df_test.columns:
-    #                 for file_read in files:
-    #                     df_1file = pd.read_csv(root + '\\' + file_read)
-    #                     df_1file['Class'] = 3
-    #                     df_1file.loc[df_1file['Well'].str.contains('01'), 'Class'] = 0
-    #                     df_1file.loc[df_1file['Well'].str.contains('02'), 'Class'] = 0
-    #                     df_1file.loc[df_1file.Well.str.contains('03'), 'Class'] = 1
-    #                     df_1file.loc[df_1file.Well.str.contains('04'), 'Class'] = 2
-    #                     df_1file.to_csv(out_dir + '\\' + 'withclasses_' + file_read, index=None)
-    #                     self.reloaddata_fromDF(df_1file)
-    #                 QMessageBox.information(None, "Column Class",
-    #                                         "The column class has been successfully added to the file\nSuccessfully saved the file",
-    #                                         QMessageBox.Ok)
-
     def on_normalize_changed(self, value_nor):
         if (value_nor == "Mean"):
             QMessageBox.information(None, "Not imp",
@@ -338,39 +250,35 @@ class Ui_Form_loadDataframe(object):
                 columnname = self.select_column()
                 df = pd.read_csv(file)
                 df['Check_if_String'] = [isinstance(x, str) for x in df[columnname]]
-                if [~df.isin([np.nan, np.inf, -np.inf]).any(1)]:
-                    print('y')
-                    mean_df = df[columnname].mean()
-                    print('pp')
-                    std_df = df[columnname].std()
-                    print('okk')
-                    QMessageBox.information(None, "Mean and STD ",
-                                            "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
+                if df['Check_if_String'].any() == True:
+                    QMessageBox.information(None, "Error",
+                                            "The column " + columnname + " selected contains string.\nPlease select another column.",
                                             QMessageBox.Ok)
 
-                if [df.isin([np.nan, np.inf, -np.inf, np.str]).all()]:
-                    buttonReply = QMessageBox.question(None, 'Concatenated file',
-                                                       "Press Yes to ignore nan, inf, or string in the rows and to continue the computation\n"
-                                                       "\nPress No otherwise.",
-                                                       # "Do you like PyQt5?",
-                                                       QMessageBox.Yes | QMessageBox.No,
-                                                       QMessageBox.Yes)
+                if df['Check_if_String'].any() == False:
+                    if df[columnname].isna().any() == True or  df[columnname].isnull().any() == True:
+                        print('1')
+                        buttonReply = QMessageBox.question(None, 'Mean and STD',
+                                        "The column " + columnname + " selected contains nan or inf values.\n"
+                                                                     "Press Yes if you want to ignore the inf and nan values.\n"
+                                                                     "Press No to select another column.\n",
+                                        QMessageBox.Yes | QMessageBox.No,
+                                        QMessageBox.Yes)
+                        if buttonReply == QMessageBox.Yes:
+                            mean_df = df[columnname].mean()
+                            std_df = df[columnname].std()
+                            QMessageBox.information(None, "Mean and STD ",
+                                                    "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
+                                                    QMessageBox.Ok)
 
-                    if buttonReply == QMessageBox.Yes:
-                        print('dd')
-                        dd = df[~df.isin([np.nan, np.inf, -np.inf]).any(1)]
-                        dd.to_csv('row.csv')
-                        mean_df = dd[columnname].mean()
-                        std_df = dd[columnname].std()
+                        if buttonReply == QMessageBox.No:
+                            print('no pressed')
+                    if df[columnname].isna().any() == False:
+                        mean_df = df[columnname].mean()
+                        std_df = df[columnname].std()
                         QMessageBox.information(None, "Mean and STD ",
                                                 "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
                                                 QMessageBox.Ok)
-                        print('out')
-
-                        if buttonReply == QMessageBox.No:
-                            QMessageBox.information(None, "Error ",
-                                                    "The column chosen contains nan inf or string. We cannot continue the data processing.\nNo file to save",
-                                                    QMessageBox.Ok)
 
         self.comboBox_statistics.setCurrentText("Statistics")
 
@@ -392,11 +300,9 @@ class Ui_Form_loadDataframe(object):
                                                            "",
                                                            "CSV Files (*.csv)")
                 if fileName2:
-                    print('f')
                     file2 = pd.read_csv(fileName2)
                     inter = file2[file2[header].isin(file1[header])]
                     if len(inter) == 0:
-                        print('y')
                         QMessageBox.information(None, "Error ",
                                                 "No intersecton between the 2 files.\nNo file to save.",
                                                 QMessageBox.Ok)
@@ -834,7 +740,6 @@ class Ui_Form_loadDataframe(object):
                                 data_dropped.to_csv(outfile, index=None)
                                 self.lineEdit_filepath.setText(
                                     out_dir + '/' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv')
-                                # self.reloaddata_fromdataframe(data_dropped)
                                 QMessageBox.information(None, "Outliers",
                                                         str(len(df_toremoveout) - len(data_dropped)) +
                                                         " outliers have been removed using the column " + str(
@@ -940,7 +845,6 @@ class Ui_Form_loadDataframe(object):
         list_col = []
         totalColumns = self.tableView_dataframe.selectionModel().selectedColumns()
         for idx in totalColumns:
-            # txt =  u"(%i,%i)" % (idx.row(), idx.column())
             column_name = self.tableView_dataframe.model().headerData(idx.column(), QtCore.Qt.Horizontal,
                                                                       QtCore.Qt.DisplayRole)
             list_col.append(column_name)
@@ -1101,9 +1005,6 @@ class Ui_Form_loadDataframe(object):
                     sns.barplot(x=header_xaxis, y=df_1[header_yaxis4], data=df_1, capsize=.5, ci='sd', ax=axs[1, 1])
                     sns.swarmplot(x=header_xaxis, y=df_1[header_yaxis4], data=df_1, size=3, color='orange',
                                   ax=axs[1, 1])
-                    # plt.xticks(rotation=45, size=5)
-                    # plt.xticks(rotation=45)
-                    # fig.suptitle(value_entered)
                     plt.show()
 
                 if len(header) == 2:
@@ -1152,7 +1053,6 @@ class Ui_Form_loadDataframe(object):
                     sns.barplot(x=header_xaxis, y=df_1[header_yaxis4], data=df_1, capsize=.0, ci=False, ax=axs[1, 1])
                     sns.swarmplot(x=header_xaxis, y=df_1[header_yaxis4], data=df_1, size=3, color='orange',
                                   ax=axs[1, 1])
-                    # fig.suptitle(value_entered)
                     plt.xticks(rotation=0, size=10)
                     plt.show()
 
@@ -1216,7 +1116,6 @@ class Ui_Form_loadDataframe(object):
 
                     if (len(df['Plate_Well']) - df['Plate_Well'].nunique() == 0):
                         df.set_index('Plate_Well', inplace=True)
-                        # df1 = pd.read_csv(file, index_col=['Plate_Well'])
                         fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Platebarcode and CPD_ID",
                                                                        "",
                                                                        "CSV Files (*.csv)")
@@ -1470,11 +1369,9 @@ class Ui_Form_loadDataframe(object):
                 df = pd.read_csv(file)
                 header = self.select_column()
                 if len(header) == 0:
-                    # if (header == df.iloc[:, -1].name):
                     QMessageBox.information(None, "Error ",
                                             "You must select a column No file to save \nTry again",
                                             QMessageBox.Ok)
-                # if (header != df.iloc[:, -1].name):
                 if len(header) > 1:
                     new_value, okPressed = QInputDialog.getText(None, "Value to rename value in column " + str(header),
                                                                 "Column name ",
@@ -1549,10 +1446,7 @@ class Ui_Form_loadDataframe(object):
                                                 "Columns: " + str(
                                                     header) + " have been dropped from your file!\nFile successfully saved.",
                                                 QMessageBox.Ok)
-                    # if fileoutput not in os.walk(out_dir):
-                    #     self.reloaddata_fromDF(d_dropped)
-                    #     d_dropped.to_csv(my_dir + '\\' + t1 + '_' + fileoutput, index=None)
-                    #     self.lineEdit_filepath.setText(my_dir + '/' + '_file_droppedcolumn_' + '.csv')
+
             self.comboBox_dropfrom.setCurrentText('Drop / Change')
 
         if (val == 'Drop from rows'):
@@ -1711,7 +1605,6 @@ class Ui_Form_loadDataframe(object):
         if 'CPD_ID' in dataframe.columns and 'BATCH_ID' in dataframe.columns:
             self.label_nbcpdid.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
-            # self.label_nbbatchid.setText(str(df['CPDid_BATCHid'].nunique()) + ' unique CPD_BATCH')
         if 'CPD_ID' not in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
             self.label_nbcpdid.setText('No CPD_ID')
             self.label_nbbatchid.setText('No BATCH_ID')
