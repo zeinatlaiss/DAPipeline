@@ -7,11 +7,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QScrollArea
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QObject, pyqtSignal
 import pandas as pd
-# from Load_Pandas import PandasModel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from functions_ddef import plotFie
 
 class PandasModel(QtCore.QAbstractTableModel):
     def __init__(self, df = pd.DataFrame(), parent=None):
@@ -146,7 +144,7 @@ class Pandas_Widget(QtWidgets.QWidget):
             print('you should choose a plot')
 
     def loadFile(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open File", "D:\RESULTS\Plates_SMARCA2\SMARCA2-test lipo-261018\Concat_Files\\", "CSV Files (*.csv)")
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open File", "D:\\", "CSV Files (*.csv)")
         self.pathLE.setText(fileName)
         df = pd.read_csv(fileName)
         self.labelplate.setText(str(df['Plate'].nunique())+ ' plates')
