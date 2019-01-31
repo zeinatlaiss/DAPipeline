@@ -126,10 +126,7 @@ class Pandas_Widget(QtWidgets.QWidget):
     def AddDataframeToTable(self):
         print('Not imp yet')
 
-        # sys.exit(win.exec_())
     def selectionchange_plot(self, i):
-        # for count in range(self.combobox_plot.count()):
-            # print(self.combobox_plot.itemText(count))
         data_pd = Pandas_Widget.loadFile
         if (self.combobox_plot.currentText() == "Scatter Plot"):
             print("Current index", i, "selection changed ", self.combobox_plot.currentText())
@@ -144,7 +141,7 @@ class Pandas_Widget(QtWidgets.QWidget):
             print('you should choose a plot')
 
     def loadFile(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open File", "D:\\", "CSV Files (*.csv)")
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open File", "", "CSV Files (*.csv)")
         self.pathLE.setText(fileName)
         df = pd.read_csv(fileName)
         self.labelplate.setText(str(df['Plate'].nunique())+ ' plates')
@@ -165,21 +162,5 @@ class Pandas_Widget(QtWidgets.QWidget):
         pdmodel = PandasModel()
         w = Pandas_Widget(pdmodel)
         w.loadFile()
-        # w.setFocus(QtCore.Qt.PopupFocusReason)
         w.show()
         sys.exit(subapp.exec_())
-
-# # if __name__ == "__main__":
-# # #
-#     app = QtWidgets.QApplication(sys.argv)
-#     w = PandasModel()
-#     # w = Pandas_Widget(pdmodel)
-#     # w.loadFile()
-#     # w.show()
-#     sys.exit(app.exec_())
-#     # app = QtWidgets.QApplication(sys.argv)
-#     # pdmodel = PandasModel()
-#     # w = Pandas_Widget(pdmodel)
-#     # w.loadFile()
-#     # w.show()
-#     # sys.exit(app.exec_())
