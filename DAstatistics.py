@@ -4,8 +4,9 @@ import seaborn as sns
 import os
 from PyQt5.QtWidgets import *
 import pandas as pd
-
 from DApandaswidget import PandasModel
+import form_listofplates
+from form_listofplates import *
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe.ui'
@@ -15,7 +16,6 @@ from DApandaswidget import PandasModel
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Form_loadDataframe(object):
     def setupUi(self, Form_loadDataframe):
@@ -48,11 +48,11 @@ class Ui_Form_loadDataframe(object):
         self.pushButton_concatfiles.setGeometry(QtCore.QRect(720, 60, 101, 21))
         self.pushButton_concatfiles.setObjectName("pushButton_concatfiles")
         self.lineEdit_plate = QtWidgets.QLabel(Form_loadDataframe)
-        self.lineEdit_plate.setGeometry(QtCore.QRect(20, 110, 91, 16))
+        self.lineEdit_plate.setGeometry(QtCore.QRect(30, 110, 91, 16))
         self.lineEdit_plate.setText("")
         self.lineEdit_plate.setObjectName("lineEdit_plate")
         self.lineEdit_well = QtWidgets.QLabel(Form_loadDataframe)
-        self.lineEdit_well.setGeometry(QtCore.QRect(150, 110, 81, 16))
+        self.lineEdit_well.setGeometry(QtCore.QRect(160, 110, 81, 16))
         self.lineEdit_well.setText("")
         self.lineEdit_well.setObjectName("lineEdit_well")
         self.tableView_dataframe = QtWidgets.QTableView(Form_loadDataframe)
@@ -139,20 +139,27 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_aggregate.addItem("")
         self.comboBox_aggregate.addItem("")
         self.label_nbcpdid = QtWidgets.QLabel(Form_loadDataframe)
-        self.label_nbcpdid.setGeometry(QtCore.QRect(250, 110, 101, 16))
+        self.label_nbcpdid.setGeometry(QtCore.QRect(260, 110, 101, 16))
         self.label_nbcpdid.setText("")
         self.label_nbcpdid.setObjectName("label_nbcpdid")
         self.label_nbbatchid = QtWidgets.QLabel(Form_loadDataframe)
-        self.label_nbbatchid.setGeometry(QtCore.QRect(360, 110, 111, 16))
+        self.label_nbbatchid.setGeometry(QtCore.QRect(370, 110, 111, 16))
         self.label_nbbatchid.setText("")
         self.label_nbbatchid.setObjectName("label_nbbatchid")
         self.label_nbrrows = QtWidgets.QLabel(Form_loadDataframe)
-        self.label_nbrrows.setGeometry(QtCore.QRect(490, 110, 101, 16))
+        self.label_nbrrows.setGeometry(QtCore.QRect(500, 110, 101, 16))
         self.label_nbrrows.setText("")
         self.label_nbrrows.setObjectName("label_nbrrows")
+        self.pushButton_getlistofplates = QtWidgets.QPushButton(Form_loadDataframe)
+        self.pushButton_getlistofplates.setGeometry(QtCore.QRect(10, 110, 16, 21))
+        self.pushButton_getlistofplates.setText("")
+        self.pushButton_getlistofplates.setIconSize(QtCore.QSize(0, 0))
+        self.pushButton_getlistofplates.setObjectName("pushButton_getlistofplates")
+        # self.dialog.show()
+        # self.dialog.lineEdit_filepath_to_listofplates.setText('ok')
+
         self.lineEdit_filepath.setText('File path')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
-        self.pushButton_addclasses.clicked.connect(self.on_addclasses_clicked)
         self.pushButton_concatfiles.clicked.connect(self.on_concatenatefiles_clicked)
         # self.pushButton_addclasses.clicked.connect(self.on_addclasses_clicked)
         self.comboBox_duplicates.currentTextChanged.connect(self.on_comboboxduplicates_changed)
@@ -166,13 +173,14 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_normalize.currentTextChanged.connect(self.on_normalize_changed)
         self.comboBox_plot.currentTextChanged.connect(self.on_plot_changed)
         self.comboBox_aggregate.currentTextChanged.connect(self.on_comboboxaggregate_changed)
-
+        self.pushButton_getlistofplates.clicked.connect(self.on_getlistofplates_clicked)
+        self.dialogs = list()
         self.retranslateUi(Form_loadDataframe)
         QtCore.QMetaObject.connectSlotsByName(Form_loadDataframe)
 
     def retranslateUi(self, Form_loadDataframe):
         _translate = QtCore.QCoreApplication.translate
-        Form_loadDataframe.setWindowTitle(_translate("Form_loadDataframe", "Form"))
+        Form_loadDataframe.setWindowTitle(_translate("Form_loadDataframe", "Pandas form"))
         self.pushButton_loadfile.setText(_translate("Form_loadDataframe", "Load File"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe", "Plot"))
         self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe", "Correlation"))
@@ -202,8 +210,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_normalize.setItemText(2, _translate("Form_loadDataframe", "Mean"))
         self.comboBox_normalize.setItemText(3, _translate("Form_loadDataframe", "Min-Max"))
         self.comboBox_removeoutliers.setItemText(0, _translate("Form_loadDataframe", "Remove outliers"))
-        self.comboBox_removeoutliers.setItemText(1, _translate("Form_loadDataframe",
-                                                               "Mean-value*sigma <value< Mean+value*sigma"))
+        self.comboBox_removeoutliers.setItemText(1, _translate("Form_loadDataframe", "Mean-value*sigma <value< Mean+value*sigma"))
         self.comboBox_removeoutliers.setItemText(2, _translate("Form_loadDataframe", "> mean"))
         self.comboBox_removeoutliers.setItemText(3, _translate("Form_loadDataframe", "> value"))
         self.comboBox_extracthits.setItemText(0, _translate("Form_loadDataframe", "Detect compounds"))
@@ -310,12 +317,17 @@ class Ui_Form_loadDataframe(object):
                         QMessageBox.information(None, "Intersection",
                                                 "The number of intersected data = " + str(len(inter)) + "\nSaved file.",
                                                 QMessageBox.Ok)
-                        t1 = fileName1.split('/')[2]
-                        t2 = fileName1.split('/')[0]
-                        t3 = fileName1.split('/')[1]
-                        outfile = t2 + '\\' + t3 + '\\' + t1 + '\\' + t1 + '_intersection.csv'
+                        # t1 = fileName1.split('/')[2]
+                        # t2 = fileName1.split('/')[0]
+                        # t3 = fileName1.split('/')[1]
+                        t1 = os.path.dirname(fileName2)
+                        file_name1 = os.path.splitext(os.path.basename(fileName1))[0]
+                        file_name2 = os.path.splitext(os.path.basename(fileName2))[0]
+                        print(fileName1)
+                        print(fileName2)
+                        outfile = t1 + '\\' + 'intersection_' + file_name1
                         inter.to_csv(outfile, index=None)
-                        self.lineEdit_filepath.setText(t2 + '//' + t3 + '//' + t1 + '//' + t1 + '_intersection.csv')
+                        self.lineEdit_filepath.setText(t1 + '/' + 'intersection.csv')
                         self.setPlateWellText_intblview(inter)
                         self.reloaddata_fromfilepath(outfile)
             self.comboBox_statistics.setCurrentText("Statistics")
@@ -891,27 +903,36 @@ class Ui_Form_loadDataframe(object):
             model = PandasModel(df.head(100))
             self.tableView_dataframe.setModel(model)
         if not self.lineEdit_filepath.setText('reloaded data'):
+            print('1')
             model = PandasModel(df.head(100))
             self.tableView_dataframe.setModel(model)
             if ('Plate' in df.columns and 'Well' in df.columns):
+                print('222')
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
+                print('222')
 
             if ('Plate' not in df.columns and 'Well' not in df.columns):
+                print('3333')
                 self.lineEdit_plate.setText('No plate')
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
+                print('3333')
 
             if ('Plate' not in df.columns and 'Well' in df.columns):
+                print('444')
                 self.lineEdit_plate.setText('No plate')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
+                print('444')
 
             if ('Plate' in df.columns and 'Well' not in df.columns):
+                print('555')
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
+                print('555')
 
     def setPlateWellText_intblview(self, df):
         self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' unique plate')
@@ -967,6 +988,38 @@ class Ui_Form_loadDataframe(object):
     def on_plot_changed(self, vl):
         if (vl == 'Correlation'):
             file = self.lineEdit_filepath.text()
+            if file == 'File path':
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != 'File path':
+                df_data1 = pd.read_csv(file)
+                if 'Class' not in df_data1.columns:
+                    QMessageBox.information(None, "Error ",
+                                            "Columns class is missing from the file.\nPlease add the column Class first.",
+                                            QMessageBox.Ok)
+                header1 = self.select_column()
+
+                if 'Class' in df_data1.columns and header1 in df_data1.columns:
+                    file2, _ = QFileDialog.getOpenFileName(None, "Load second file to plot the correlation",
+                                                                   "",
+                                                                   "CSV Files (*.csv)")
+                    if file2:
+                        df_data2 = pd.read_csv(file2)
+                        self.reloaddata_fromfilepath(file2)
+                        self.lineEdit_filepath.setText(str(file2))
+                        if header1:
+                            print('1')
+                            if 'Class' in df_data1.columns:
+                                if 'Class' in df_data2.columns:
+                                    df_data1 = df_data1[df_data1['Class'] == 3]
+                                    df_data2 = df_data2[df_data2['Class'] == 3]
+                                    print('CORRELATION = ' + header1, np.corrcoef(df_data1[header1].values, df_data2[header1]))
+                                    plt.scatter(df_data1['Perc_SenescentCells'].values, df_data2['Perc_SenescentCells'].values)
+                                    plt.ylim([0, 2])
+                                    plt.xlim([0, 2])
+                                    plt.show()
+        self.comboBox_plot.setCurrentText("Plot")
 
         if (vl == 'Swarm plot with error bar'):
             file = self.lineEdit_filepath.text()
@@ -1109,33 +1162,44 @@ class Ui_Form_loadDataframe(object):
                 file = self.lineEdit_filepath.text()
                 df = pd.read_csv(file)
                 if 'Plate_Well' in df.columns:
+                    print('okk')
                     if (len(df['Plate_Well']) - df['Plate_Well'].nunique() > 0):
+                        print('in')
                         QMessageBox.information(None, "Error ",
                                                 "The column Plate_Well has duplicated values, you cannot link the file \n No file to save",
                                                 QMessageBox.Ok)
 
                     if (len(df['Plate_Well']) - df['Plate_Well'].nunique() == 0):
+                        print('nk')
                         df.set_index('Plate_Well', inplace=True)
                         fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Platebarcode and CPD_ID",
                                                                        "",
                                                                        "CSV Files (*.csv)")
+                        print('mvm')
                         if fileName_cpds:
                             df_withcpds = pd.read_csv(fileName_cpds, index_col=['Plate_Well'], low_memory=False)
+                            print('mm')
                             my_dir_finalfile = QFileDialog.getExistingDirectory(
                                 None,
                                 "Select output folder",
                                 "",
                                 QFileDialog.ShowDirsOnly)
+                            print('fm')
                             t1 = my_dir_finalfile.split('/')[2]
+                            print('jjj')
                             df['CPD_ID'] = df_withcpds['X_CPD_ID']
+                            print('ehy')
                             df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
+                            print('jfjf')
                             df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
                             df['Concentration'] = df_withcpds['Concentration (uM)']
                             df.to_csv(my_dir_finalfile + '\\' + t1 + '_LinkedFile.csv')
+                            print('nfn')
                             QMessageBox.information(None, "File linked ",
                                                     "Successfully linked and saved the file!",
                                                     QMessageBox.
                                                     Ok)
+                            print('bsb')
                             self.reloaddata_fromDF(df)
 
                 if 'Plate_Well' not in df.columns:
@@ -1157,18 +1221,24 @@ class Ui_Form_loadDataframe(object):
                                                     QMessageBox.Ok)
 
                         if (len(df['Plate_Well']) - df['Plate_Well'].nunique() == 0):
+                            print('in')
                             fileName_platebarcode, _ = QFileDialog.getOpenFileName(None,
                                                                                    "Load File with Platebarcode and CPD_ID",
                                                                                    "D:\RESULTS\\test_GUI\\",
                                                                                    "CSV Files (*.csv)")
                             if fileName_platebarcode:
+                                print('out')
+
 
                                 df_withcpds = pd.read_csv(fileName_platebarcode, index_col=['PLATEBARCODE'],
                                                           low_memory=False)
                                 fileName_sanofi, _ = QFileDialog.getOpenFileName(None, "Load File with Plate sanofi",
                                                                                  "D:\RESULTS\\test_GUI\\",
                                                                                  "CSV Files (*.csv)")
+                                print('ok')
                                 if fileName_sanofi:
+                                    print('lol')
+
                                     df_Platetracking = pd.read_csv(fileName_sanofi, low_memory=False)
                                     if 'cpds_plate' not in df_Platetracking:
                                         QMessageBox.information(None, "Error",
@@ -1178,9 +1248,11 @@ class Ui_Form_loadDataframe(object):
                                         df_Platetracking = pd.read_csv(fileName_sanofi, index_col=['cpds_plate'],
                                                                        low_memory=False)
                                         df_withcpds['Plate'] = df_Platetracking['cells_plate']
+                                        print('1')
 
                                         df_withcpds['Plate_Well'] = df_withcpds['Plate'] + '_' + df_withcpds['WELL']
                                         df_withcpds.fillna("Nothing", inplace=True)
+                                        print('2')
                                         d = df_withcpds.drop(
                                             df_withcpds[(df_withcpds.Plate.str.contains("Nothing"))].index)
                                         d.to_csv(my_dir_finalfile + "\\" + t1 + '_Filewithcpds_and_Plate.csv',
@@ -1188,9 +1260,12 @@ class Ui_Form_loadDataframe(object):
                                         df_dropped = pd.read_csv(
                                             my_dir_finalfile + "\\" + t1 + '_Filewithcpds_and_Plate.csv',
                                             index_col=['Plate_Well'])
+                                        print('3')
                                         df['CPD_ID'] = df_dropped['X_CPD_ID']
                                         df['BATCH_ID'] = df_dropped['X_BATCH_ID']
+                                        print('4')
                                         df.to_csv(my_dir_finalfile + t1 + '_LinkedFile.csv', index=None)
+                                        print('5')
                                         QMessageBox.information(None, "File linked ",
                                                                 "Successfully linked and saved the file!",
                                                                 QMessageBox.Ok)
@@ -1450,66 +1525,121 @@ class Ui_Form_loadDataframe(object):
             self.comboBox_dropfrom.setCurrentText('Drop / Change')
 
         if (val == 'Drop from rows'):
-            if file == 'File path':
-                QMessageBox.information(None, "Error ",
-                                        "No loaded file.\nPlease load a file first.",
-                                        QMessageBox.Ok)
-            if file != 'File path':
-                header = self.select_column()
-                file = self.lineEdit_filepath.text()
-                df = pd.read_csv(file)
-                value_entered, okPressed = QInputDialog.getText(None, "Value to drop from rows", "Value to drop ",
-                                                                QLineEdit.Normal, "")
-                if (value_entered in df[header].values):
-                    my_dir = QFileDialog.getExistingDirectory(
-                        None,
-                        "Select output folder",
-                        "",
-                        QFileDialog.ShowDirsOnly)
-                    t1 = my_dir.split('/')[2]
-                    d = df[~(df[header].str.contains(value_entered, na=False))]
-                    d.to_csv(my_dir + '\\' + t1 + '_row_file_dropped.csv', index=None)
-                    self.lineEdit_filepath.setText(my_dir + '/' + t1 + '_row_file_dropped.csv')
-                    self.reloaddata_fromfilepath(my_dir + '\\' + t1 + '_row_file_dropped.csv')
-                    QMessageBox.information(None, "Dropped rows ",
-                                            "The value " + str(
-                                                value_entered) + " you entered has been dropped from column " + str(
-                                                header) + "\nSuccessfully saved the file!",
-                                            QMessageBox.Ok)
+            # import sys
+            # app = QtWidgets.QApplication(sys.argv)
+            # Form_CheckBoxes = QtWidgets.QWidget()
+            # ui_checkboxes = Ui_Form_CheckBoxes()
+            # ui_checkboxes.setupUi(Form_CheckBoxes)
+            # Form_CheckBoxes.show()
+            # sys.exit(app.exec_())
+            print('l')
 
-                    if ('Plate' in b.columns and 'Well' in b.columns):
-                        print('ee')
-                        self.lineEdit_plate.setText(str(b['Plate'].nunique()) + ' plates')
-                        self.lineEdit_well.setText(str(len(b['Well'])) + ' wells')
-                        self.getncpdsbatches(b)
+        # if file == 'File path':
+        #         QMessageBox.information(None, "Error ",
+        #                                 "No loaded file.\nPlease load a file first.",
+        #                                 QMessageBox.Ok)
+        #     if file != 'File path':
+        #         header = self.select_column()
+        #         file = self.lineEdit_filepath.text()
+        #         df = pd.read_csv(file)
+        #         header = self.select_column()
+        #         if np.where(df.applymap(lambda x: x == '')):
+        #             df[header].replace('', np.nan, inplace=True)
+        #             df.dropna(subset=[header], inplace=True)
+        #             dir = os.path.dirname(file)
+        #             file_name1 = os.path.splitext(os.path.basename(file))[0]
+        #             df.to_csv( dir + '\\'+ file_name1 + '_droppedNAN.csv')
 
-                    if ('Plate' not in b.columns and 'Well' not in b.columns):
-                        print('pp')
-                        self.lineEdit_plate.setText('No plate')
-                        self.lineEdit_well.setText('No wells')
-                        self.getncpdsbatches(b)
+        # if (val == 'Drop nan from rows'):
+        #     if file == 'File path':
+        #         QMessageBox.information(None, "Error ",
+        #                                 "No loaded file.\nPlease load a file first.",
+        #                                 QMessageBox.Ok)
+        #     if file != 'File path':
+        #         header = self.select_column()
+        #         file = self.lineEdit_filepath.text()
+        #         df = pd.read_csv(file)
+        #         value_entered, okPressed = QInputDialog.getText(None, "Value to drop from rows", "Value to drop ",
+        #                                                         QLineEdit.Normal, "")
+        #         # if type(value_entered) == int: #or type(value_entered) == float:
+        #
+        #             # if (int(value_entered) in df[header].values):
+        #
+        #         if (value_entered in str(df[header].values)):
+        #             print('1')
+        #
+        #             if type(value_entered) == int:
+        #                 print('2')
+        #                 d = df[~[df[header].str.contains(str(value_entered), na=False)]]
+        #                 print(d)
+        #
+        #             if type(value_entered) == float:
+        #                 print('2')
+        #                 d = df[~[df[header].str.contains(str(value_entered), na=False)]]
+        #                 print(d)
+        #
+        #             if type(value_entered) == str:
+        #                 print('3')
+        #                 d = df[~[df[header].str.contains(str(value_entered), na=False)]]
+        #                 print(d)
+        #
+        #                 # my_dir = QFileDialog.getExistingDirectory(
+        #                 #     None,
+        #                 #     "Select output folder",
+        #                 #     "",
+        #                 #     QFileDialog.ShowDirsOnly)
+        #                 # t1 = my_dir.split('/')[2]
+        #                 # print('th')
+        #                 # df = df[~df['date'].isin(a)]
+        #                 # # d = df[~[df[header].str.contains(str(value_entered), na=False)]]
+        #                 # print('2')
+        #                 # d.to_csv(my_dir + '\\' + t1 + '_row_file_dropped.csv', index=None)
+        #                 # self.lineEdit_filepath.setText(my_dir + '/' + t1 + '_row_file_dropped.csv')
+        #                 # self.reloaddata_fromfilepath(my_dir + '\\' + t1 + '_row_file_dropped.csv')
+        #                 # QMessageBox.information(None, "Dropped rows ",
+        #                 #                         "The value " + str(
+        #                 #                             value_entered) + " you entered has been dropped from column " + str(
+        #                 #                             header) + "\nSuccessfully saved the file!",
+        #                 #                         QMessageBox.Ok)
+        #                 # print('3')
+        #
+        #                 if ('Plate' in b.columns and 'Well' in b.columns):
+        #                     print('ee')
+        #                     self.lineEdit_plate.setText(str(b['Plate'].nunique()) + ' plates')
+        #                     self.lineEdit_well.setText(str(len(b['Well'])) + ' wells')
+        #                     self.getncpdsbatches(b)
+        #
+        #                 if ('Plate' not in b.columns and 'Well' not in b.columns):
+        #                     print('pp')
+        #                     self.lineEdit_plate.setText('No plate')
+        #                     self.lineEdit_well.setText('No wells')
+        #                     self.getncpdsbatches(b)
+        #
+        #                 if ('Plate' not in b.columns and 'Well' in b.columns):
+        #                     print('qq')
+        #                     self.lineEdit_plate.setText('No plate')
+        #                     self.lineEdit_well.setText(str(len(b['Well'])) + ' wells')
+        #                     print('oo')
+        #                     self.getncpdsbatches(b)
+        #
+        #                 if ('Plate' in b.columns and 'Well' not in b.columns):
+        #                     print('ka')
+        #                     self.lineEdit_plate.setText(str(b['Plate'].nunique()) + ' plates')
+        #                     self.lineEdit_well.setText('No wells')
+        #                     self.getncpdsbatches(b)
+        #
+        #         if (value_entered not in str(df[header].values)):
+        #             QMessageBox.information(None, "Error",
+        #                                     "No value to drop.\nThe value " + str(
+        #                                         value_entered) + " does not exist in the column " + str(
+        #                                         header) + "\nNo file to save.",
+        #                                     QMessageBox.Ok)
+        #             print('00')
+        #     self.comboBox_dropfrom.setCurrentText('Drop / Change')
 
-                    if ('Plate' not in b.columns and 'Well' in b.columns):
-                        print('qq')
-                        self.lineEdit_plate.setText('No plate')
-                        self.lineEdit_well.setText(str(len(b['Well'])) + ' wells')
-                        print('oo')
-                        self.getncpdsbatches(b)
-
-                    if ('Plate' in b.columns and 'Well' not in b.columns):
-                        print('ka')
-                        self.lineEdit_plate.setText(str(b['Plate'].nunique()) + ' plates')
-                        self.lineEdit_well.setText('No wells')
-                        self.getncpdsbatches(b)
-
-                if (value_entered not in df[header].values):
-                    QMessageBox.information(None, "Error",
-                                            "No value to drop.\nThe value " + str(
-                                                value_entered) + " does not exist in the column " + str(
-                                                header) + "\nNo file to save.",
-                                            QMessageBox.Ok)
-                    print('00')
-            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+    def get_filename_path(self):
+        file = self.lineEdit_filepath.text()
+        return file
 
     def on_comboboxduplicates_changed(self, value):
         file = self.lineEdit_filepath.text()
@@ -1649,6 +1779,19 @@ class Ui_Form_loadDataframe(object):
                 self.lineEdit_well.setText('No well')
                 self.getncpdsbatches(df)
 
+    def on_getlistofplates_clicked(self):
+        print('2')
+        dia =  Ui_Form_listplate()
+        print('3')
+        self.dialogs.append(dia)
+        print('4')
+
+    def on_textedit_clicked(self):
+        self.text_path = str(self.lineEdit_filepath.text())
+
+        print('okkk')
+        return self.text_path
+
     def on_concatenatefiles_clicked(self):
         filter = "CSV (*.csv)"
         filename, _ = QFileDialog.getOpenFileNames(None, "Select CSV files to concatenate",
@@ -1673,13 +1816,12 @@ class Ui_Form_loadDataframe(object):
                                                  '//' + t1 + '_Concatenated_File.csv')
                     self.lineEdit_filepath.setText(my_dir + '/' + t1 + '_Concatenated_File.csv')
 
-
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     Form_loadDataframe = QtWidgets.QWidget()
     ui = Ui_Form_loadDataframe()
     ui.setupUi(Form_loadDataframe)
     Form_loadDataframe.show()
     sys.exit(app.exec_())
+
