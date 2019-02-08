@@ -41,9 +41,7 @@ class Ui_Form_CheckBoxes(object):
         self.lineEdit_filepath_checkboxes.setGeometry(QtCore.QRect(20, 20, 571, 21))
         self.lineEdit_filepath_checkboxes.setObjectName("lineEdit_filepath_checkboxes")
 
-        # self.connect(self.on_apply_clicked, PYQT_SIGNAL("clicked()"), QtCore.ins)
         self.pushButton_apply.clicked.connect(self.on_apply_clicked)
-        # self.lineEdit_filepath_checkboxes.setText(Ui_Form_loadDataframe.lineEdit_filepath.text())
 
         self.retranslateUi(Form_CheckBoxes)
         QtCore.QMetaObject.connectSlotsByName(Form_CheckBoxes)
@@ -57,19 +55,13 @@ class Ui_Form_CheckBoxes(object):
         self.pushButton_apply.setText(_translate("Form_CheckBoxes", "Apply"))
         self.label_drop.setText(_translate("Form_CheckBoxes", "Drop"))
 
-    def show_it(self, linedit):
-        self.lineEdit_filepath_checkboxes.setText(linedit)
-
-
     def on_apply_clicked(self):
-
         file = 'testfile.csv'
         if file == 'File path':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
         if file != 'File path':
-            # header = DAstatistics.select_column()
             df = pd.read_csv(file)
 
             if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked():
@@ -79,8 +71,8 @@ class Ui_Form_CheckBoxes(object):
 
             if self.checkBox_nan.isChecked():
                 if np.where(df.applymap(lambda x: x == '')):
-                    df['nb_lysosomes'].replace('', np.nan, inplace=True)
-                    df.dropna(subset=['nb_lysosomes'], inplace=True)
+                    df[header].replace('', np.nan, inplace=True)
+                    df.dropna(subset=[header], inplace=True)
                     dir = os.path.dirname(file)
                     file_name1 = os.path.splitext(os.path.basename(file))[0]
                     df.to_csv( dir + '\\'+ file_name1 + '_droppedNAN.csv', index=None)
