@@ -76,7 +76,7 @@ class Ui_Form_CheckBoxes(object):
                     dir = os.path.dirname(file)
                     file_name1 = os.path.splitext(os.path.basename(file))[0]
                     df.to_csv( dir + '\\'+ file_name1 + '_droppedNAN.csv', index=None)
-                    Form_CheckBoxes.hide()
+                    # Form_CheckBoxes.hide()
 
             if self.checkBox_missingvalue.isChecked():
                 df.fillna("missing", inplace=True)
@@ -84,10 +84,11 @@ class Ui_Form_CheckBoxes(object):
                 dir = os.path.dirname(file)
                 file_name1 = os.path.splitext(os.path.basename(file))[0]
                 df_dropped.to_csv(dir + '\\' + file_name1 + '_droppedMissingValues.csv', index=None)
-                Form_CheckBoxes.hide()
+                # Form_CheckBoxes.hide()
 
             if self.checkBox_value.isChecked():
-                Form_CheckBoxes.hide()
+                print('1')
+                # Form_CheckBoxes.hide()
 
 
 if __name__ == "__main__":
