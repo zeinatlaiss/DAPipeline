@@ -1,12 +1,16 @@
+from sklearn.model_selection import train_test_split
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+import string
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 from PyQt5.QtWidgets import *
 import pandas as pd
-from DApandaswidget import PandasModel
-import form_listofplates
-from form_listofplates import *
+from form_table_addclasses import Ui_form_table_addclasses
+from requests.packages.urllib3.packages.six.moves import xrange
+
+from Pandas_widget import PandasModel
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe.ui'
@@ -91,6 +95,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_linkfileby.addItem("")
         self.comboBox_linkfileby.addItem("")
         self.comboBox_linkfileby.addItem("")
+        self.comboBox_linkfileby.addItem("")
         self.comboBox_machinelearning = QtWidgets.QComboBox(Form_loadDataframe)
         self.comboBox_machinelearning.setGeometry(QtCore.QRect(1310, 150, 131, 22))
         self.comboBox_machinelearning.setObjectName("comboBox_machinelearning")
@@ -155,8 +160,6 @@ class Ui_Form_loadDataframe(object):
         self.pushButton_getlistofplates.setText("")
         self.pushButton_getlistofplates.setIconSize(QtCore.QSize(0, 0))
         self.pushButton_getlistofplates.setObjectName("pushButton_getlistofplates")
-        # self.dialog.show()
-        # self.dialog.lineEdit_filepath_to_listofplates.setText('ok')
 
         self.lineEdit_filepath.setText('File path')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
@@ -174,7 +177,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_plot.currentTextChanged.connect(self.on_plot_changed)
         self.comboBox_aggregate.currentTextChanged.connect(self.on_comboboxaggregate_changed)
         self.pushButton_getlistofplates.clicked.connect(self.on_getlistofplates_clicked)
-        self.dialogs = list()
+
         self.retranslateUi(Form_loadDataframe)
         QtCore.QMetaObject.connectSlotsByName(Form_loadDataframe)
 
@@ -203,6 +206,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_linkfileby.setItemText(0, _translate("Form_loadDataframe", "Link file by"))
         self.comboBox_linkfileby.setItemText(1, _translate("Form_loadDataframe", "Well"))
         self.comboBox_linkfileby.setItemText(2, _translate("Form_loadDataframe", "Plate_Well"))
+        self.comboBox_linkfileby.setItemText(3, _translate("Form_loadDataframe", "PLATEBARCODE"))
         self.comboBox_machinelearning.setItemText(0, _translate("Form_loadDataframe", "Machine learning"))
         self.comboBox_machinelearning.setItemText(1, _translate("Form_loadDataframe", "LDA"))
         self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe", "Normalise"))
@@ -938,6 +942,11 @@ class Ui_Form_loadDataframe(object):
             self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
             self.getncpdsbatches(df)
 
+        if ('Plate' in df.columns and 'WELL' in df.columns):
+            self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
+            self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
+            self.getncpdsbatches(df)
+
         if ('Plate' not in df.columns and 'Well' not in df.columns):
             self.lineEdit_plate.setText('No plate')
             self.lineEdit_well.setText('No wells')
@@ -946,6 +955,11 @@ class Ui_Form_loadDataframe(object):
         if ('Plate' not in df.columns and 'Well' in df.columns):
             self.lineEdit_plate.setText('No plate')
             self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
+            self.getncpdsbatches(df)
+
+        if ('Plate' not in df.columns and 'WELL' in df.columns):
+            self.lineEdit_plate.setText('No plate')
+            self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
             self.getncpdsbatches(df)
 
         if ('Plate' in df.columns and 'Well' not in df.columns):
@@ -961,6 +975,11 @@ class Ui_Form_loadDataframe(object):
             self.lineEdit_well.setText(str(len(df1['Well'])) + ' wells')
             self.getncpdsbatches(df1)
 
+        if ('Plate' in df1.columns and 'WELL' in df1.columns):
+            self.lineEdit_plate.setText(str(df1['Plate'].nunique()) + ' plates')
+            self.lineEdit_well.setText(str(len(df1['WELL'])) + ' WELLs')
+            self.getncpdsbatches(df1)
+
         if ('Plate' not in df1.columns and 'Well' not in df1.columns):
             self.lineEdit_plate.setText('No plate')
             self.lineEdit_well.setText('No wells')
@@ -969,6 +988,11 @@ class Ui_Form_loadDataframe(object):
         if ('Plate' not in df1.columns and 'Well' in df1.columns):
             self.lineEdit_plate.setText('No plate')
             self.lineEdit_well.setText(str(len(df1['Well'])) + ' wells')
+            self.getncpdsbatches(df1)
+
+        if ('Plate' not in df1.columns and 'WELL' in df1.columns):
+            self.lineEdit_plate.setText('No plate')
+            self.lineEdit_well.setText(str(len(df1['WELL'])) + ' WELLs')
             self.getncpdsbatches(df1)
 
         if ('Plate' in df1.columns and 'Well' not in df1.columns):
@@ -1302,7 +1326,45 @@ class Ui_Form_loadDataframe(object):
                         QMessageBox.information(None, "File linked",
                                                 "Successfully linked and saved the files!",
                                                 QMessageBox.Ok)
+            self.comboBox_linkfileby.setCurrentText('Link file by')
 
+        if (value_ == 'PLATEBARCODE'):
+            file_PLATEBARCODE = self.lineEdit_filepath.text()
+            if file_PLATEBARCODE == "File path":
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != "File path":
+                df_PLATEBARCODE = pd.read_csv(file_PLATEBARCODE)
+                if 'PLATEBARCODE' not in df_PLATEBARCODE.columns :
+                    print('1')
+                    QMessageBox.information(None, "Error ",
+                                            "The column PLATEBARCODE does not exist in the file\nYou cannot link your file.",
+                                            QMessageBox.Ok)
+                if 'PLATEBARCODE' in df_PLATEBARCODE.columns:
+                    df_PLATEBARCODE = pd.read_csv(file_PLATEBARCODE, index_col=['PLATEBARCODE'])
+                    fileName_Barcode_CompoundPlate, _ = QFileDialog.getOpenFileName(None,
+                                                                   "Load File with Barcode_CompoundPlate",
+                                                                   "",
+                                                                   "CSV Files (*.csv)")
+                    if fileName_Barcode_CompoundPlate:
+                        df_Barcode_CompoundPlate = pd.read_csv(fileName_Barcode_CompoundPlate)
+                        if 'Barcode_CompoundPlate' not in df_Barcode_CompoundPlate.columns:
+                            QMessageBox.information(None, "Error ",
+                                                    "The column Barcode_CompoundPlate does not exist in the file\nYou cannot link your file.",
+                                                    QMessageBox.Ok)
+                        if 'Barcode_CompoundPlate' in df_Barcode_CompoundPlate.columns:
+                            df_Barcode_CompoundPlate = pd.read_csv(fileName_Barcode_CompoundPlate,
+                                                                   index_col='Barcode_CompoundPlate')
+                            df_PLATEBARCODE['Barcode_AssayPlate'] = df_Barcode_CompoundPlate['Barcode_AssayPlate']
+                            t1 = os.path.dirname(file_PLATEBARCODE)
+                            file_name1 = os.path.splitext(os.path.basename(file_PLATEBARCODE))[0]
+                            df_PLATEBARCODE.to_csv(t1 + '\\' + 'File_' + file_name1 + '.csv')
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'File_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'File_' + file_name1 + '.csv')
+                            QMessageBox.information(None, "File linked",
+                                                    "Successfully linked and saved the file!",
+                                                    QMessageBox.Ok)
             self.comboBox_linkfileby.setCurrentText('Link file by')
 
     def on_comboboxaddcolumn_changed(self, _value):
@@ -1751,14 +1813,20 @@ class Ui_Form_loadDataframe(object):
             df = pd.read_csv(fileName, low_memory=False)
             model = PandasModel(df.head(1000))
             self.tableView_dataframe.setModel(model)
+
             if ('Plate' in df.columns and 'Well' in df.columns):
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
 
+            if ('Plate' in df.columns and 'WELL' in df.columns):
+                self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
+                self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
+                self.getncpdsbatches(df)
+
             if ('Plate' not in df.columns and 'Well' not in df.columns):
                 self.lineEdit_plate.setText('No plate')
-                self.lineEdit_well.setText('No well')
+                self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
 
             if ('Plate' not in df.columns and 'Well' in df.columns):
@@ -1766,9 +1834,14 @@ class Ui_Form_loadDataframe(object):
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
 
+            if ('Plate' not in df.columns and 'WELL' in df.columns):
+                self.lineEdit_plate.setText('No plate')
+                self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
+                self.getncpdsbatches(df)
+
             if ('Plate' in df.columns and 'Well' not in df.columns):
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
-                self.lineEdit_well.setText('No well')
+                self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
 
     def on_getlistofplates_clicked(self):
