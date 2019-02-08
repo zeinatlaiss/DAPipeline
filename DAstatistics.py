@@ -903,36 +903,27 @@ class Ui_Form_loadDataframe(object):
             model = PandasModel(df.head(100))
             self.tableView_dataframe.setModel(model)
         if not self.lineEdit_filepath.setText('reloaded data'):
-            print('1')
             model = PandasModel(df.head(100))
             self.tableView_dataframe.setModel(model)
             if ('Plate' in df.columns and 'Well' in df.columns):
-                print('222')
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
-                print('222')
 
             if ('Plate' not in df.columns and 'Well' not in df.columns):
-                print('3333')
                 self.lineEdit_plate.setText('No plate')
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
-                print('3333')
 
             if ('Plate' not in df.columns and 'Well' in df.columns):
-                print('444')
                 self.lineEdit_plate.setText('No plate')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
-                print('444')
 
             if ('Plate' in df.columns and 'Well' not in df.columns):
-                print('555')
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
-                print('555')
 
     def setPlateWellText_intblview(self, df):
         self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' unique plate')
@@ -1006,19 +997,28 @@ class Ui_Form_loadDataframe(object):
                                                                    "CSV Files (*.csv)")
                     if file2:
                         df_data2 = pd.read_csv(file2)
-                        self.reloaddata_fromfilepath(file2)
-                        self.lineEdit_filepath.setText(str(file2))
-                        if header1:
-                            print('1')
-                            if 'Class' in df_data1.columns:
-                                if 'Class' in df_data2.columns:
-                                    df_data1 = df_data1[df_data1['Class'] == 3]
-                                    df_data2 = df_data2[df_data2['Class'] == 3]
-                                    print('CORRELATION = ' + header1, np.corrcoef(df_data1[header1].values, df_data2[header1]))
-                                    plt.scatter(df_data1['Perc_SenescentCells'].values, df_data2['Perc_SenescentCells'].values)
-                                    plt.ylim([0, 2])
-                                    plt.xlim([0, 2])
-                                    plt.show()
+                        if len(df_data1) != len(df_data2):
+                            QMessageBox.information(None, "Correlation Error",
+                                                    "Correlation cannot be applied. Please load another file\nDifferent number of rows.",
+                                                    QMessageBox.Ok)
+                            if len(df_data1) == len(df_data2):
+                                self.reloaddata_fromfilepath(file2)
+                                self.lineEdit_filepath.setText(str(file2))
+                                if header1:
+                                    print('1')
+                                    if 'Class' in df_data1.columns:
+                                        if 'Class' in df_data2.columns:
+                                            df_data1 = df_data1[df_data1['Class'] == 3]
+                                            df_data2 = df_data2[df_data2['Class'] == 3]
+                                            plt.scatter(df_data1['Perc_SenescentCells'].values, df_data2['Perc_SenescentCells'].values)
+                                            plt.ylim([0, 2])
+                                            plt.xlim([0, 2])
+                                            plt.show()
+                                            QMessageBox.information(None, "Correlation ",
+                                                                    "Correlation = " + str(np.corrcoef(df_data1[header1].values,
+                                                                                                       df_data2[header1])),
+                                                                    QMessageBox.Ok)
+
         self.comboBox_plot.setCurrentText("Plot")
 
         if (vl == 'Swarm plot with error bar'):
@@ -1284,33 +1284,25 @@ class Ui_Form_loadDataframe(object):
                                             "The column Well does not exist in the file\nYou cannot link your file.",
                                             QMessageBox.Ok)
                 if 'Well' in df.columns:
+                    fileName_cpds, _ = QFileDialog.getOpenFileName(None,
+                                                                   "Load File with Platebarcode, CPD_ID and BATCH_ID and Concentration (uM)",
+                                                                   "",
+                                                                   "CSV Files (*.csv)")
+                    if fileName_cpds:
+                        df = pd.read_csv(file, index_col='Well')
+                        df_cpds = pd.read_csv(fileName_cpds, index_col='Well')
+                        df['CPD_ID'] = df_cpds['X_CPD_ID']
+                        df['BATCH_ID'] = df_cpds['X_BATCH_ID']
+                        df['Concentration'] = df_cpds['Concentration (uM)']
+                        t1 = os.path.dirname(file)
+                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                        QMessageBox.information(None, "File linked",
+                                                "Successfully linked and saved the files!",
+                                                QMessageBox.Ok)
 
-                    my_dir = QFileDialog.getExistingDirectory(
-                        None,
-                        "Select input folder",
-                        "",
-                        QFileDialog.ShowDirsOnly)
-                    out_dir = QFileDialog.getExistingDirectory(
-                        None,
-                        "Select output folder",
-                        "",
-                        QFileDialog.ShowDirsOnly)
-                    if my_dir:
-                        if out_dir:
-                            fileName_cpds, _ = QFileDialog.getOpenFileName(None,
-                                                                           "Load File with Platebarcode, CPD_ID and BATCH_ID",
-                                                                           "",
-                                                                           "CSV Files (*.csv)")
-                            if fileName_cpds:
-                                for root, dirs, files in os.walk(my_dir):
-                                    for file_read in files:
-                                        df = pd.read_csv(root + '\\' + file_read, index_col='Well')
-                                        df_cpds = pd.read_csv(fileName_cpds, index_col='Well')
-                                        df_cpds['PLATEBARCODE'] = df['Plate_Sanofi']
-                                        df_cpds.to_csv(out_dir + '\\' + 'LinkedFile_' + file_read)
-                                QMessageBox.information(None, "File linked",
-                                                        "Successfully linked and saved the files!",
-                                                        QMessageBox.Ok)
             self.comboBox_linkfileby.setCurrentText('Link file by')
 
     def on_comboboxaddcolumn_changed(self, _value):
