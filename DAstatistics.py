@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import *
 import pandas as pd
 from requests.packages.urllib3.packages.six.moves import xrange
 from form_checkboxes_dropfromrows import Ui_Form_CheckBoxes
+from form_table_addclasses import Ui_form_table_addclasses
 from Pandas_widget import PandasModel
 
 # -*- coding: utf-8 -*-
@@ -24,9 +25,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe(object):
 
-    def openwindow(self):
+    def openwindow_form_checkboxes(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Form_CheckBoxes()
+        self.ui.setupUi(self.window)
+        # Form_loadDataframe.hide()
+        self.window.show()
+
+    def openwindow_addclasses(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_form_table_addclasses()
         self.ui.setupUi(self.window)
         # Form_loadDataframe.hide()
         self.window.show()
@@ -1578,7 +1586,7 @@ class Ui_Form_loadDataframe(object):
                                             "No loaded file.\nPlease load a file first.",
                                             QMessageBox.Ok)
             if file != 'File path':
-                self.openwindow()
+                self.openwindow_form_checkboxes()
 
             self.comboBox_dropfrom.setCurrentText('Drop / Change')
 
@@ -1786,8 +1794,7 @@ class Ui_Form_loadDataframe(object):
             self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
 
     def on_addclasses_clicked(self, t):
-        t = self.lineEdit_filepath.text()
-        print(t)
+        self.openwindow_addclasses()
 
     def on_loadFile_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(None, "Open File",
