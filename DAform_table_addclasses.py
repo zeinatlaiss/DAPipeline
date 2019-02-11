@@ -71,11 +71,7 @@ class Ui_form_table_addclasses(object):
         l = list(string.ascii_uppercase)
         self.tableWidget_toaddclasses.setRowCount(rows)
         self.tableWidget_toaddclasses.setColumnCount(cols)
-        # if j + 1 <= 9:
-        #     if  self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1))) == df['Well']:
-        #         self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
-        # if j + 1 >= 10:
-        #     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + str(j + 1)))
+
 
         self.tableWidget_toaddclasses.setVerticalHeaderLabels(l)
         self.pushButton_loadfileaddclasses.clicked.connect(self.on_loadFile_clicked)
@@ -113,37 +109,6 @@ class Ui_form_table_addclasses(object):
                 self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
                 self.comboBox_featuresfromdataframe.addItems(list_descriptors)
 
-    def on_loadfromdataframe_clicked(self):
-        print('1')
-        self.getcellsvalues()
-        print('2')
-        df = pd.read_csv(
-            'D:\RESULTS\\vl1vl2\\out.csv')
-        df_rows = df.count()
-        cols = 24
-        rows = 16
-        l = list(string.ascii_uppercase)
-        self.lineEdit_filepathfromdataframe.setText(str('D:\RESULTS\\vl1vl2\\out.csv'))
-        number_of_rows = self.tableWidget_toaddclasses.rowCount()
-        number_of_columns = self.tableWidget_toaddclasses.columnCount()
-        list_descriptors = df.columns
-        if 'Plate' in df.columns:
-            list_plates = list(df['Plate'].drop_duplicates(keep="first"))
-            nbr_rows = len(df)
-            self.comboBox_plates.addItems((list_plates))
-            self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
-            self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
-            self.comboBox_featuresfromdataframe.addItems(list_descriptors)
-            self.comboBox_featuresfromdataframe.currentTextChanged.connect(self.on_comboBox_featuresfromdataframe_changed)
-            self.comboBox_plates.currentTextChanged.connect(self.on_comboBox_plates_changed)
-
-    def getcellsvalues(self):
-        print('3')
-        selectedcells = self.tableWidget_toaddclasses.model().headerData(5, QtCore.Qt.Horizontal, QtCore.Qt.Vertical)
-        # selectedcells = self.tableWidget_toaddclasses.selectionModel().selectedIndexes()
-        print(selectedcells)
-        self.tableWidget_toaddclasses.itemAt(1, 2).text()
-
     def on_comboBox_plates_changed(self):
         print('ok')
 
@@ -167,7 +132,6 @@ class Ui_form_table_addclasses(object):
                                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(str(df.loc[row, value_combox])))
                                 # if  self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1))) == row['nbnuclei_wtdead']:
                                 #     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
-
                         i += 1
 
     def fill_tablewidget(self):
