@@ -1,3 +1,4 @@
+from Functions_outils import load_file_tocheckboxes
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import string
@@ -168,7 +169,6 @@ class Ui_Form_loadDataframe(object):
         self.pushButton_getlistofplates.setText("")
         self.pushButton_getlistofplates.setIconSize(QtCore.QSize(0, 0))
         self.pushButton_getlistofplates.setObjectName("pushButton_getlistofplates")
-
 
         self.lineEdit_filepath.setText('File path')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
@@ -907,21 +907,25 @@ class Ui_Form_loadDataframe(object):
             model = PandasModel(df.head(100))
             self.tableView_dataframe.setModel(model)
             if ('Plate' in df.columns and 'Well' in df.columns):
+                print('1')
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
 
             if ('Plate' not in df.columns and 'Well' not in df.columns):
+                print('2')
                 self.lineEdit_plate.setText('No plate')
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
 
             if ('Plate' not in df.columns and 'Well' in df.columns):
+                print('3')
                 self.lineEdit_plate.setText('No plate')
                 self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
                 self.getncpdsbatches(df)
 
             if ('Plate' in df.columns and 'Well' not in df.columns):
+                print('4')
                 self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
@@ -1203,12 +1207,14 @@ class Ui_Form_loadDataframe(object):
                             df['CPD_ID'] = df_withcpds['X_CPD_ID']
                             df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
                             df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
-                            df['Concentration'] = df_withcpds['Concentration (uM)']
+                            if 'Concentration (uM)' not in df_withcpds:
+                                df['Concentration'] = '3'
+                            if 'Concentration (uM)' in df_withcpds:
+                                df['Concentration'] = df_withcpds['Concentration (uM)']
                             df.to_csv(my_dir_finalfile + '\\' + t1 + '_LinkedFile.csv')
                             QMessageBox.information(None, "File linked ",
                                                     "Successfully linked and saved the file!",
-                                                    QMessageBox.
-                                                    Ok)
+                                                    QMessageBox.Ok)
                             self.reloaddata_fromDF(df)
 
                 if 'Plate_Well' not in df.columns:
@@ -1357,7 +1363,7 @@ class Ui_Form_loadDataframe(object):
 
                 if (value_entered == ''):
                     QMessageBox.information(None, "Error ",
-                                            "No entry value !\nPlease enter a value in the input text.",
+                                            "No entry value !\nPlease enter a value in the input text.\nExample: Plate_Well or Plate_WELL",
                                             QMessageBox.Ok)
                 if (value_entered not in d1.columns):
                     if (value_entered == 'Plate_Well'):
@@ -1367,7 +1373,6 @@ class Ui_Form_loadDataframe(object):
                                                     "PlateSanofi_Well to add the column.",
                                                     QMessageBox.Ok)
 
-                if (value_entered not in d1.columns):
                     if (value_entered == 'Plate_Well'):
                         if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' not in d1.columns):
                             d1['Plate_Well'] = d1['Plate'] + '_' + d1['Well']
@@ -1389,6 +1394,27 @@ class Ui_Form_loadDataframe(object):
                                                     "The column Plate or Well not in the file! No column to add!\nNo file to save.",
                                                     QMessageBox.Ok)
 
+                    if (value_entered == 'Plate_WELL'):
+                        if ('Plate' in d1.columns and 'WELL' in d1.columns and 'Plate_Sanofi' not in d1.columns):
+                            d1['Plate_WELL'] = d1['Plate'] + '_' + d1['WELL']
+                            out_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if out_dir:
+                                t1 = out_dir.split('/')[2]
+                                d1.to_csv(out_dir + '\\' + t1 + '_Plate_WELL.csv', index=None)
+                                QMessageBox.information(None, "Column added ",
+                                                        "The column " + value_entered + " has been successfully added.\nSuccessfully saved the file!",
+                                                        QMessageBox.Ok)
+                                self.reloaddata_fromDF(d1)
+                                self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_WELL.csv')
+
+                        if ('Plate' not in d1.columns or 'WELL' not in d1.columns):
+                            QMessageBox.information(None, "Error ",
+                                                    "The column Plate or Well not in the file! No column to add!\nNo file to save.",
+                                                    QMessageBox.Ok)
                     if (value_entered == 'PlateSanofi_Well'):
                         my_dir = QFileDialog.getExistingDirectory(
                             None,
@@ -1555,6 +1581,9 @@ class Ui_Form_loadDataframe(object):
                 self.openwindow()
 
             self.comboBox_dropfrom.setCurrentText('Drop / Change')
+
+
+
 
         #         header = self.select_column()
         #         file = self.lineEdit_filepath.text()
