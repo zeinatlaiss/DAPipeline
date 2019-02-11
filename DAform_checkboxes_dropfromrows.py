@@ -17,13 +17,13 @@ class Ui_Form_CheckBoxes(object):
         Form_CheckBoxes.setObjectName("Form_CheckBoxes")
         Form_CheckBoxes.resize(707, 281)
         self.checkBox_nan = QtWidgets.QCheckBox(Form_CheckBoxes)
-        self.checkBox_nan.setGeometry(QtCore.QRect(60, 120, 72, 19))
+        self.checkBox_nan.setGeometry(QtCore.QRect(60, 120, 131, 19))
         self.checkBox_nan.setObjectName("checkBox_nan")
         self.checkBox_missingvalue = QtWidgets.QCheckBox(Form_CheckBoxes)
-        self.checkBox_missingvalue.setGeometry(QtCore.QRect(60, 150, 91, 19))
+        self.checkBox_missingvalue.setGeometry(QtCore.QRect(60, 150, 141, 19))
         self.checkBox_missingvalue.setObjectName("checkBox_missingvalue")
         self.checkBox_value = QtWidgets.QCheckBox(Form_CheckBoxes)
-        self.checkBox_value.setGeometry(QtCore.QRect(60, 180, 72, 19))
+        self.checkBox_value.setGeometry(QtCore.QRect(60, 180, 131, 19))
         self.checkBox_value.setObjectName("checkBox_value")
         self.pushButton_apply = QtWidgets.QPushButton(Form_CheckBoxes)
         self.pushButton_apply.setGeometry(QtCore.QRect(70, 220, 80, 21))
@@ -47,15 +47,16 @@ class Ui_Form_CheckBoxes(object):
         self.pushButton_apply.clicked.connect(self.on_apply_clicked)
         self.pushButton_loadfile.clicked.connect(self.on_loadFilecheckboxes_clicked)
 
+
         self.retranslateUi(Form_CheckBoxes)
         QtCore.QMetaObject.connectSlotsByName(Form_CheckBoxes)
 
     def retranslateUi(self, Form_CheckBoxes):
         _translate = QtCore.QCoreApplication.translate
         Form_CheckBoxes.setWindowTitle(_translate("Form_CheckBoxes", "Drop values from rows form "))
-        self.checkBox_nan.setText(_translate("Form_CheckBoxes", "nan"))
-        self.checkBox_missingvalue.setText(_translate("Form_CheckBoxes", "missing value"))
-        self.checkBox_value.setText(_translate("Form_CheckBoxes", "value"))
+        self.checkBox_nan.setText(_translate("Form_CheckBoxes", "nan values in file"))
+        self.checkBox_missingvalue.setText(_translate("Form_CheckBoxes", "missing value in column "))
+        self.checkBox_value.setText(_translate("Form_CheckBoxes", "specific value in column"))
         self.pushButton_apply.setText(_translate("Form_CheckBoxes", "Apply"))
         self.label_drop.setText(_translate("Form_CheckBoxes", "Drop"))
         self.pushButton_loadfile.setText(_translate("Form_CheckBoxes", "Load file"))
@@ -66,9 +67,6 @@ class Ui_Form_CheckBoxes(object):
                                                   "CSV Files (*.csv)")
         if fileName:
             self.lineEdit_filepath_checkboxes.setText(fileName)
-
-    def show_it(self, linedit):
-        self.lineEdit_filepath_checkboxes.setText(linedit)
 
     def on_apply_clicked(self):
         file = self.lineEdit_filepath_checkboxes.text()
@@ -128,6 +126,7 @@ class Ui_Form_CheckBoxes(object):
                                             "Missing values have been dropped.",
                                             QMessageBox.Ok)
                 # Form_CheckBoxes.hide()
+
 
 if __name__ == "__main__":
     import sys
