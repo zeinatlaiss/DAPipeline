@@ -11,7 +11,7 @@ from requests.packages.urllib3.packages.six.moves import xrange
 from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
 from DAform_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
-from DAPandas_widget import PandasModel
+from DApandaswidget import PandasModel
 
 # -*- coding: utf-8 -*-
 
