@@ -1,4 +1,3 @@
-from Functions_outils import load_file_tocheckboxes
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import string
@@ -9,9 +8,10 @@ import os
 from PyQt5.QtWidgets import *
 import pandas as pd
 from requests.packages.urllib3.packages.six.moves import xrange
-from form_checkboxes_dropfromrows import Ui_Form_CheckBoxes
-from form_table_addclasses import Ui_form_table_addclasses
-from Pandas_widget import PandasModel
+from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
+from DAform_table_addclasses import Ui_form_table_addclasses
+from DAform_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
+from DAPandas_widget import PandasModel
 
 # -*- coding: utf-8 -*-
 
@@ -35,6 +35,13 @@ class Ui_Form_loadDataframe(object):
     def openwindow_addclasses(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_form_table_addclasses()
+        self.ui.setupUi(self.window)
+        # Form_loadDataframe.hide()
+        self.window.show()
+
+    def openwindow_renamevalues(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Form_checkboxes_RenameValues()
         self.ui.setupUi(self.window)
         # Form_loadDataframe.hide()
         self.window.show()
@@ -1487,9 +1494,12 @@ class Ui_Form_loadDataframe(object):
                                         QMessageBox.Ok)
 
         if (val == 'Rename value in rows'):
-            QMessageBox.information(None, "Not imp",
-                                        "Not implemented yet",
+            if file == 'File path':
+                QMessageBox.information(None, "Error",
+                                        "Please load a file first.",
                                         QMessageBox.Ok)
+            if file != 'File path':
+                self.openwindow_renamevalues()
 
         if (val == 'Rename columns'):
             if file == "File path":
