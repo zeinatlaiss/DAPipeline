@@ -1,3 +1,4 @@
+from Pandas_widget import PandasModel
 import numpy as np
 import os
 from PyQt5.QtWidgets import *
@@ -15,21 +16,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form_CheckBoxes(object):
     def setupUi(self, Form_CheckBoxes):
         Form_CheckBoxes.setObjectName("Form_CheckBoxes")
-        Form_CheckBoxes.resize(707, 281)
+        Form_CheckBoxes.resize(918, 575)
         self.checkBox_nan = QtWidgets.QCheckBox(Form_CheckBoxes)
-        self.checkBox_nan.setGeometry(QtCore.QRect(60, 120, 131, 19))
+        self.checkBox_nan.setGeometry(QtCore.QRect(50, 440, 131, 19))
         self.checkBox_nan.setObjectName("checkBox_nan")
         self.checkBox_missingvalue = QtWidgets.QCheckBox(Form_CheckBoxes)
-        self.checkBox_missingvalue.setGeometry(QtCore.QRect(60, 150, 141, 19))
+        self.checkBox_missingvalue.setGeometry(QtCore.QRect(50, 470, 141, 19))
         self.checkBox_missingvalue.setObjectName("checkBox_missingvalue")
         self.checkBox_value = QtWidgets.QCheckBox(Form_CheckBoxes)
-        self.checkBox_value.setGeometry(QtCore.QRect(60, 180, 131, 19))
+        self.checkBox_value.setGeometry(QtCore.QRect(50, 500, 131, 19))
         self.checkBox_value.setObjectName("checkBox_value")
         self.pushButton_apply = QtWidgets.QPushButton(Form_CheckBoxes)
-        self.pushButton_apply.setGeometry(QtCore.QRect(70, 220, 80, 21))
+        self.pushButton_apply.setGeometry(QtCore.QRect(50, 540, 80, 21))
         self.pushButton_apply.setObjectName("pushButton_apply")
         self.label_drop = QtWidgets.QLabel(Form_CheckBoxes)
-        self.label_drop.setGeometry(QtCore.QRect(20, 70, 51, 21))
+        self.label_drop.setGeometry(QtCore.QRect(30, 410, 51, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(True)
@@ -37,23 +38,28 @@ class Ui_Form_CheckBoxes(object):
         self.label_drop.setFont(font)
         self.label_drop.setObjectName("label_drop")
         self.lineEdit_filepath_checkboxes = QtWidgets.QLineEdit(Form_CheckBoxes)
-        self.lineEdit_filepath_checkboxes.setGeometry(QtCore.QRect(20, 20, 571, 21))
+        self.lineEdit_filepath_checkboxes.setGeometry(QtCore.QRect(20, 20, 771, 21))
         self.lineEdit_filepath_checkboxes.setObjectName("lineEdit_filepath_checkboxes")
         self.pushButton_loadfile = QtWidgets.QPushButton(Form_CheckBoxes)
-        self.pushButton_loadfile.setGeometry(QtCore.QRect(610, 20, 80, 21))
+        self.pushButton_loadfile.setGeometry(QtCore.QRect(810, 20, 80, 21))
         self.pushButton_loadfile.setObjectName("pushButton_loadfile")
+        self.tableView_dropfromrows = QtWidgets.QTableView(Form_CheckBoxes)
+        self.tableView_dropfromrows.setGeometry(QtCore.QRect(20, 60, 871, 341))
+        self.tableView_dropfromrows.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tableView_dropfromrows.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.tableView_dropfromrows.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectColumns)
+        self.tableView_dropfromrows.setObjectName("tableView_dropfromrows")
 
         self.lineEdit_filepath_checkboxes.setText('')
         self.pushButton_apply.clicked.connect(self.on_apply_clicked)
         self.pushButton_loadfile.clicked.connect(self.on_loadFilecheckboxes_clicked)
-
 
         self.retranslateUi(Form_CheckBoxes)
         QtCore.QMetaObject.connectSlotsByName(Form_CheckBoxes)
 
     def retranslateUi(self, Form_CheckBoxes):
         _translate = QtCore.QCoreApplication.translate
-        Form_CheckBoxes.setWindowTitle(_translate("Form_CheckBoxes", "Drop values from rows form "))
+        Form_CheckBoxes.setWindowTitle(_translate("Form_CheckBoxes", "Drop from rows"))
         self.checkBox_nan.setText(_translate("Form_CheckBoxes", "nan values in file"))
         self.checkBox_missingvalue.setText(_translate("Form_CheckBoxes", "missing value in column "))
         self.checkBox_value.setText(_translate("Form_CheckBoxes", "specific value in column"))
@@ -61,12 +67,26 @@ class Ui_Form_CheckBoxes(object):
         self.label_drop.setText(_translate("Form_CheckBoxes", "Drop"))
         self.pushButton_loadfile.setText(_translate("Form_CheckBoxes", "Load file"))
 
+    def select_column(self):
+        col_nb = self.tableView_dropfromrows.currentIndex().column()
+        column_name = self.tableView_dropfromrows.model().headerData(col_nb, QtCore.Qt.Horizontal,
+                                                                  QtCore.Qt.DisplayRole)
+        return column_name
+
+    def reloaddata_fromfilepath(self, file):
+        df = pd.read_csv(file)
+        model = PandasModel(df.head(500))
+        self.tableView_dropfromrows.setModel(model)
+
     def on_loadFilecheckboxes_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(None, "Open File",
                                                   "",
                                                   "CSV Files (*.csv)")
         if fileName:
             self.lineEdit_filepath_checkboxes.setText(fileName)
+            df = pd.read_csv(fileName, low_memory=False)
+            model = PandasModel(df.head(10))
+            self.tableView_dropfromrows.setModel(model)
 
     def on_apply_clicked(self):
         file = self.lineEdit_filepath_checkboxes.text()
@@ -76,57 +96,75 @@ class Ui_Form_CheckBoxes(object):
                                         QMessageBox.Ok)
         if file != '':
             df = pd.read_csv(file)
-            if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked():
-                QMessageBox.information(None, "Error",
-                                        "Please check at least one of the above cases.",
+            header = self.select_column()
+            if (len(header) < 1):
+                QMessageBox.information(None, "Error ",
+                                        "You must select a column.\nTry again",
                                         QMessageBox.Ok)
-            if self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked():
-                if np.where(df.applymap(lambda x: x == '')):
-                    df1 = df.dropna(how='any')
-                    dir = os.path.dirname(file)
-                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                    df1.to_csv( dir + '\\'+ file_name1 + '_droppedNAN.csv', index=None)
-                    QMessageBox.information(None, "NAN dropped",
-                                            "NAN values have been dropped from all the files.",
-                                            QMessageBox.Ok)
-                    # Form_CheckBoxes.hide()
-
-            if self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked():
-                value_entered, okPressed = QInputDialog.getText(None, "Enter column name to drop nan values", "Column name ",
-                                                                QLineEdit.Normal, "")
-
-                if value_entered not in df.columns:
+            if len(header) >= 1:
+                if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked():
                     QMessageBox.information(None, "Error",
-                                            "The column " + str(value_entered) + " selected is not in the file.\nTry with another column",
+                                            "Please check at least one of the above cases.",
                                             QMessageBox.Ok)
-                if value_entered in df.columns:
-                    df[value_entered].fillna("missing", inplace=True)
-                    df.drop(df.loc[df[value_entered] == 'missing'].index, inplace=True)
+                if self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value:
+                    if np.where(df.applymap(lambda x: x == '')):
+                        df1 = df.dropna(how='any')
+                        dir = os.path.dirname(file)
+                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                        df1.to_csv( dir + '\\'+ file_name1 + '_droppedNAN.csv', index=None)
+                        QMessageBox.information(None, "NAN dropped",
+                                                "NAN values have been dropped from all the files.",
+                                                QMessageBox.Ok)
+                        self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedNAN.csv')
+                        # Form_CheckBoxes.hide()
+
+                if self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked() and not self.checkBox_nan.isChecked():
+                    df[header].fillna("missing", inplace=True)
+                    df.drop(df.loc[df[header] == 'missing'].index, inplace=True)
                     dir = os.path.dirname(file)
                     file_name1 = os.path.splitext(os.path.basename(file))[0]
                     df.to_csv(dir + '\\' + file_name1 + '_droppedMissingValues.csv', index=None)
-                    QMessageBox.information(None, "Missing values dropped",
-                                            "Missing values have been dropped.",
+                    QMessageBox.information(None, "Missing values",
+                                            "Empty cells have been dropped.",
                                             QMessageBox.Ok)
-                # Form_CheckBoxes.hide()
+                    self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedMissingValues.csv')
+                    # Form_CheckBoxes.hide()
 
-            if self.checkBox_value.isChecked():
-                value_entered, okPressed = QInputDialog.getText(None, "Enter column name to drop nan values",
-                                                                "Column name ",
-                                                                QLineEdit.Normal, "")
-                if value_entered in df.columns:
-                    value_in_rows, okPressed = QInputDialog.getText(None, "Enter a value to drop from " +  str(value_entered),
+                if self.checkBox_value.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_nan.isChecked():
+                    value_in_rows, okPressed = QInputDialog.getText(None, "Enter a value to drop from " +  str(header),
                                                                     "Value to drop ",
                                                                     QLineEdit.Normal, "")
-                    df.drop(df.loc[df[value_entered] == value_in_rows].index, inplace=True)
-                    dir = os.path.dirname(file)
-                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                    df.to_csv(dir + '\\' + file_name1 + '_droppedValue.csv', index=None)
-                    QMessageBox.information(None, "Missing values dropped",
-                                            "Missing values have been dropped.",
-                                            QMessageBox.Ok)
-                # Form_CheckBoxes.hide()
+                    if type(value_in_rows) == str:
+                        value_in_rows_str = str(value_in_rows)
+                        df.drop(df.loc[df[header] == value_in_rows_str].index, inplace=True)
+                        dir = os.path.dirname(file)
+                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                        df.to_csv(dir + '\\' + file_name1 + '_droppedValue_str.csv', index=None)
+                        QMessageBox.information(None, "Specific values",
+                                                "The value " + str(value_in_rows) + " have been dropped from " + str(header) ,
+                                                QMessageBox.Ok)
+                        self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedValue_str.csv')
+                        print('done')
+                       # Form_CheckBoxes.hide()
 
+                    # if type(value_in_rows) != int:
+                    #     print('mp')
+                    #     print('222')
+                    #     value_in_rows_int = str(value_in_rows)
+                    #     print('1')
+                    #     df.drop(df.loc[df[header] == str(value_in_rows_int)].index, inplace=True)
+                    #     print('2')
+                    #     dir = os.path.dirname(file)
+                    #     file_name1 = os.path.splitext(os.path.basename(file))[0]
+                    #     df.to_csv(dir + '\\' + file_name1 + '_droppedValue_int.csv', index=None)
+                    #     QMessageBox.information(None, "Specific values",
+                    #                             "The value " + str(value_in_rows) + " have been dropped from " + str(
+                    #                                 header),
+                    #                             QMessageBox.Ok)
+                    #     print('why')
+                    #     self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedValue_int.csv')
+                    #     print('no')
+                    #     # Form_CheckBoxes.hide()
 
 if __name__ == "__main__":
     import sys
