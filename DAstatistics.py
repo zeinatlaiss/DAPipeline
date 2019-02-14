@@ -1,3 +1,4 @@
+from Functions_outils import load_file_tocheckboxes
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import string
@@ -8,10 +9,10 @@ import os
 from PyQt5.QtWidgets import *
 import pandas as pd
 from requests.packages.urllib3.packages.six.moves import xrange
-from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
-from DAform_table_addclasses import Ui_form_table_addclasses
-from DAform_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
-from DApandaswidget import PandasModel
+from form_checkboxes_dropfromrows import Ui_Form_CheckBoxes
+from form_table_addclasses import Ui_form_table_addclasses
+from form_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
+from Pandas_widget import PandasModel
 
 # -*- coding: utf-8 -*-
 
@@ -1493,6 +1494,8 @@ class Ui_Form_loadDataframe(object):
                                         "Not implemented yet..",
                                         QMessageBox.Ok)
 
+            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+
         if (val == 'Rename value in rows'):
             if file == 'File path':
                 QMessageBox.information(None, "Error",
@@ -1500,6 +1503,8 @@ class Ui_Form_loadDataframe(object):
                                         QMessageBox.Ok)
             if file != 'File path':
                 self.openwindow_renamevalues()
+
+            self.comboBox_dropfrom.setCurrentText('Drop / Change')
 
         if (val == 'Rename columns'):
             if file == "File path":
