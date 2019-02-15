@@ -318,9 +318,31 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Z factor & Robust Z factor":
-            QMessageBox.information(None, "Not imp ",
-                                    "Not implemented yet..",
-                                    QMessageBox.Ok)
+            file = self.lineEdit_filepath.text()
+            if file == 'File path':
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != 'File path':
+                df = pd.read_csv(file)
+                if 'Plate' in df.columns:
+                    if 'Class' not in df.columns:
+                        QMessageBox.information(None, "Error ",
+                                                "The column Class does not exist in the loaded file.\nPlease add the column Class first.",
+                                                QMessageBox.Ok)
+                    if 'Class' in df.columns:
+                        header = self.select_column()
+                        if header:
+                            if (df['Plate'].nunique() == 1):
+                                pos_data = df[df['Class'] == 1]
+                                neg_data = df[df['Class'] == 2]
+                                Z_factor = 1 - ((3 * (np.std(neg_data) + np.std(pos_data))) / (np.abs(np.mean(neg_data) - np.mean(pos_data))))
+                                QMessageBox.information(None, "Z factor",
+                                                        "Z factor " + str(header) + " = " + str(Z_factor[header]), QMessageBox.Ok)
+                            if (df['Plate'].nunique() > 1):
+                                QMessageBox.information(None, "Error ",
+                                                        "The Plate is not unique.\nPlease group your data first.",
+                                                        QMessageBox.Ok)
 
         if value_st == "Intersection":
             if file == "File path":
@@ -1742,7 +1764,7 @@ class Ui_Form_loadDataframe(object):
                 nb_unique_header = df[header].nunique()
                 if (len(df[header]) - nb_unique_header == 0):
                     QMessageBox.information(None, "Number of duplicates",
-                                            "You have no duplicated values in the column" + str(header),
+                                            "You have no duplicated values in the column " + str(header),
                                             QMessageBox.Ok)
                 if (len(df[header]) - nb_unique_header > 0):
                     QMessageBox.information(None, "Number of duplicates",
