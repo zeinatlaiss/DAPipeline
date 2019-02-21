@@ -71,11 +71,16 @@ class Ui_form_table_addclasses(object):
         l = list(string.ascii_uppercase)
         self.tableWidget_toaddclasses.setRowCount(rows)
         self.tableWidget_toaddclasses.setColumnCount(cols)
-
+        # if j + 1 <= 9:
+        #     if  self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1))) == df['Well']:
+        #         self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
+        # if j + 1 >= 10:
+        #     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + str(j + 1)))
 
         self.tableWidget_toaddclasses.setVerticalHeaderLabels(l)
         self.pushButton_loadfileaddclasses.clicked.connect(self.on_loadFile_clicked)
         self.comboBox_featuresfromdataframe.currentTextChanged.connect(self.on_comboBox_featuresfromdataframe_changed)
+        self.comboBox_plates.currentTextChanged.connect(self.on_comboBoxplates_changed)
 
         self.retranslateUi(form_table_addclasses)
         QtCore.QMetaObject.connectSlotsByName(form_table_addclasses)
@@ -86,6 +91,16 @@ class Ui_form_table_addclasses(object):
         self.pushButton_loadfromdataframe.setText(_translate("form_table_addclasses", "Load"))
         self.pushButton_loadfileaddclasses.setText(_translate("form_table_addclasses", "Load file"))
 
+    def load_dict(self, plate, desc):
+        df_plate = self.df[self.df["Plate"]== plate]
+        if 'Well' not in df_plate:
+            print('no')
+        if 'Well' in df_plate:
+            keys = df_plate["Well"]
+            values = df_plate[desc]
+            dict_well = dict(zip(keys, values))
+            return dict_well
+
     def on_loadFile_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(None, "Open File",
                                                   "",
@@ -93,59 +108,84 @@ class Ui_form_table_addclasses(object):
         if fileName:
             self.lineEdit_filepathfromdataframe.setText(fileName)
             df = pd.read_csv(fileName, low_memory=False)
-            df_rows = df.count()
-            cols = 24
-            rows = 16
-            l = list(string.ascii_uppercase)
-            number_of_rows = self.tableWidget_toaddclasses.rowCount()
-            number_of_columns = self.tableWidget_toaddclasses.columnCount()
-            list_descriptors = df.columns
-            print(list_descriptors)
-            if 'Plate' in df.columns:
-                list_plates = list(df['Plate'].drop_duplicates(keep="first"))
-                nbr_rows = len(df)
-                self.comboBox_plates.addItems((list_plates))
-                self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
-                self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
-                self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+            if 'Well' not in df:
+                self.lineEdit_filepathfromdataframe.setText('')
+                QMessageBox.information(None, "Error ",
+                                    "The column Well is not in the file.\nTry again.",
+                                    QMessageBox.Ok)
 
-    def on_comboBox_plates_changed(self):
-        print('ok')
-
-    def on_comboBox_featuresfromdataframe_changed(self, value_combox):
-            file = self.lineEdit_filepathfromdataframe.text()
-            if file == '':
-                QMessageBox.information(None, "Error",
-                                        "Please load a file first.",
-                                        QMessageBox.Ok)
-            if file != '':
-                df = pd.read_csv(file)
-                print(value_combox)
+            if 'Well' in df:
+                df_rows = df.count()
                 cols = 24
                 rows = 16
                 l = list(string.ascii_uppercase)
-                for k in range(len(l)):
-                    for i in range(rows):
-                        for j in range(cols):
-                            for index, row in df.iterrows():
-                                if  self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1))) == row['Well']:
-                                    self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(str(df.loc[row, value_combox])))
-                                # if  self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1))) == row['nbnuclei_wtdead']:
-                                #     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
-                        i += 1
+                number_of_rows = self.tableWidget_toaddclasses.rowCount()
+                number_of_columns = self.tableWidget_toaddclasses.columnCount()
+                list_descriptors = df.columns
+                if 'Plate' in df.columns:
+                    list_plates = list(df['Plate'].drop_duplicates(keep="first"))
+                    nbr_rows = len(df)
+                    self.comboBox_plates.addItems((list_plates))
+                    self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
+                    self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
+                    self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
+                    self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+                    # self.comboBox_featuresfromdataframe.setCurrentText()
+                    self.df = df
+
+    def getcellsvalues(self):
+        selectedcells = self.tableWidget_toaddclasses.model().headerData(5, QtCore.Qt.Horizontal, QtCore.Qt.Vertical)
+        self.tableWidget_toaddclasses.itemAt(1, 2).text()
+
+    def on_comboBoxplates_changed(self):
+        self.tableWidget_toaddclasses.clearContents()
+        self.comboBox_featuresfromdataframe.setCurrentIndex(0)
+
+    def on_comboBox_featuresfromdataframe_changed(self):
+        # if (val == 'nbnuclei_wtdead'):
+        self.fill_tablewidget()
+
+    # def fill_tablewidget(self):
+    #     cols = 24
+    #     rows = 16
+    #     l = list(string.ascii_uppercase)
+    #     for k in range(len(l)):
+    #         for i in range(rows):
+    #             for j in range(cols):
+    #                 if j + 1 <= 9:
+    #                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
+    #                 print(k)
+    #                 if j + 1 >= 10:
+    #                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + str(j + 1)))
+    #                 print(k)
+    #             i += 1
 
     def fill_tablewidget(self):
         cols = 24
         rows = 16
-        l = list(string.ascii_uppercase)
-        for k in range(len(l)):
-            for i in range(rows):
-                for j in range(cols):
-                    if j + 1 <= 9:
-                        self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
-                    if j + 1 >= 10:
-                        self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + str(j + 1)))
-                i += 1
+        ll1 = list(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'])
+        ll2 = list(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'])
+        plate_cb = self.comboBox_plates.currentText()
+        desc_cb = self.comboBox_featuresfromdataframe.currentText()
+        if desc_cb != 'Descriptor':
+            dict_table_well = self.load_dict(plate_cb, desc_cb)
+            for row,i in enumerate(range(len(ll1))):
+                for col,j in enumerate(range(len(ll2))):
+                    well_from_list = str(ll1[row])+ str(ll2[col])
+                    value = 0
+                    if well_from_list in dict_table_well.keys():
+                        value = dict_table_well[well_from_list]
+                        item = QTableWidgetItem(str(value))
+                        self.tableWidget_toaddclasses.setItem(row, col, item)
+
+    def select_multicolumns(self):
+        list_col = []
+        totalColumns = self.tableWidget_toaddclasses.selectionModel().selectedColumns()
+        for idx in totalColumns:
+            column_name = self.tableWidget_toaddclasses.model().headerData(idx.column(), QtCore.Qt.Horizontal,
+                                                                      QtCore.Qt.DisplayRole)
+            list_col.append(column_name)
+        return list_col
 
 if __name__ == "__main__":
     import sys
