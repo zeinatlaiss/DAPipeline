@@ -1,15 +1,10 @@
-import seaborn as sns
-import os
 import sys
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidget, QScrollArea, QTableWidgetItem, QFileDialog, QLabel, QMenu, QVBoxLayout, \
-    QSizePolicy, QMessageBox, QWidget, QPushButton
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QFileDialog, QLabel, QMenu, QVBoxLayout, \
+    QSizePolicy
 import pandas as pd
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 
 class PandasModel(QtCore.QAbstractTableModel):
     def __init__(self, df = pd.DataFrame(), parent=None):
@@ -126,7 +121,10 @@ class Pandas_Widget(QtWidgets.QWidget):
     def AddDataframeToTable(self):
         print('Not imp yet')
 
+        # sys.exit(win.exec_())
     def selectionchange_plot(self, i):
+        # for count in range(self.combobox_plot.count()):
+            # print(self.combobox_plot.itemText(count))
         data_pd = Pandas_Widget.loadFile
         if (self.combobox_plot.currentText() == "Scatter Plot"):
             print("Current index", i, "selection changed ", self.combobox_plot.currentText())
@@ -141,7 +139,7 @@ class Pandas_Widget(QtWidgets.QWidget):
             print('you should choose a plot')
 
     def loadFile(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open File", "", "CSV Files (*.csv)")
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open File", "D:\\", "CSV Files (*.csv)")
         self.pathLE.setText(fileName)
         df = pd.read_csv(fileName)
         self.labelplate.setText(str(df['Plate'].nunique())+ ' plates')
@@ -162,5 +160,21 @@ class Pandas_Widget(QtWidgets.QWidget):
         pdmodel = PandasModel()
         w = Pandas_Widget(pdmodel)
         w.loadFile()
+        # w.setFocus(QtCore.Qt.PopupFocusReason)
         w.show()
         sys.exit(subapp.exec_())
+
+# # if __name__ == "__main__":
+# # #
+#     app = QtWidgets.QApplication(sys.argv)
+#     w = PandasModel()
+#     # w = Pandas_Widget(pdmodel)
+#     # w.loadFile()
+#     # w.show()
+#     sys.exit(app.exec_())
+#     # app = QtWidgets.QApplication(sys.argv)
+#     # pdmodel = PandasModel()
+#     # w = Pandas_Widget(pdmodel)
+#     # w.loadFile()
+#     # w.show()
+#     # sys.exit(app.exec_())
