@@ -1,4 +1,4 @@
-from Pandas_widget import PandasModel
+from DAPandaswidget import PandasModel
 import numpy as np
 import os
 from PyQt5.QtWidgets import *
@@ -107,6 +107,10 @@ class Ui_Form_CheckBoxes(object):
                                             "Please check at least one of the above cases.",
                                             QMessageBox.Ok)
                 if self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value:
+                    if not np.where(df.applymap(lambda x: x == '')):
+                        QMessageBox.information(None, "Error",
+                                                "NAN values do not exist in the column "  +header + "selected.",
+                                                QMessageBox.Ok)
                     if np.where(df.applymap(lambda x: x == '')):
                         df1 = df.dropna(how='any')
                         dir = os.path.dirname(file)
@@ -115,7 +119,8 @@ class Ui_Form_CheckBoxes(object):
                         QMessageBox.information(None, "NAN dropped",
                                                 "NAN values have been dropped from all the files.",
                                                 QMessageBox.Ok)
-                        self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedNAN.csv')
+                        self.lineEdit_filepath_checkboxes.setText(dir + '/'+ file_name1 + '_droppedNAN.csv')
+                        self.reloaddata_fromfilepath(dir + '/'+ file_name1 + '_droppedNAN.csv')
                         # Form_CheckBoxes.hide()
 
                 if self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked() and not self.checkBox_nan.isChecked():
@@ -127,7 +132,9 @@ class Ui_Form_CheckBoxes(object):
                     QMessageBox.information(None, "Missing values",
                                             "Empty cells have been dropped.",
                                             QMessageBox.Ok)
-                    self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedMissingValues.csv')
+                    self.lineEdit_filepath_checkboxes.setText(dir + '/' + file_name1 + '_droppedMissingValues.csv')
+                    print('1')
+                    self.reloaddata_fromfilepath(dir + '\\' + file_name1 + '_droppedMissingValues.csv')
                     # Form_CheckBoxes.hide()
 
                 if self.checkBox_value.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_nan.isChecked():
@@ -143,9 +150,10 @@ class Ui_Form_CheckBoxes(object):
                         QMessageBox.information(None, "Specific values",
                                                 "The value " + str(value_in_rows) + " have been dropped from " + str(header) ,
                                                 QMessageBox.Ok)
-                        self.reloaddata_fromfilepath(dir + '/' + file_name1 + '_droppedValue_str.csv')
-                        print('done')
-                       # Form_CheckBoxes.hide()
+                        self.lineEdit_filepath_checkboxes.setText(dir + '/' + file_name1 + '_droppedValue_str.csv')
+                        print('2')
+                        self.reloaddata_fromfilepath(dir + '\\' + file_name1 + '_droppedValue_str.csv')
+                         # Form_CheckBoxes.hide()
 
                     # if type(value_in_rows) != int:
                     #     print('mp')

@@ -1,4 +1,4 @@
-from Pandas_widget import PandasModel
+from Pandaswidget import PandasModel
 import os
 from PyQt5.QtWidgets import *
 import pandas as pd

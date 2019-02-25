@@ -1,5 +1,5 @@
 import os
-from Pandas_widget import PandasModel
+from DAPandaswidget import PandasModel
 import pandas as pd
 from PyQt5.QtWidgets import *
 import string
@@ -147,46 +147,63 @@ class Ui_form_table_addclasses(object):
                                     QMessageBox.Ok)
         if file != '':
             df1 = pd.read_csv(file)
-            print(dd)
-            for i in range(len(dd)):
-                print(dd[i])
-                cl_nb = self.ll
-                df1['Class'] = ''
-                for row, i in enumerate(range(len(dd))):
-                    # well_from_list = str(dd[row])
-                    df1['Check_if_in_WELL'] = [isinstance(x, str) for x in df1['Well']]
-                    if df1['Check_if_in_WELL'].any() == False:
-                        print('1')
-                    if df1['Check_if_in_WELL'].any() == True:
-                        df1['Class'] = cl_nb
-                        t1 = os.path.dirname(file)
-                        file_name1 = os.path.splitext(os.path.basename(file))[0]
-                        self.lineEdit_filepathfromdataframe.setText(t1 + '\\' + file_name1 +'.csv')
-                        df1.to_csv(t1 + '\\' + file_name1 +'.csv', index=None)
-                        df = pd.read_csv(t1 + '\\' + file_name1 +'.csv', low_memory=False)
-                        if 'Well' not in df:
-                            self.lineEdit_filepathfromdataframe.setText('')
-                            QMessageBox.information(None, "Error ",
-                                                    "The column Well is not in the file.\nTry again.",
-                                                    QMessageBox.Ok)
-                        if 'Well' in df:
-                            df_rows = df.count()
-                            cols = 24
-                            rows = 16
-                            l = list(string.ascii_uppercase)
-                            number_of_rows = self.tableWidget_toaddclasses.rowCount()
-                            number_of_columns = self.tableWidget_toaddclasses.columnCount()
-                            list_descriptors = df.columns
-                            if 'Plate' in df.columns:
-                                list_plates = list(df['Plate'].drop_duplicates(keep="first"))
-                                nbr_rows = len(df)
-                                self.comboBox_plates.addItems((list_plates))
-                                self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
-                                self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
-                                self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
-                                self.comboBox_featuresfromdataframe.addItems(list_descriptors)
-                                self.df = df
-                                self.fill_tablewidget()
+            if 'Class' in df1:
+                buttonReply = QMessageBox.question(None, 'Mean and STD',
+                                                   "The column 'Class' already exists in the file.\n"
+                                                                                "Press Yes if you want to edit the Class.\n"
+                                                                                "Press No to ignore.\n",
+                                                   QMessageBox.Yes | QMessageBox.No,
+                                                   QMessageBox.Yes)
+                if buttonReply == QMessageBox.Yes:
+                    if (self.comboBox_addclass.currentText() == "Add class"):
+                        QMessageBox.information(None, "Error ",
+                                                "Please enter a class number from the combobox.\nTry again.",
+                                                QMessageBox.Ok)
+                    else:
+                        print(dd)
+                        for i in range(len(dd)):
+                            print(dd[i])
+                            cl_nb = self.ll
+                            df1['Class'] = ''
+                            for row, i in enumerate(range(len(dd))):
+                                # well_from_list = str(dd[row])
+                                df1['Check_if_in_WELL'] = [isinstance(x, str) for x in df1['Well']]
+                                if df1['Check_if_in_WELL'].any() == False:
+                                    print('1')
+                                if df1['Check_if_in_WELL'].any() == True:
+                                    df1['Class'] = cl_nb
+                                    t1 = os.path.dirname(file)
+                                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                    self.lineEdit_filepathfromdataframe.setText(t1 + '\\' + file_name1 + '.csv')
+                                    df1.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
+                                    df = pd.read_csv(t1 + '\\' + file_name1 + '.csv', low_memory=False)
+                                    if 'Well' not in df:
+                                        self.lineEdit_filepathfromdataframe.setText('')
+                                        QMessageBox.information(None, "Error ",
+                                                                "The column Well is not in the file.\nTry again.",
+                                                                QMessageBox.Ok)
+                                    if 'Well' in df.columns:
+                                        df_rows = df.count()
+                                        cols = 24
+                                        rows = 16
+                                        l = list(string.ascii_uppercase)
+                                        number_of_rows = self.tableWidget_toaddclasses.rowCount()
+                                        number_of_columns = self.tableWidget_toaddclasses.columnCount()
+                                        list_descriptors = df.columns
+                                        if 'Plate' in df.columns:
+                                            list_plates = list(df['Plate'].drop_duplicates(keep="first"))
+                                            nbr_rows = len(df)
+                                            self.comboBox_plates.addItems((list_plates))
+                                            self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
+                                            self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
+                                            self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
+                                            self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+                                            self.df = df
+                                            self.fill_tablewidget()
+                if buttonReply == QMessageBox.No:
+                    print('')
+
+
 
     def load_dict(self, plate, desc):
         df_plate = self.df[self.df["Plate"]== plate]

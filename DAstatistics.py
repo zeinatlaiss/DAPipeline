@@ -1,4 +1,3 @@
-from Functions_outils import load_file_tocheckboxes
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import string
@@ -12,8 +11,7 @@ from requests.packages.urllib3.packages.six.moves import xrange
 from form_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from form_table_addclasses import Ui_form_table_addclasses
 from form_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
-from Pandas_widget import PandasModel
-
+from DAPandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe.ui'
@@ -25,7 +23,6 @@ from Pandas_widget import PandasModel
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe(object):
-
     def openwindow_form_checkboxes(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Form_CheckBoxes()
@@ -180,11 +177,6 @@ class Ui_Form_loadDataframe(object):
         self.label_nbrrows.setGeometry(QtCore.QRect(570, 110, 131, 21))
         self.label_nbrrows.setText("")
         self.label_nbrrows.setObjectName("label_nbrrows")
-        self.pushButton_getlistofplates = QtWidgets.QPushButton(Form_loadDataframe)
-        self.pushButton_getlistofplates.setGeometry(QtCore.QRect(10, 160, 111, 20))
-        self.pushButton_getlistofplates.setText("")
-        self.pushButton_getlistofplates.setIconSize(QtCore.QSize(0, 0))
-        self.pushButton_getlistofplates.setObjectName("pushButton_getlistofplates")
 
         self.lineEdit_filepath.setText('File path')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
@@ -201,7 +193,6 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_normalize.currentTextChanged.connect(self.on_comboboxnormalize_changed)
         self.comboBox_plot.currentTextChanged.connect(self.on_plot_changed)
         self.comboBox_aggregate.currentTextChanged.connect(self.on_comboboxaggregate_changed)
-        self.pushButton_getlistofplates.clicked.connect(self.on_getlistofplates_clicked)
 
         self.retranslateUi(Form_loadDataframe)
         QtCore.QMetaObject.connectSlotsByName(Form_loadDataframe)
@@ -349,7 +340,6 @@ class Ui_Form_loadDataframe(object):
                     QMessageBox.information(None, "Error",
                                             "The column " + columnname + " selected contains string.\nPlease select another column.",
                                             QMessageBox.Ok)
-
                 if df['Check_if_String'].any() == False:
                     if df[columnname].isna().any() == True or  df[columnname].isnull().any() == True:
                         buttonReply = QMessageBox.question(None, 'Mean and STD',
@@ -364,7 +354,6 @@ class Ui_Form_loadDataframe(object):
                             QMessageBox.information(None, "Mean and STD ",
                                                     "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
                                                     QMessageBox.Ok)
-
                         if buttonReply == QMessageBox.No:
                             print('no pressed')
                     if df[columnname].isna().any() == False:
@@ -384,6 +373,10 @@ class Ui_Form_loadDataframe(object):
                                         QMessageBox.Ok)
             if file != 'File path':
                 df = pd.read_csv(file)
+                if 'Plate' not in df.columns:
+                    QMessageBox.information(None, "Error ",
+                                            "Column 'Plate' does not exist in the file.",
+                                            QMessageBox.Ok)
                 if 'Plate' in df.columns:
                     if 'Class' not in df.columns:
                         QMessageBox.information(None, "Error ",
@@ -411,29 +404,38 @@ class Ui_Form_loadDataframe(object):
             if file:
                 fileName1 = file
                 file1 = pd.read_csv(fileName1)
-                header = self.select_column()
-                fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to get the intersection",
-                                                           "",
-                                                           "CSV Files (*.csv)")
-                if fileName2:
-                    file2 = pd.read_csv(fileName2)
-                    inter = file2[file2[header].isin(file1[header])]
-                    if len(inter) == 0:
-                        QMessageBox.information(None, "Error ",
-                                                "No intersecton between the 2 files.\nNo file to save.",
-                                                QMessageBox.Ok)
-                    if len(inter) > 0:
-                        QMessageBox.information(None, "Intersection",
-                                                "The number of intersected data = " + str(len(inter)) + "\nSaved file.",
-                                                QMessageBox.Ok)
-                        t1 = os.path.dirname(fileName2)
-                        file_name1 = os.path.splitext(os.path.basename(fileName1))[0]
-                        file_name2 = os.path.splitext(os.path.basename(fileName2))[0]
-                        outfile = t1 + '\\' + 'intersection_' + file_name1
-                        inter.to_csv(outfile, index=None)
-                        self.lineEdit_filepath.setText(t1 + '/' + 'intersection.csv')
-                        self.setPlateWellText_intblview(inter)
-                        self.reloaddata_fromfilepath(outfile)
+                header1 = self.select_column()
+                if (len(header1) < 1):
+                    QMessageBox.information(None, "Error ",
+                                            "Please select a column first.",
+                                            QMessageBox.Ok)
+                if (len(header1) >= 1):
+                    fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to get the intersection",
+                                                               "",
+                                                               "CSV Files (*.csv)")
+                    if fileName2:
+                        file2 = pd.read_csv(fileName2)
+                        header2 = self.select_column()
+                        if not header2:
+                            QMessageBox.information(None, "Error ",
+                                                    "Please select a column first.",
+                                                    QMessageBox.Ok)
+                        if header2:
+                            inter = file2[file2[header2].isin(file1[header1])]
+                            if len(inter) == 0:
+                                QMessageBox.information(None, "Error ",
+                                                        "No intersecton between the 2 files.\nNo file to save.",
+                                                        QMessageBox.Ok)
+                            if len(inter) > 0:
+                                t1 = os.path.dirname(fileName1)
+                                file_name1 = os.path.splitext(os.path.basename(fileName1))[0]
+                                inter.to_csv(t1 + '\\' + 'Intersection_' + file_name1 + '.csv', index=None)
+                                self.reloaddata_fromfilepath(t1 + '\\' + 'Intersection_' + file_name1 + '.csv')
+                                self.lineEdit_filepath.setText(t1 + '/' + 'Intersection_' + file_name1 + '.csv')
+                                QMessageBox.information(None, "Intersection",
+                                            "The number of intersected data = " + str(len(inter)) + "\nSaved file.",
+                                            QMessageBox.Ok)
+
             self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Union":
@@ -445,29 +447,30 @@ class Ui_Form_loadDataframe(object):
                 fileName1 = file
                 file1 = pd.read_csv(fileName1)
                 header = self.select_column()
-                fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to get the union",
-                                                           "",
-                                                           "CSV Files (*.csv)")
-                if fileName2:
-                    file2 = pd.read_csv(fileName2)
-                    union = pd.concat([file1, file2], ignore_index=True).drop_duplicates().reset_index(drop=True)
-                    union.to_csv('D:\\RESULTS\\vl1vl2\\out.csv', index=None)
-                    if len(union) == 0:
-                        QMessageBox.information(None, "Error ",
-                                                "No union between the 2 files.\nNo file to save.",
-                                                QMessageBox.Ok)
-                    if len(union) > 0:
-                        QMessageBox.information(None, "Union",
-                                                "The number of union data = " + str(len(union)) + "\nSaved file.",
-                                                QMessageBox.Ok)
-                        t1 = fileName1.split('/')[2]
-                        t2 = fileName1.split('/')[0]
-                        t3 = fileName1.split('/')[1]
-                        outfile = t2 + '\\' + t3 + '\\' + t1 + '\\' + t1 + '_union.csv'
-                        union.to_csv(outfile, index=None)
-                        self.lineEdit_filepath.setText(t2 + '//' + t3 + '//' + t1 + '//' + t1 + '_union.csv')
-                        self.setPlateWellText_intblview(union)
-                        self.reloaddata_fromfilepath(outfile)
+                if not header:
+                    QMessageBox.information(None, "Error ",
+                                            "Please select a column first.",
+                                            QMessageBox.Ok)
+                if header:
+                    fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to get the union",
+                                                               "",
+                                                               "CSV Files (*.csv)")
+                    if fileName2:
+                        file2 = pd.read_csv(fileName2)
+                        union = pd.concat([file1, file2], ignore_index=True).drop_duplicates().reset_index(drop=True)
+                        if len(union) == 0:
+                            QMessageBox.information(None, "Error ",
+                                                    "No union between the 2 files.\nNo file to save.",
+                                                    QMessageBox.Ok)
+                        if len(union) > 0:
+                            t1 = os.path.dirname(fileName1)
+                            file_name1 = os.path.splitext(os.path.basename(fileName1))[0]
+                            union.to_csv(t1 + '\\' + 'Union_' + file_name1 + '.csv', index=None)
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'Union_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'Union_' + file_name1 + '.csv')
+                            QMessageBox.information(None, "Union",
+                                                    "The number of union data = " + str(len(union)) + "\nSaved file.",
+                                                    QMessageBox.Ok)
             self.comboBox_statistics.setCurrentText("Statistics")
 
     def on_machinelearning_changed(self, value_ch):
@@ -492,39 +495,44 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to detect the active compounds.\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Active_compounds':
-                    value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
-                    stdval = df_toremoveout[columnname].std()
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['Active_compounds'] = 'notactive'
-                    df_toremoveout['Active_compounds'][
-                        (df_toremoveout[columnname] >= meanval + value_sigma1 * stdval)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactive'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No active compound",
-                                                "You have no active compound"
-                                                + "\nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        out_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if out_dir:
-                            t1 = out_dir.split('/')[2]
-                            outfile = out_dir + '//' + t1 + '_Active_compounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            QMessageBox.information(None, "Active coumpounds",
-                                                    str(len(data_dropped)) +
-                                                    " active compounds were detected using the column " + str(
-                                                        columnname) + " when value > " + str(meanval) + ' ' + ' + ' + str(
-                                                        value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
-                                                    + "\nSuccessfully saved the file!",
+                    if 'Well' in df_toremoveout:
+                        value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
+                        stdval = df_toremoveout[columnname].std()
+                        meanval = df_toremoveout[columnname].mean()
+                        df_toremoveout['Active_compounds'] = 'notactive'
+                        df_toremoveout['Active_compounds'][
+                            (df_toremoveout[columnname] >= meanval + value_sigma1 * stdval)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactive'))].index)
+                        if len(data_dropped) <= 1:
+                            QMessageBox.information(None, "No active compound",
+                                                    "You have no active compound"
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(out_dir + '/' + 'Active_compounds.csv')
-                            self.reloaddata_fromfilepath(outfile)
+                        if len(data_dropped) > 2:
+                            out_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if out_dir:
+                                t1 = out_dir.split('/')[2]
+                                outfile = out_dir + '//' + t1 + '_Active_compounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+                                QMessageBox.information(None, "Active coumpounds",
+                                                        str(len(data_dropped)) +
+                                                        " active compounds were detected using the column '" + str(
+                                                            columnname) + "' when value > " + str(meanval) + ' ' + ' + ' + str(
+                                                            value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
+                                                        + "\nSuccessfully saved the file!",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath.setText(out_dir + '/' + 'Active_compounds.csv')
+                                self.reloaddata_fromfilepath(outfile)
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "> mean - value * sigma"):
@@ -540,40 +548,45 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to detect the active compounds.\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'NonToxic_Compounds':
-                    value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
-                    stdval = df_toremoveout[columnname].std()
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['NonToxic_Compounds'] = 'toxic'
-                    df_toremoveout['NonToxic_Compounds'][
-                        (df_toremoveout[columnname] >= meanval + value_sigma1 * stdval)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['NonToxic_Compounds'].str.contains('toxic'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "Non toxic compounds",
-                                                "You have no toxic compound"
-                                                + "\nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        out_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if out_dir:
-                            t1 = out_dir.split('/')[2]
-                            outfile = out_dir + '//' + t1 + 'toxiccompounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-
-                            QMessageBox.information(None, "Toxic coumpounds",
-                                                    str(len(data_dropped)) +
-                                                    " toxic compounds were detected using the column " + str(
-                                                        columnname) + " when value > " + str(meanval) + ' ' + ' + ' + str(
-                                                        value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
-                                                    + "\nSuccessfully saved the file!",
+                    if 'Well' in df_toremoveout:
+                        value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
+                        stdval = df_toremoveout[columnname].std()
+                        meanval = df_toremoveout[columnname].mean()
+                        df_toremoveout['NonToxic_Compounds'] = 'toxic'
+                        df_toremoveout['NonToxic_Compounds'][
+                            (df_toremoveout[columnname] >= meanval + value_sigma1 * stdval)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['NonToxic_Compounds'].str.contains('toxic'))].index)
+                        if len(data_dropped) <= 1:
+                            QMessageBox.information(None, "Non toxic compounds",
+                                                    "You have no toxic compound"
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(out_dir + '/' + t1 + 'toxiccompounds.csv')
-                            self.reloaddata_fromfilepath(outfile)
+                        if len(data_dropped) > 2:
+                            out_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if out_dir:
+                                t1 = out_dir.split('/')[2]
+                                outfile = out_dir + '//' + t1 + 'toxiccompounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+
+                                QMessageBox.information(None, "Toxic coumpounds",
+                                                        str(len(data_dropped)) +
+                                                        " toxic compounds were detected using the column '" + str(
+                                                            columnname) + "' when value > " + str(meanval) + ' ' + ' + ' + str(
+                                                            value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
+                                                        + "\nSuccessfully saved the file!",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath.setText(out_dir + '/' + t1 + 'toxiccompounds.csv')
+                                self.reloaddata_fromfilepath(outfile)
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "< mean - value * sigma"):
@@ -589,38 +602,43 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to detect the active compounds.\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Toxic_compounds':
-                    value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
-                    stdval = df_toremoveout[columnname].std()
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['Toxic_compounds'] = 'not toxic'
-                    df_toremoveout['Toxic_compounds'][(df_toremoveout[columnname] <= meanval - value_sigma1 * stdval)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Toxic_compounds'].str.contains('not toxic'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No toxic compound",
-                                                "You have no toxic compound"
-                                                + "\nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        out_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if out_dir:
-                            t1 = out_dir.split('/')[2]
-                            outfile = out_dir + '//' + t1 + '_Toxic_compounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            QMessageBox.information(None, "Toxic coumpounds",
-                                                    str(len(data_dropped)) +
-                                                    " toxic compounds were detected using the column " + str(
-                                                        columnname) + " when value < " + str(meanval) + ' ' + ' + ' + str(
-                                                        value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
-                                                    + "\nSuccessfully saved the file!",
+                    if 'Well' in df_toremoveout:
+                        value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
+                        stdval = df_toremoveout[columnname].std()
+                        meanval = df_toremoveout[columnname].mean()
+                        df_toremoveout['Toxic_compounds'] = 'not toxic'
+                        df_toremoveout['Toxic_compounds'][(df_toremoveout[columnname] <= meanval - value_sigma1 * stdval)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['Toxic_compounds'].str.contains('not toxic'))].index)
+                        if len(data_dropped) <= 1:
+                            QMessageBox.information(None, "No toxic compound",
+                                                    "You have no toxic compound"
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(out_dir + '/' + 'Toxic_compounds.csv')
-                            self.reloaddata_fromfilepath(outfile)
+                        if len(data_dropped) > 2:
+                            out_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if out_dir:
+                                t1 = out_dir.split('/')[2]
+                                outfile = out_dir + '//' + t1 + '_Toxic_compounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+                                QMessageBox.information(None, "Toxic coumpounds",
+                                                        str(len(data_dropped)) +
+                                                        " toxic compounds were detected using the column " + str(
+                                                            columnname) + " when value < " + str(meanval) + ' ' + ' + ' + str(
+                                                            value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
+                                                        + "\nSuccessfully saved the file!",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath.setText(out_dir + '/' + 'Toxic_compounds.csv')
+                                self.reloaddata_fromfilepath(outfile)
 
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
@@ -637,35 +655,40 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to detect compounds\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Active_compounds':
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['Active_compounds'] = 'notactivecpd'
-                    df_toremoveout['Active_compounds'][(df_toremoveout[columnname] > meanval)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactivecpd'))].index)
-                    if len(df_toremoveout) < 1 :
-                        QMessageBox.information(None, "No active compound",
-                                                "You have no active compound"
-                                                + " \nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) >= 1:
-                        out_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        t1 = out_dir.split('/')[2]
-                        if out_dir:
-                            outfile = out_dir + '//' + t1 + '_activecompounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            QMessageBox.information(None, "Active compounds",
-                                                    str(len(data_dropped)) +
-                                                    " active compounds based on the column " + str(
-                                                        columnname)+ 'when value > ' + str() + '.\n'
-                                                    + "Successfully saved the file!",
+                    if 'Well' in df_toremoveout:
+                        meanval = df_toremoveout[columnname].mean()
+                        df_toremoveout['Active_compounds'] = 'notactivecpd'
+                        df_toremoveout['Active_compounds'][(df_toremoveout[columnname] > meanval)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactivecpd'))].index)
+                        if len(df_toremoveout) < 1 :
+                            QMessageBox.information(None, "No active compound",
+                                                    "You have no active compound"
+                                                    + " \nNo file to save",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(
-                                out_dir + '/' + t1 + '_activecompounds.csv')
+                        if len(data_dropped) >= 1:
+                            out_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            t1 = out_dir.split('/')[2]
+                            if out_dir:
+                                outfile = out_dir + '//' + t1 + '_activecompounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+                                QMessageBox.information(None, "Active compounds",
+                                                        str(len(data_dropped)) +
+                                                        " active compounds based on the column " + str(
+                                                            columnname)+ 'when value > ' + str() + '.\n'
+                                                        + "Successfully saved the file!",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath.setText(
+                                    out_dir + '/' + t1 + '_activecompounds.csv')
 
                             self.reloaddata_fromfilepath(
                                 out_dir + '/' + t1 + '_activecompounds.csv')
@@ -685,34 +708,39 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to detect the active compounds.\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Active_compounds':
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['Active_compounds'] = 'notactive'
-                    df_toremoveout['Active_compounds'][(df_toremoveout[columnname] < meanval)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactive'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No active compound",
-                                                "You have no active compound"
-                                                + "\nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        my_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if my_dir:
-                            outfile = my_dir + '//' + 'Active_compounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            QMessageBox.information(None, "Active coumpounds",
-                                                    str(len(data_dropped)) +
-                                                    " active compounds were detected using the column " + str(
-                                                        columnname) + " when mean < " + str(meanval)
-                                                    + "\nSuccessfully saved the file",
+                    if 'Well' in df_toremoveout:
+                        meanval = df_toremoveout[columnname].mean()
+                        df_toremoveout['Active_compounds'] = 'notactive'
+                        df_toremoveout['Active_compounds'][(df_toremoveout[columnname] < meanval)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactive'))].index)
+                        if len(data_dropped) <= 1:
+                            QMessageBox.information(None, "No active compound",
+                                                    "You have no active compound"
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
-                            self.reloaddata_fromfilepath(outfile)
+                        if len(data_dropped) > 2:
+                            my_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if my_dir:
+                                outfile = my_dir + '//' + 'Active_compounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+                                QMessageBox.information(None, "Active coumpounds",
+                                                        str(len(data_dropped)) +
+                                                        " active compounds were detected using the column '" + str(
+                                                            columnname) + "' when mean < " + str(meanval)
+                                                        + "\nSuccessfully saved the file",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
+                                self.reloaddata_fromfilepath(outfile)
 
         self.comboBox_extracthits.setCurrentText("Detect compounds")
 
@@ -728,36 +756,40 @@ class Ui_Form_loadDataframe(object):
                     QMessageBox.information(None, "Error ",
                                             "Please select a column to detect the active compounds.\nTry again. No file to save",
                                             QMessageBox.Ok)
-
                 if columnname != 'Active_compounds':
-                    value_v, ok = QInputDialog.getDouble(None, "Input", "Value:")
-                    df_toremoveout['Active_compounds'] = 'notactive'
-                    df_toremoveout['Active_compounds'][(df_toremoveout[columnname] >= value_v)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactive'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No active compound",
-                                                "You have no active compound"
-                                                + "\nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        my_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if my_dir:
-                            outfile = my_dir + '//' + 'Active_compounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
-                            self.reloaddata_fromfilepath(outfile)
-                            QMessageBox.information(None, "Active coumpounds",
-                                                    str(len(data_dropped)) +
-                                                    " active compounds were detected using the column " + str(
-                                                        columnname) + " when value < " + str(value_v)
-                                                    + "\nSuccessfully saved the file",
+                    if 'Well' in df_toremoveout:
+                        value_v, ok = QInputDialog.getDouble(None, "Input", "Value:")
+                        df_toremoveout['Active_compounds'] = 'notactive'
+                        df_toremoveout['Active_compounds'][(df_toremoveout[columnname] >= value_v)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('notactive'))].index)
+                        if len(data_dropped) <= 1:
+                            QMessageBox.information(None, "No active compound",
+                                                    "You have no active compound"
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
+                        if len(data_dropped) > 2:
+                            my_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if my_dir:
+                                outfile = my_dir + '//' + 'Active_compounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+                                self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
+                                self.reloaddata_fromfilepath(outfile)
+                                QMessageBox.information(None, "Active coumpounds",
+                                                        str(len(data_dropped)) +
+                                                        " active compounds were detected using the column '" + str(
+                                                            columnname) + "' when value < " + str(value_v)
+                                                        + "\nSuccessfully saved the file",
+                                                        QMessageBox.Ok)
 
             self.comboBox_statistics.setCurrentText("Detect compounds")
 
@@ -774,37 +806,42 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to detect the active compounds.\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Active_compounds':
-                    value_v, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
-                    stdval = df_toremoveout[columnname].std()
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['Active_compounds'] = 'not active'
-                    df_toremoveout['Active_compounds'][(df_toremoveout[columnname] <= value_v)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('not active'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No active compound",
-                                                "You have no active compound"
-                                                + "\nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        my_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if my_dir:
-                            outfile = my_dir + '//' + 'Active_compounds.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
-                            self.reloaddata_fromfilepath(outfile)
-                            QMessageBox.information(None, "Active coumpounds",
-                                                    str(len(data_dropped)) +
-                                                    " active compounds were detected using the column " + str(
-                                                        columnname) + " at " + str(meanval) + ' ' + ' + ' + str(
-                                                        value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
-                                                    + "\nSuccessfully saved the file",
+                    if 'Well' in df_toremoveout:
+                        value_v, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
+                        stdval = df_toremoveout[columnname].std()
+                        meanval = df_toremoveout[columnname].mean()
+                        df_toremoveout['Active_compounds'] = 'not active'
+                        df_toremoveout['Active_compounds'][(df_toremoveout[columnname] <= value_v)] = \
+                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                        data_dropped = df_toremoveout.drop(
+                            df_toremoveout[(df_toremoveout['Active_compounds'].str.contains('not active'))].index)
+                        if len(data_dropped) <= 1:
+                            QMessageBox.information(None, "No active compound",
+                                                    "You have no active compound"
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
+                        if len(data_dropped) > 2:
+                            my_dir = QFileDialog.getExistingDirectory(
+                                None,
+                                "Select output folder",
+                                "",
+                                QFileDialog.ShowDirsOnly)
+                            if my_dir:
+                                outfile = my_dir + '//' + 'Active_compounds.csv'
+                                data_dropped.to_csv(outfile, index=None)
+                                self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
+                                self.reloaddata_fromfilepath(outfile)
+                                QMessageBox.information(None, "Active coumpounds",
+                                                        str(len(data_dropped)) +
+                                                        " active compounds were detected using the column " + str(
+                                                            columnname) + " at " + str(meanval) + ' ' + ' + ' + str(
+                                                            value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
+                                                        + "\nSuccessfully saved the file",
+                                                        QMessageBox.Ok)
 
             self.comboBox_statistics.setCurrentText("Detect compounds")
 
@@ -823,40 +860,46 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to remove the outliers\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Outliers':
-                    value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
-                    if value_sigma1:
-                        stdval = df_toremoveout[columnname].std()
-                        meanval = df_toremoveout[columnname].mean()
-                        df_toremoveout['Outliers'] = 'outlier'
-                        df_toremoveout['Outliers'][(df_toremoveout[columnname] >= meanval + value_sigma1 * stdval) |
-                                                   (df_toremoveout[columnname] <= meanval - value_sigma1 * stdval)] = \
-                            df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                        data_dropped = df_toremoveout.drop(
-                            df_toremoveout[(df_toremoveout['Outliers'].str.contains('outlier'))].index)
-                        if len(data_dropped) < 1:
-                            QMessageBox.information(None, "No Outliers",
-                                                    "You have no outliers"
-                                                    + " \nNo file to save",
-                                                    QMessageBox.Ok)
-                        if len(data_dropped) >=1:
-                            out_dir = QFileDialog.getExistingDirectory(
-                                None,
-                                "Select output folder",
-                                "",
-                                QFileDialog.ShowDirsOnly)
-                            t1 = out_dir.split('/')[2]
-                            if out_dir:
-                                outfile = out_dir + '//' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv'
-                                data_dropped.to_csv(outfile, index=None)
-                                self.lineEdit_filepath.setText(
-                                    out_dir + '/' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv')
-                                QMessageBox.information(None, "Outliers",
-                                                        str(len(df_toremoveout) - len(data_dropped)) +
-                                                        " outliers have been removed using the column " + str(
-                                                            columnname) + '.\n'
-                                                        + "Successfully saved the file!",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
+                                                QMessageBox.Ok)
+                    if 'Well' in df_toremoveout:
+                        value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
+                        if value_sigma1:
+
+                            stdval = df_toremoveout[columnname].std()
+                            meanval = df_toremoveout[columnname].mean()
+                            df_toremoveout['Outliers'] = 'outlier'
+                            df_toremoveout['Outliers'][(df_toremoveout[columnname] >= meanval + value_sigma1 * stdval) |
+                                                       (df_toremoveout[columnname] <= meanval - value_sigma1 * stdval)] = \
+                                df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                            data_dropped = df_toremoveout.drop(
+                                df_toremoveout[(df_toremoveout['Outliers'].str.contains('outlier'))].index)
+                            if len(data_dropped) < 1:
+                                QMessageBox.information(None, "No Outliers",
+                                                        "You have no outliers"
+                                                        + " \nNo file to save",
                                                         QMessageBox.Ok)
-                                self.reloaddata_fromfilepath(out_dir + '/' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv')
+                            if len(data_dropped) >=1:
+                                out_dir = QFileDialog.getExistingDirectory(
+                                    None,
+                                    "Select output folder",
+                                    "",
+                                    QFileDialog.ShowDirsOnly)
+                                t1 = out_dir.split('/')[2]
+                                if out_dir:
+                                    outfile = out_dir + '//' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv'
+                                    data_dropped.to_csv(outfile, index=None)
+                                    self.lineEdit_filepath.setText(
+                                        out_dir + '/' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv')
+                                    QMessageBox.information(None, "Outliers",
+                                                            str(len(df_toremoveout) - len(data_dropped)) +
+                                                            " outliers have been removed using the column " + str(
+                                                                columnname) + '.\n'
+                                                            + "Successfully saved the file!",
+                                                            QMessageBox.Ok)
+                                    self.reloaddata_fromfilepath(out_dir + '/' + t1 + '_WithoutOutliers_' + str(value_sigma1) + 'sigma.csv')
             self.comboBox_removeoutliers.setCurrentText("Remove outliers")
 
         if (value_cb == "> mean"):
@@ -872,37 +915,45 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to remove the outliers\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Outliers':
-                    meanval = df_toremoveout[columnname].mean()
-                    df_toremoveout['Outliers'] = 'outlier'
-                    df_toremoveout['Outliers'][(df_toremoveout[columnname] > meanval)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Outliers'].str.contains('outlier'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No Outliers",
-                                                "You have no outliers"
-                                                + " \nNo file to save",
-                                                QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        out_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        t1 = out_dir.split('/')[2]
-                        if out_dir:
-                            outfile = out_dir + '//' + t1 + '_WithoutOutliers.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            QMessageBox.information(None, "Outliers",
-                                                    str(len(df_toremoveout) - len(data_dropped)) +
-                                                    " outliers have been removed using the column " + str(
-                                                        columnname) + '.\n'
-                                                    + "Successfully saved the file!",
+                        meanval = df_toremoveout[columnname].mean()
+                        if 'Well' not in df_toremoveout:
+                            QMessageBox.information(None, "Error ",
+                                                    "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(
-                                out_dir + '/' + t1 + '_WithoutOutliers.csv')
-                            self.reloaddata_fromfilepath(
-                                out_dir + '/' + t1 + '_WithoutOutliers.csv')
+                        if 'Well' in df_toremoveout:
+                            df_toremoveout['Outliers'] = 'outlier'
+                            df_toremoveout['Outliers'][(df_toremoveout[columnname] > meanval)] = \
+                                df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                            print('33')
+                            data_dropped = df_toremoveout.drop(
+                                df_toremoveout[(df_toremoveout['Outliers'].str.contains('outlier'))].index)
+                            if len(data_dropped) <= 1:
+                                print('22222')
+                                QMessageBox.information(None, "No Outliers",
+                                                        "You have no outliers"
+                                                        + " \nNo file to save",
+                                                        QMessageBox.Ok)
+                            if len(data_dropped) > 2:
+                                print('flldk')
+                                out_dir = QFileDialog.getExistingDirectory(
+                                    None,
+                                    "Select output folder",
+                                    "",
+                                    QFileDialog.ShowDirsOnly)
+                                t1 = out_dir.split('/')[2]
+                                if out_dir:
+                                    outfile = out_dir + '//' + t1 + '_WithoutOutliers.csv'
+                                    data_dropped.to_csv(outfile, index=None)
+                                    QMessageBox.information(None, "Outliers",
+                                                            str(len(df_toremoveout) - len(data_dropped)) +
+                                                            " outliers have been removed using the column " + str(
+                                                                columnname) + '.\n'
+                                                            + "Successfully saved the file!",
+                                                            QMessageBox.Ok)
+                                    self.lineEdit_filepath.setText(
+                                        out_dir + '/' + t1 + '_WithoutOutliers.csv')
+                                    self.reloaddata_fromfilepath(
+                                        out_dir + '/' + t1 + '_WithoutOutliers.csv')
 
             self.comboBox_removeoutliers.setCurrentText("Remove outliers")
 
@@ -919,36 +970,42 @@ class Ui_Form_loadDataframe(object):
                                             "Please select a column to remove the outliers\nTry again. No file to save",
                                             QMessageBox.Ok)
                 if columnname != 'Outliers':
-                    value_out, ok = QInputDialog.getDouble(None, "Input", "Value:")
-                    df_toremoveout['Outliers'] = 'outlier'
-                    df_toremoveout['Outliers'][(df_toremoveout[columnname] >= value_out)] = \
-                        df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
-                    data_dropped = df_toremoveout.drop(
-                        df_toremoveout[(df_toremoveout['Outliers'].str.contains('outlier'))].index)
-                    if len(data_dropped) <= 1:
-                        QMessageBox.information(None, "No Outliers",
-                                                "You have no outliers"
-                                                + " \nNo file to save",
+                    if 'Well' not in df_toremoveout:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Well' does not exist in the file. You cannot remove the outliers.\nNo file to save.",
                                                 QMessageBox.Ok)
-                    if len(data_dropped) > 2:
-                        my_dir = QFileDialog.getExistingDirectory(
-                            None,
-                            "Select output folder",
-                            "",
-                            QFileDialog.ShowDirsOnly)
-                        if my_dir:
-                            outfile = my_dir + '//' + 'WithoutOutliers_gt_' + str(value_out) + '.csv'
-                            data_dropped.to_csv(outfile, index=None)
-                            QMessageBox.information(None, "Outliers",
-                                                    str(len(df_toremoveout) - len(data_dropped)) +
-                                                    " outliers have been rejected using the column " + str(
-                                                        columnname) + '.\n'
-                                                    + "Successfully saved the file!",
-                                                    QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(
-                                my_dir + '/' + 'WithoutOutliers_gt_' + str(value_out) + '.csv')
-                            self.reloaddata_fromfilepath(
-                                my_dir + '/' + 'WithoutOutliers_gt_' + str(value_out) + '.csv')
+                    if 'Well' in df_toremoveout:
+                        value_out, ok = QInputDialog.getDouble(None, "Input", "Value:")
+                        if value_out:
+                            df_toremoveout['Outliers'] = 'outlier'
+                            df_toremoveout['Outliers'][(df_toremoveout[columnname] >= value_out)] = \
+                                df_toremoveout['Plate'] + '_' + df_toremoveout['Well']
+                            data_dropped = df_toremoveout.drop(
+                                df_toremoveout[(df_toremoveout['Outliers'].str.contains('outlier'))].index)
+                            if len(data_dropped) <= 1:
+                                QMessageBox.information(None, "No Outliers",
+                                                        "You have no outliers"
+                                                        + " \nNo file to save",
+                                                        QMessageBox.Ok)
+                            if len(data_dropped) > 2:
+                                my_dir = QFileDialog.getExistingDirectory(
+                                    None,
+                                    "Select output folder",
+                                    "",
+                                    QFileDialog.ShowDirsOnly)
+                                if my_dir:
+                                    outfile = my_dir + '//' + 'WithoutOutliers_gt_' + str(value_out) + '.csv'
+                                    data_dropped.to_csv(outfile, index=None)
+                                    QMessageBox.information(None, "Outliers",
+                                                            str(len(df_toremoveout) - len(data_dropped)) +
+                                                            " outliers have been rejected using the column " + str(
+                                                                columnname) + '.\n'
+                                                            + "Successfully saved the file!",
+                                                            QMessageBox.Ok)
+                                    self.lineEdit_filepath.setText(
+                                        my_dir + '/' + 'WithoutOutliers_gt_' + str(value_out) + '.csv')
+                                    self.reloaddata_fromfilepath(
+                                        my_dir + '/' + 'WithoutOutliers_gt_' + str(value_out) + '.csv')
             self.comboBox_removeoutliers.setCurrentText("Remove outliers")
 
     def select_multicolumns(self):
@@ -1296,7 +1353,6 @@ class Ui_Form_loadDataframe(object):
                                                 QMessageBox.Ok)
                 if header_1:
                     if (len(df[header_1]) - df[header_1].nunique() > 0):
-                        print('222')
                         buttonReply = QMessageBox.question(None, 'Duplicated key',
                                "Press Yes if you want to continue linking with duplicated keys.\n"
                                "Press No to ignore.",
@@ -1324,42 +1380,39 @@ class Ui_Form_loadDataframe(object):
                                     model = PandasModel(df_withcpds.head(1000))
                                     self.tableView_dataframe.setModel(model)
                                     header_2 = self.select_column()
-                                    if not header_2:
-                                        QMessageBox.information(None, "Error ",
-                                                                "Please select a column to link the file.",
-                                                                QMessageBox.Ok)
-                                    if header_2:
-                                        df_withcpds = pd.read_csv(fileName_cpds, index_col=[header_2], low_memory=False)
-                                        df['CPD_ID'] = df_withcpds['X_CPD_ID']
-                                        df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
-                                        df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
-                                        if 'Concentration' in df_withcpds:
-                                            df['Concentration'] = df_withcpds['Concentration']
-                                        if 'Concentration' not in df_withcpds:
-                                            df['Concentration'] = '3'
-                                        if 'Concentration (uM)' not in df_withcpds:
-                                            df['Concentration'] = '3'
-                                        if 'Concentration (uM)' in df_withcpds:
-                                            df['Concentration'] = df_withcpds['Concentration (uM)']
-                                        t1 = os.path.dirname(file)
-                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                                        QMessageBox.information(None, "File linked",
-                                                                "Successfully linked and saved the files!",
-                                                                QMessageBox.Ok)
-
-
-                                    if buttonReply == QMessageBox.No:
-                                        QMessageBox.information(None, "Error ",
-                                                                "The column selected has duplicated values, you cannot link the file.\nNo file to save.",
-                                                                QMessageBox.Ok)
+                                    print('1212')
+                                    print(header_2)
+                                    df_withcpds = pd.read_csv(fileName_cpds, index_col=[header_2], low_memory=False)
+                                    df['CPD_ID'] = df_withcpds['X_CPD_ID']
+                                    print('1313')
+                                    df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
+                                    df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
+                                    if 'Concentration' in df_withcpds:
+                                        df['Concentration'] = df_withcpds['Concentration']
+                                    if 'Concentration' not in df_withcpds:
+                                        df['Concentration'] = '3'
+                                    if 'Concentration (uM)' not in df_withcpds:
+                                        df['Concentration'] = '3'
+                                    if 'Concentration (uM)' in df_withcpds:
+                                        df['Concentration'] = df_withcpds['Concentration (uM)']
+                                    t1 = os.path.dirname(file)
+                                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                    df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                    self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                    self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                    QMessageBox.information(None, "File linked",
+                                                            "Successfully linked and saved the files!",
+                                                            QMessageBox.Ok)
+                                    # if buttonReply == QMessageBox.No:
+                                    #     QMessageBox.information(None, "Error ",
+                                    #                             "The column selected has duplicated values, you cannot link the file.\nNo file to save.",
+                                    #                             QMessageBox.Ok)
                     if (len(df[header_1]) - df[header_1].nunique() == 0):
                         fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
                                                                   "",
                                                                   "CSV Files (*.csv)")
                         if fileName_cpds:
+                            print('dmsms')
                             df = pd.read_csv(file, index_col=[header_1])
                             df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
                             self.lineEdit_filepath.setText(fileName_cpds)
@@ -1367,10 +1420,12 @@ class Ui_Form_loadDataframe(object):
                             self.tableView_dataframe.setModel(model)
                             header_2 = self.select_column()
                             if not header_2:
+                                print('sdnf')
                                 QMessageBox.information(None, "Error ",
                                                         "Please select a column to link the file.",
                                                         QMessageBox.Ok)
                             if header_2:
+                                print('jkdkd')
                                 df_withcpds = pd.read_csv(fileName_cpds, index_col=[header_2], low_memory=False)
                                 df['CPD_ID'] = df_withcpds['X_CPD_ID']
                                 df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
@@ -1382,11 +1437,14 @@ class Ui_Form_loadDataframe(object):
                                 if 'Concentration (uM)' not in df_withcpds:
                                     df['Concentration'] = '3'
                                 if 'Concentration (uM)' in df_withcpds:
+                                    print('dmff')
                                     df['Concentration'] = df_withcpds['Concentration (uM)']
                                 t1 = os.path.dirname(file)
                                 file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                print('mfmd')
                                 df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
                                 self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                print('mvks')
                                 self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
                                 QMessageBox.information(None, "File linked",
                                                         "Successfully linked and saved the files!",
@@ -1403,7 +1461,7 @@ class Ui_Form_loadDataframe(object):
                 df = pd.read_csv(file)
                 if 'Well' not in df.columns:
                     QMessageBox.information(None, "Error ",
-                                            "The column Well does not exist in the file\nYou cannot link your file.",
+                                            "Column 'Well' does not exist in the file\nYou cannot link your file.",
                                             QMessageBox.Ok)
                 if 'Well' in df.columns:
                     fileName_cpds, _ = QFileDialog.getOpenFileName(None,
@@ -1411,58 +1469,77 @@ class Ui_Form_loadDataframe(object):
                                                                    "",
                                                                    "CSV Files (*.csv)")
                     if fileName_cpds:
-                        df = pd.read_csv(file, index_col='Well')
-                        df_cpds = pd.read_csv(fileName_cpds, index_col='Well')
-                        df['CPD_ID'] = df_cpds['X_CPD_ID']
-                        df['BATCH_ID'] = df_cpds['X_BATCH_ID']
-                        df['Concentration'] = df_cpds['Concentration (uM)']
-                        t1 = os.path.dirname(file)
-                        file_name1 = os.path.splitext(os.path.basename(file))[0]
-                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                        QMessageBox.information(None, "File linked",
-                                                "Successfully linked and saved the files!",
-                                                QMessageBox.Ok)
+                        df_cpds = pd.read_csv(fileName_cpds)
+                        if 'WELL' not in df_cpds.columns:
+                            df = pd.read_csv(file, index_col='Well')
+                            df_cpds = pd.read_csv(fileName_cpds, index_col='Well')
+                            df['CPD_ID'] = df_cpds['X_CPD_ID']
+                            df['BATCH_ID'] = df_cpds['X_BATCH_ID']
+                            df['Concentration'] = df_cpds['Concentration (uM)']
+                            t1 = os.path.dirname(file)
+                            file_name1 = os.path.splitext(os.path.basename(file))[0]
+                            df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                            QMessageBox.information(None, "File linked",
+                                                    "Successfully linked and saved the files!",
+                                                    QMessageBox.Ok)
+
+                        if 'WELL' in df_cpds.columns:
+                            print('2')
+                            df = pd.read_csv(file, index_col='Well')
+                            df_cpds = pd.read_csv(fileName_cpds, index_col='WELL')
+                            df['CPD_ID'] = df_cpds['X_CPD_ID']
+                            df['BATCH_ID'] = df_cpds['X_BATCH_ID']
+                            df['Concentration'] = df_cpds['Concentration (uM)']
+                            t1 = os.path.dirname(file)
+                            file_name1 = os.path.splitext(os.path.basename(file))[0]
+                            df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                            QMessageBox.information(None, "File linked",
+                                                    "Successfully linked and saved the files!",
+                                                    QMessageBox.Ok)
+
             self.comboBox_linkfileby.setCurrentText('Link file by')
 
-        # if (value_ == 'PLATEBARCODE'):
-        #     file_PLATEBARCODE = self.lineEdit_filepath.text()
-        #     if file_PLATEBARCODE == "File path":
-        #         QMessageBox.information(None, "Error ",
-        #                                 "No loaded file.\nPlease load a file first.",
-        #                                 QMessageBox.Ok)
-        #     if file != "File path":
-        #         df_PLATEBARCODE = pd.read_csv(file_PLATEBARCODE)
-        #         if 'PLATEBARCODE' not in df_PLATEBARCODE.columns :
-        #             QMessageBox.information(None, "Error ",
-        #                                     "The column PLATEBARCODE does not exist in the file\nYou cannot link your file.",
-        #                                     QMessageBox.Ok)
-        #         if 'PLATEBARCODE' in df_PLATEBARCODE.columns:
-        #             df_PLATEBARCODE = pd.read_csv(file_PLATEBARCODE, index_col=['PLATEBARCODE'])
-        #             fileName_Barcode_CompoundPlate, _ = QFileDialog.getOpenFileName(None,
-        #                                                            "Load File with Barcode_CompoundPlate",
-        #                                                            "",
-        #                                                            "CSV Files (*.csv)")
-        #             if fileName_Barcode_CompoundPlate:
-        #                 df_Barcode_CompoundPlate = pd.read_csv(fileName_Barcode_CompoundPlate)
-        #                 if 'Barcode_CompoundPlate' not in df_Barcode_CompoundPlate.columns:
-        #                     QMessageBox.information(None, "Error ",
-        #                                             "The column Barcode_CompoundPlate does not exist in the file\nYou cannot link your file.",
-        #                                             QMessageBox.Ok)
-        #                 if 'Barcode_CompoundPlate' in df_Barcode_CompoundPlate.columns:
-        #                     df_Barcode_CompoundPlate = pd.read_csv(fileName_Barcode_CompoundPlate,
-        #                                                            index_col='Barcode_CompoundPlate')
-        #                     df_PLATEBARCODE['Barcode_AssayPlate'] = df_Barcode_CompoundPlate['Barcode_AssayPlate']
-        #                     t1 = os.path.dirname(file_PLATEBARCODE)
-        #                     file_name1 = os.path.splitext(os.path.basename(file_PLATEBARCODE))[0]
-        #                     df_PLATEBARCODE.to_csv(t1 + '\\' + 'CPDs_file_' + file_name1 + '.csv')
-        #                     self.reloaddata_fromfilepath(t1 + '\\' + 'CPDs_file_' + file_name1 + '.csv')
-        #                     self.lineEdit_filepath.setText(t1 + '/' + 'CPDs_file_' + file_name1 + '.csv')
-        #                     QMessageBox.information(None, "File linked",
-        #                                             "Successfully linked and saved the file!",
-        #                                             QMessageBox.Ok)
-        #     self.comboBox_linkfileby.setCurrentText('Link file by')
+        if (value_ == 'PLATEBARCODE'):
+            file_PLATEBARCODE = self.lineEdit_filepath.text()
+            if file_PLATEBARCODE == "File path":
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != "File path":
+                df_PLATEBARCODE = pd.read_csv(file_PLATEBARCODE)
+                if 'PLATEBARCODE' not in df_PLATEBARCODE.columns :
+                    QMessageBox.information(None, "Error ",
+                                            "Column 'PLATEBARCODE' does not exist in the file\nYou cannot link your file.",
+                                            QMessageBox.Ok)
+                if 'PLATEBARCODE' in df_PLATEBARCODE.columns:
+                    df_PLATEBARCODE = pd.read_csv(file_PLATEBARCODE, index_col=['PLATEBARCODE'])
+                    fileName_Barcode_CompoundPlate, _ = QFileDialog.getOpenFileName(None,
+                                                                   "Load File with Barcode_CompoundPlate",
+                                                                   "",
+                                                                   "CSV Files (*.csv)")
+                    if fileName_Barcode_CompoundPlate:
+                        df_Barcode_CompoundPlate = pd.read_csv(fileName_Barcode_CompoundPlate)
+                        if 'Barcode_CompoundPlate' not in df_Barcode_CompoundPlate.columns:
+                            QMessageBox.information(None, "Error ",
+                                                    "Column 'Barcode_CompoundPlate' does not exist in the file\nYou cannot link your file.",
+                                                    QMessageBox.Ok)
+                        if 'Barcode_CompoundPlate' in df_Barcode_CompoundPlate.columns:
+                            df_Barcode_CompoundPlate = pd.read_csv(fileName_Barcode_CompoundPlate,
+                                                                   index_col='Barcode_CompoundPlate')
+                            df_PLATEBARCODE['Barcode_AssayPlate'] = df_Barcode_CompoundPlate['Barcode_AssayPlate']
+                            t1 = os.path.dirname(file_PLATEBARCODE)
+                            file_name1 = os.path.splitext(os.path.basename(file_PLATEBARCODE))[0]
+                            df_PLATEBARCODE.to_csv(t1 + '\\' + 'CPDs_file_' + file_name1 + '.csv')
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'CPDs_file_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'CPDs_file_' + file_name1 + '.csv')
+                            QMessageBox.information(None, "File linked",
+                                                    "Successfully linked and saved the file!",
+                                                    QMessageBox.Ok)
+            self.comboBox_linkfileby.setCurrentText('Link file by')
 
     def on_comboboxaddcolumn_changed(self, _value):
         file = self.lineEdit_filepath.text()
@@ -1526,7 +1603,7 @@ class Ui_Form_loadDataframe(object):
                                 t1 = out_dir.split('/')[2]
                                 d1.to_csv(out_dir + '\\' + t1 + '_Plate_WELL.csv', index=None)
                                 QMessageBox.information(None, "Column added ",
-                                                        "The column " + value_entered + " has been successfully added.\nSuccessfully saved the file!",
+                                                        "Column '" + value_entered + "' has been successfully added.\nSuccessfully saved the file!",
                                                         QMessageBox.Ok)
                                 self.reloaddata_fromDF(d1)
                                 self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_WELL.csv')
@@ -1534,7 +1611,7 @@ class Ui_Form_loadDataframe(object):
                         if ('Plate' not in d1.columns and 'WELL' not in d1.columns and 'Well' not in d1.columns and
                                 'Barcode_AssayPlate' not in d1.columns and 'Plate_Sanofi' not in d1.columns):
                             QMessageBox.information(None, "Error ",
-                                                    "The column Plate or Well not in the file! No column to add!\nNo file to save.",
+                                                    "Columns 'Plate' or 'Well' not in the file! No column to add!\nNo file to save.",
                                                     QMessageBox.Ok)
 
                     if (value_entered == 'Concentration'):
@@ -1963,20 +2040,12 @@ class Ui_Form_loadDataframe(object):
                 self.lineEdit_well.setText('No wells')
                 self.getncpdsbatches(df)
 
-    def on_getlistofplates_clicked(self):
-        print('2')
-        dia =  Ui_Form_listplate()
-        print('3')
-        self.dialogs.append(dia)
-        print('4')
-
     def on_textedit_clicked(self):
         self.text_path = str(self.lineEdit_filepath.text())
         return self.text_path
 
     def on_concatenatefiles_clicked(self):
         filter = "CSV (*.csv)"
-
         filename, _ = QFileDialog.getOpenFileNames(None, "Select CSV files to concatenate",
                                                    "",
                                                    filter)
