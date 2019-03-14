@@ -1,5 +1,5 @@
 import os
-from DAPandaswidget import PandasModel
+from DApandaswidget import PandasModel
 import pandas as pd
 from PyQt5.QtWidgets import *
 import string
@@ -175,7 +175,7 @@ class Ui_form_table_addclasses(object):
                                     t1 = os.path.dirname(file)
                                     file_name1 = os.path.splitext(os.path.basename(file))[0]
                                     self.lineEdit_filepathfromdataframe.setText(t1 + '\\' + file_name1 + '.csv')
-                                    df1.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
+                                    df1.to_csv(t1 + '\\' + file_name1 + '_withclasses' + '.csv', index=None)
                                     df = pd.read_csv(t1 + '\\' + file_name1 + '.csv', low_memory=False)
                                     if 'Well' not in df:
                                         self.lineEdit_filepathfromdataframe.setText('')

@@ -8,10 +8,10 @@ import os
 from PyQt5.QtWidgets import *
 import pandas as pd
 from requests.packages.urllib3.packages.six.moves import xrange
-from form_checkboxes_dropfromrows import Ui_Form_CheckBoxes
-from form_table_addclasses import Ui_form_table_addclasses
-from form_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
-from DAPandaswidget import PandasModel
+from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
+from DAform_table_addclasses import Ui_form_table_addclasses
+from DAform_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
+from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe.ui'
@@ -111,6 +111,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_addcolumn.setObjectName("comboBox_addcolumn")
         self.comboBox_addcolumn.addItem("")
         self.comboBox_addcolumn.addItem("")
+        self.comboBox_addcolumn.addItem("")
         self.comboBox_linkfileby = QtWidgets.QComboBox(Form_loadDataframe)
         self.comboBox_linkfileby.setGeometry(QtCore.QRect(1310, 90, 131, 22))
         self.comboBox_linkfileby.setObjectName("comboBox_linkfileby")
@@ -177,6 +178,10 @@ class Ui_Form_loadDataframe(object):
         self.label_nbrrows.setGeometry(QtCore.QRect(570, 110, 131, 21))
         self.label_nbrrows.setText("")
         self.label_nbrrows.setObjectName("label_nbrrows")
+        self.pushButton_editvalues = QtWidgets.QPushButton(Form_loadDataframe)
+        self.pushButton_editvalues.setGeometry(QtCore.QRect(920, 60, 80, 21))
+        self.pushButton_editvalues.setObjectName("pushButton_editvalues")
+
 
         self.lineEdit_filepath.setText('File path')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
@@ -218,7 +223,8 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_dropfrom.setItemText(4, _translate("Form_loadDataframe", "Extract value from rows"))
         self.comboBox_dropfrom.setItemText(5, _translate("Form_loadDataframe", "Rename columns"))
         self.comboBox_addcolumn.setItemText(0, _translate("Form_loadDataframe", "Add column"))
-        self.comboBox_addcolumn.setItemText(1, _translate("Form_loadDataframe", "New column"))
+        self.comboBox_addcolumn.setItemText(1, _translate("Form_loadDataframe", "Merge 2 columns"))
+        self.comboBox_addcolumn.setItemText(2, _translate("Form_loadDataframe", "New column"))
         self.comboBox_linkfileby.setItemText(0, _translate("Form_loadDataframe", "Link file by"))
         self.comboBox_linkfileby.setItemText(1, _translate("Form_loadDataframe", "Well"))
         self.comboBox_linkfileby.setItemText(2, _translate("Form_loadDataframe", "Plate_Well"))
@@ -250,6 +256,9 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_aggregate.setItemText(0, _translate("Form_loadDataframe", "Aggregate"))
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe", "Aggregated grouping by"))
+        self.pushButton_editvalues.setText(_translate("Form_loadDataframe", "Edit values"))
+
+
 
     def on_comboboxnormalize_changed(self, value_nor):
         file = self.lineEdit_filepath.text()
@@ -262,13 +271,16 @@ class Ui_Form_loadDataframe(object):
                 df2 = pd.read_csv(file)
                 t1 = os.path.dirname(file)
                 file_name1 = os.path.splitext(os.path.basename(file))[0]
-
-                if 'Plate' not in df2 and 'Class' not in df2:
+                if 'Plate' not in df2.columns and 'Class' not in df2.columns:
                     QMessageBox.information(None, "Error ",
-                                            "No column Plate in the file.\nYou cannot apply the normalisation",
+                                            "Columns 'Plate' and 'Class' do not exist in the file.\nYou cannot apply the normalisation",
                                             QMessageBox.Ok)
-                if 'Plate' in df2:
-                    if 'Class' in df2:
+                if 'Plate' in df2.columns:
+                    if 'Class' not in df2.columns:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Class' does not exist in the file.\nYou cannot apply the normalisation",
+                                                QMessageBox.Ok)
+                    if 'Class' in df2.columns:
                         df2_grp = df2.groupby('Plate')
                         for grp in df2_grp:
                             for column in grp[1]._get_numeric_data():
@@ -291,13 +303,16 @@ class Ui_Form_loadDataframe(object):
             df2 = pd.read_csv(file)
             t1 = os.path.dirname(file)
             file_name1 = os.path.splitext(os.path.basename(file))[0]
-
-            if 'Plate' not in df2 and 'Class' not in df2:
+            if 'Plate' not in df2.columns and 'Class' not in df2.columns:
                 QMessageBox.information(None, "Error ",
-                                        "No column Plate in the file.\nYou cannot apply the normalisation",
+                                        "Columns 'Plate' and 'Class' do not exist in the file.\nYou cannot apply the normalisation",
                                         QMessageBox.Ok)
-            if 'Plate' in df2:
-                if 'Class' in df2:
+            if 'Plate' in df2.columns:
+                if 'Class' not in df2.columns:
+                    QMessageBox.information(None, "Error ",
+                                            "Column 'Class' does not exist in the file.\nYou cannot apply the normalisation",
+                                            QMessageBox.Ok)
+                if 'Class' in df2.columns:
                     df2_grp = df2.groupby('Plate')
                     for grp in df2_grp:
                         for column in grp[1]._get_numeric_data():
@@ -321,9 +336,7 @@ class Ui_Form_loadDataframe(object):
             QMessageBox.information(None, "Not imp",
                                     "Not implemented yet.",
                                     QMessageBox.Ok)
-
         self.comboBox_normalize.setCurrentText("Normalise")
-
 
     def on_statistics_changed(self, value_st):
         file = self.lineEdit_filepath.text()
@@ -554,6 +567,9 @@ class Ui_Form_loadDataframe(object):
                                                 QMessageBox.Ok)
                     if 'Well' in df_toremoveout:
                         value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
+                        # Neg = df_tot[df_tot['Class'] == 2]
+                        # Pos = df_tot[df_tot['Class'] == 1]
+                        # Cpd = df_tot[df_tot['Class'] == 3]
                         stdval = df_toremoveout[columnname].std()
                         meanval = df_toremoveout[columnname].mean()
                         df_toremoveout['NonToxic_Compounds'] = 'toxic'
@@ -1240,7 +1256,6 @@ class Ui_Form_loadDataframe(object):
                     plt.show()
 
                 if len(header) == 2:
-                    print('22')
                     header_xaxis = header[0]
                     header_yaxis1 = header[1]
                     sns.barplot(x=header_xaxis, y=df_1[header_yaxis1], data=df_1, capsize=.5, ci='sd')
@@ -1311,7 +1326,7 @@ class Ui_Form_loadDataframe(object):
         if (value_agg == 'Aggregate - Min Max Mean Sum STD'):
             file = self.lineEdit_filepath.text()
             if file == "File path":
-                QMessageBox.information(None, "Error ",
+                QMessageBox.information(None, "Error",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
             if file != "File path":
@@ -1346,109 +1361,92 @@ class Ui_Form_loadDataframe(object):
             if file != "File path":
                 file = self.lineEdit_filepath.text()
                 df = pd.read_csv(file)
-                header_1 = self.select_column()
-                if not header_1:
-                    QMessageBox.information(None, "Error",
-                                                "Please select a column to link the file.\n",
-                                                QMessageBox.Ok)
-                if header_1:
-                    if (len(df[header_1]) - df[header_1].nunique() > 0):
-                        buttonReply = QMessageBox.question(None, 'Duplicated key',
-                               "Press Yes if you want to continue linking with duplicated keys.\n"
-                               "Press No to ignore.",
-                               # "Do you like PyQt5?",
-                               QMessageBox.Yes | QMessageBox.No,
-                               QMessageBox.Yes)
-                        if buttonReply == QMessageBox.Yes:
-                            fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
-                                                                           "",
-                                                                           "CSV Files (*.csv)")
-                            if fileName_cpds:
-                                df = pd.read_csv(file, index_col=[header_1])
-                                df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
-                                self.lineEdit_filepath.setText(fileName_cpds)
-                                model = PandasModel(df_withcpds.head(1000))
-                                self.tableView_dataframe.setModel(model)
-                                header_2 = self.select_column()
-                                if not header_2:
-                                    QMessageBox.information(None, "Error ",
-                                                            "Please select a column to link the file.",
-                                                            QMessageBox.Ok)
-                                if header_2:
-                                    df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
-                                    self.lineEdit_filepath.setText(fileName_cpds)
-                                    model = PandasModel(df_withcpds.head(1000))
-                                    self.tableView_dataframe.setModel(model)
-                                    header_2 = self.select_column()
-                                    print('1212')
-                                    print(header_2)
-                                    df_withcpds = pd.read_csv(fileName_cpds, index_col=[header_2], low_memory=False)
-                                    df['CPD_ID'] = df_withcpds['X_CPD_ID']
-                                    print('1313')
-                                    df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
-                                    df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
-                                    if 'Concentration' in df_withcpds:
-                                        df['Concentration'] = df_withcpds['Concentration']
-                                    if 'Concentration' not in df_withcpds:
-                                        df['Concentration'] = '3'
-                                    if 'Concentration (uM)' not in df_withcpds:
-                                        df['Concentration'] = '3'
-                                    if 'Concentration (uM)' in df_withcpds:
-                                        df['Concentration'] = df_withcpds['Concentration (uM)']
-                                    t1 = os.path.dirname(file)
-                                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                    df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                    self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                    self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                                    QMessageBox.information(None, "File linked",
-                                                            "Successfully linked and saved the files!",
-                                                            QMessageBox.Ok)
-                                    # if buttonReply == QMessageBox.No:
+                # header_1 = self.select_column()
+                # if not header_1:
+                #     QMessageBox.information(None, "Error",
+                #                                 "Please select a column to link the file.\n",
+                #                                 QMessageBox.Ok)
+                # if header_1:
+                # #     print(df[header_1].nunique())
+                #     if (len(df[header_1]) > 1):
+                #         print('d')
+                #         buttonReply = QMessageBox.question(None, 'Duplicated key',
+                #                "Press Yes if you want to continue linking with duplicated keys.\n"
+                #                "Press No to ignore.",
+                #                "Do you like PyQt5?",
+                               # QMessageBox.Yes | QMessageBox.No,
+                               # QMessageBox.Yes)
+                        # print('mfd')
+                        # if buttonReply == QMessageBox.Yes:
+                        #     print('ndnd')
+                fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
+                                                               "",
+                                                               "CSV Files (*.csv)")
+                if fileName_cpds:
+                    df = pd.read_csv(file, index_col=['PlateSanofi_Well'])
+                    df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
+                    self.lineEdit_filepath.setText(fileName_cpds)
+                    model = PandasModel(df_withcpds.head(1000))
+                    self.tableView_dataframe.setModel(model)
+                    df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
+                    self.lineEdit_filepath.setText(fileName_cpds)
+                    model = PandasModel(df_withcpds.head(1000))
+                    self.tableView_dataframe.setModel(model)
+                    df_withcpds = pd.read_csv(fileName_cpds, index_col=['Plate_Well'], low_memory=False)
+                    df['CPD_ID'] = df_withcpds['X_CPD_ID']
+                    df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
+                    df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
+                    if 'Concentration' in df_withcpds:
+                        df['Concentration'] = df_withcpds['Concentration']
+                    if 'Concentration' not in df_withcpds:
+                        df['Concentration'] = '3'
+                    if 'Concentration (uM)' not in df_withcpds:
+                        df['Concentration'] = '3'
+                    if 'Concentration (uM)' in df_withcpds:
+                        df['Concentration'] = df_withcpds['Concentration (uM)']
+                    t1 = os.path.dirname(file)
+                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                    df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                    self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                    self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                    QMessageBox.information(None, "File linked",
+                                            "Successfully linked and saved the files!",
+                                            QMessageBox.Ok)
+                                # if buttonReply == QMessageBox.No:
                                     #     QMessageBox.information(None, "Error ",
                                     #                             "The column selected has duplicated values, you cannot link the file.\nNo file to save.",
                                     #                             QMessageBox.Ok)
-                    if (len(df[header_1]) - df[header_1].nunique() == 0):
-                        fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
-                                                                  "",
-                                                                  "CSV Files (*.csv)")
-                        if fileName_cpds:
-                            print('dmsms')
-                            df = pd.read_csv(file, index_col=[header_1])
-                            df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
-                            self.lineEdit_filepath.setText(fileName_cpds)
-                            model = PandasModel(df_withcpds.head(1000))
-                            self.tableView_dataframe.setModel(model)
-                            header_2 = self.select_column()
-                            if not header_2:
-                                print('sdnf')
-                                QMessageBox.information(None, "Error ",
-                                                        "Please select a column to link the file.",
-                                                        QMessageBox.Ok)
-                            if header_2:
-                                print('jkdkd')
-                                df_withcpds = pd.read_csv(fileName_cpds, index_col=[header_2], low_memory=False)
-                                df['CPD_ID'] = df_withcpds['X_CPD_ID']
-                                df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
-                                df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
-                                if 'Concentration' in df_withcpds:
-                                    df['Concentration'] = df_withcpds['Concentration']
-                                if 'Concentration' not in df_withcpds:
-                                    df['Concentration'] = '3'
-                                if 'Concentration (uM)' not in df_withcpds:
-                                    df['Concentration'] = '3'
-                                if 'Concentration (uM)' in df_withcpds:
-                                    print('dmff')
-                                    df['Concentration'] = df_withcpds['Concentration (uM)']
-                                t1 = os.path.dirname(file)
-                                file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                print('mfmd')
-                                df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                print('mvks')
-                                self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                                QMessageBox.information(None, "File linked",
-                                                        "Successfully linked and saved the files!",
-                                                        QMessageBox.Ok)
+                    # if (df[header_1].nunique() == 0):
+                    #     fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
+                    #                                               "",
+                    #                                               "CSV Files (*.csv)")
+                    #     if fileName_cpds:
+                    #         df = pd.read_csv(file, index_col=[header_1])
+                    #         df_withcpds = pd.read_csv(fileName_cpds, low_memory=False)
+                    #         self.lineEdit_filepath.setText(fileName_cpds)
+                    #         model = PandasModel(df_withcpds.head(1000))
+                    #         self.tableView_dataframe.setModel(model)
+                    #         df_withcpds = pd.read_csv(fileName_cpds, index_col=[header_2], low_memory=False)
+                    #         df['CPD_ID'] = df_withcpds['X_CPD_ID']
+                    #         df['BATCH_ID'] = df_withcpds['X_BATCH_ID']
+                    #         df['CPDid_BATCHid'] = df_withcpds['X_CPD_ID'] + '_' + df_withcpds['X_BATCH_ID']
+                    #         if 'Concentration' in df_withcpds:
+                    #             df['Concentration'] = df_withcpds['Concentration']
+                    #         if 'Concentration' not in df_withcpds:
+                    #             df['Concentration'] = '3'
+                    #         if 'Concentration (uM)' not in df_withcpds:
+                    #             df['Concentration'] = '3'
+                    #         if 'Concentration (uM)' in df_withcpds:
+                    #             print('dmff')
+                    #             df['Concentration'] = df_withcpds['Concentration (uM)']
+                    #         t1 = os.path.dirname(file)
+                    #         file_name1 = os.path.splitext(os.path.basename(file))[0]
+                    #         df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                    #         self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                    #         self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                    #         QMessageBox.information(None, "File linked",
+                    #                                 "Successfully linked and saved the files!",
+                    #                                 QMessageBox.Ok)
             self.comboBox_linkfileby.setCurrentText('Link file by')
 
         if (value_ == 'Well'):
@@ -1470,35 +1468,170 @@ class Ui_Form_loadDataframe(object):
                                                                    "CSV Files (*.csv)")
                     if fileName_cpds:
                         df_cpds = pd.read_csv(fileName_cpds)
-                        if 'WELL' not in df_cpds.columns:
-                            df = pd.read_csv(file, index_col='Well')
-                            df_cpds = pd.read_csv(fileName_cpds, index_col='Well')
-                            df['CPD_ID'] = df_cpds['X_CPD_ID']
-                            df['BATCH_ID'] = df_cpds['X_BATCH_ID']
-                            df['Concentration'] = df_cpds['Concentration (uM)']
-                            t1 = os.path.dirname(file)
-                            file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                            self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                            QMessageBox.information(None, "File linked",
-                                                    "Successfully linked and saved the files!",
+                        if 'Well' not in df_cpds.columns and 'WELL' not in df_cpds.columns:
+                            QMessageBox.information(None, "Error",
+                                                    "Column 'Well' or 'WELL does not exist in the file.\nNo file to link.",
                                                     QMessageBox.Ok)
+                        if 'Well' in df_cpds.columns and 'WELL' not in df_cpds.columns:
+                            if ((len(df_cpds) - df_cpds['Well'].nunique()) != 0):
+                                QMessageBox.information(None, 'Error', "Values in column 'Well' are not unique.\nYou cannot link the file.",
+                                                                   QMessageBox.Ok)
+                            if ((len(df_cpds) - df_cpds['Well'].nunique()) ==0):
+                                df = pd.read_csv(file, index_col=['Well'])
+                                if 'X_CPD_ID' in df_cpds.columns and 'X_BATCH_ID' in df_cpds.columns:
+                                    df_cpds = pd.read_csv(fileName_cpds, index_col=['Well'])
+                                    df['CPD_ID'] = df_cpds['X_CPD_ID']
+                                    df['BATCH_ID'] = df_cpds['X_BATCH_ID']
+                                    df['CPDid_BATCHid'] = df_cpds['X_CPD_ID'] + '_' + df_cpds['X_BATCH_ID']
+                                    if 'Concentration' not in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = '0'
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration' in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration (uM)' in df_cpds.columns and 'Concentration' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration (uM)']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                if 'CPD_ID' in df_cpds.columns and 'BATCH_ID' in df_cpds.columns:
+                                    df_cpds = pd.read_csv(fileName_cpds, index_col=['Well'])
+                                    df['CPD_ID'] = df_cpds['CPD_ID']
+                                    df['BATCH_ID'] = df_cpds['BATCH_ID']
+                                    df['CPDid_BATCHid'] = df_cpds['CPD_ID'] + '_' + df_cpds['BATCH_ID']
+                                    if 'Concentration' not in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = '0'
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration' in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration (uM)' in df_cpds.columns and 'Concentration' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration (uM)']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
 
-                        if 'WELL' in df_cpds.columns:
-                            print('2')
-                            df = pd.read_csv(file, index_col='Well')
-                            df_cpds = pd.read_csv(fileName_cpds, index_col='WELL')
-                            df['CPD_ID'] = df_cpds['X_CPD_ID']
-                            df['BATCH_ID'] = df_cpds['X_BATCH_ID']
-                            df['Concentration'] = df_cpds['Concentration (uM)']
-                            t1 = os.path.dirname(file)
-                            file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                            self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                            QMessageBox.information(None, "File linked",
-                                                    "Successfully linked and saved the files!",
+
+                        if 'WELL' in df_cpds.columns and 'Well' not in df_cpds.columns:
+                            if ((len(df_cpds) - df_cpds['WELL'].nunique())!= 0):
+                                QMessageBox.information(None, 'Error',
+                                                        "Values in column 'WELL' are not unique.\nYou cannot link the file.",
+                                                        QMessageBox.Ok)
+                            if ((len(df_cpds) - df_cpds['WELL'].nunique()) ==0):
+                                df = pd.read_csv(file, index_col=['Well'])
+                                if 'X_CPD_ID' in df_cpds.columns and 'X_BATCH_ID' in df_cpds.columns:
+                                    df_cpds = pd.read_csv(fileName_cpds, index_col=['Well'])
+                                    df['CPD_ID'] = df_cpds['X_CPD_ID']
+                                    df['BATCH_ID'] = df_cpds['X_BATCH_ID']
+                                    df['CPDid_BATCHid'] = df_cpds['X_CPD_ID'] + '_' + df_cpds['X_BATCH_ID']
+                                    if 'Concentration' not in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = '0'
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration' in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration (uM)' in df_cpds.columns and 'Concentration' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration (uM)']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+
+                                if 'CPD_ID' in df_cpds.columns and 'BATCH_ID' in df_cpds.columns:
+                                    df_cpds = pd.read_csv(fileName_cpds, index_col=['Well'])
+                                    df['CPD_ID'] = df_cpds['CPD_ID']
+                                    df['BATCH_ID'] = df_cpds['BATCH_ID']
+                                    df['CPDid_BATCHid'] = df_cpds['CPD_ID'] + '_' + df_cpds['BATCH_ID']
+                                    if 'Concentration' not in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = '0'
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration' in df_cpds.columns and 'Concentration (uM)' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+                                    if 'Concentration (uM)' in df_cpds.columns and 'Concentration' not in df_cpds.columns:
+                                        df['Concentration'] = df_cpds['Concentration (uM)']
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+                                        QMessageBox.information(None, "File linked",
+                                                                "Successfully linked and saved the files!",
+                                                                QMessageBox.Ok)
+
+                        if 'WELL' in df_cpds.columns and 'Well' in df_cpds.columns:
+                            QMessageBox.information(None, 'Error',
+                                                    "You cannot have columns 'WELL' and 'Well' in the same file.\nNo file to link.",
                                                     QMessageBox.Ok)
 
             self.comboBox_linkfileby.setCurrentText('Link file by')
@@ -1543,135 +1676,248 @@ class Ui_Form_loadDataframe(object):
 
     def on_comboboxaddcolumn_changed(self, _value):
         file = self.lineEdit_filepath.text()
-
         if (_value == 'New column'):
             if file == "File path":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
             if file != "File path":
-                d1 = pd.read_csv(file)
-                value_entered, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
-                                                                QLineEdit.Normal, "")
-                if (value_entered in d1.columns):
-                    QMessageBox.information(None, "Error ",
-                                            "The column " + value_entered + " you entered already exists \nNo file to save ",
-                                            QMessageBox.Ok)
+                df = pd.read_csv(file)
+                value_entered_column, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
+                                                            QLineEdit.Normal, "")
 
-                if (value_entered == ''):
-                    QMessageBox.information(None, "Error ",
-                                            "No entry value !\nPlease enter a value in the input text.\nExample: Plate_Well or Plate_WELL",
-                                            QMessageBox.Ok)
-                if (value_entered not in d1.columns):
-                    if (value_entered == 'Plate_Well'):
-                        if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' in d1.columns):
-                            QMessageBox.information(None, "Error ",
-                                                    "You cannot add the column Plate_Well. The column Plate_Sanofi exists in the file.\nPlease use the option "
-                                                    "PlateSanofi_Well to add the column.",
-                                                    QMessageBox.Ok)
-
-                    if (value_entered == 'Plate_Well'):
-                        if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' not in d1.columns):
-                            d1['Plate_Well'] = d1['Plate'] + '_' + d1['Well']
-                            out_dir = QFileDialog.getExistingDirectory(
-                                None,
-                                "Select output folder",
-                                "",
-                                QFileDialog.ShowDirsOnly)
-                            if out_dir:
-                                t1 = out_dir.split('/')[2]
-                                d1.to_csv(out_dir + '\\' + t1 + '_Plate_Well.csv', index=None)
-                                QMessageBox.information(None, "Column added ",
-                                                        "The column " + value_entered + " has been successfully added.\nSuccessfully saved the file!",
-                                                        QMessageBox.Ok)
-                                self.reloaddata_fromDF(d1)
-                                self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_Well.csv')
-                        if ('Plate' not in d1.columns or 'Well' not in d1.columns):
-                            QMessageBox.information(None, "Error ",
-                                                    "The column Plate or Well not in the file! No column to add!\nNo file to save.",
-                                                    QMessageBox.Ok)
-
-                    if (value_entered == 'Plate_WELL'):
-                        if ('Barcode_AssayPlate' in d1.columns and 'WELL' in d1.columns and 'Plate_Sanofi' not in d1.columns):
-                            d1['Plate_WELL'] = d1['Barcode_AssayPlate'] + '_' + d1['WELL']
-                            out_dir = QFileDialog.getExistingDirectory(
-                                None,
-                                "Select output folder",
-                                "",
-                                QFileDialog.ShowDirsOnly)
-                            if out_dir:
-                                t1 = out_dir.split('/')[2]
-                                d1.to_csv(out_dir + '\\' + t1 + '_Plate_WELL.csv', index=None)
-                                QMessageBox.information(None, "Column added ",
-                                                        "Column '" + value_entered + "' has been successfully added.\nSuccessfully saved the file!",
-                                                        QMessageBox.Ok)
-                                self.reloaddata_fromDF(d1)
-                                self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_WELL.csv')
-
-                        if ('Plate' not in d1.columns and 'WELL' not in d1.columns and 'Well' not in d1.columns and
-                                'Barcode_AssayPlate' not in d1.columns and 'Plate_Sanofi' not in d1.columns):
-                            QMessageBox.information(None, "Error ",
-                                                    "Columns 'Plate' or 'Well' not in the file! No column to add!\nNo file to save.",
-                                                    QMessageBox.Ok)
-
-                    if (value_entered == 'Concentration'):
-                        conc_value, okPressed = QInputDialog.getText(None,
-                                                                    "Concentration: ",
-                                                                    "Concentration",
-                                                                    QLineEdit.Normal,
-                                                                    "Value")
-
-                        if okPressed:
-                            d1['Concentration'] = conc_value
+                if value_entered_column in df.columns:
+                    value_entered_rowval, okPressed = QInputDialog.getText(None,
+                                                                           "Enter value to add to the column " + str(
+                                                                               value_entered_column), "Value: ",
+                                                                           QLineEdit.Normal, "")
+                    new_column = str(value_entered_column)
+                    if new_column in df.columns:
+                        buttonReply = QMessageBox.question(None, 'Error',
+                                                                           "The column " + new_column + " already exists in the file.\n"
+                                                                           "Press Yes if you want to overwrite the column.\n"
+                                                                           "Press No to ignore.",
+                                                                           QMessageBox.Yes | QMessageBox.No,
+                                                                           QMessageBox.Yes)
+                        if buttonReply == QMessageBox.No:
+                            print('1')
+                        if buttonReply == QMessageBox.Yes:
+                            df[new_column] = '' + value_entered_rowval + ''
                             t1 = os.path.dirname(file)
                             file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            d1.to_csv(t1 + '\\' + 'File_' + file_name1 + '.csv', index=None)
-                            self.reloaddata_fromfilepath(t1 + '\\' + 'File_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '/' + 'File_' + file_name1 + '.csv')
-                            QMessageBox.information(None, "Concentration added",
-                                                    "The column Concentration has been added!",
+                            df.to_csv(t1 + '\\' + 'newcolumn_' + file_name1 + '.csv', index=None)
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'newcolumn_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'newcolumn_' + file_name1 + '.csv')
+                            QMessageBox.information(None, "Column added",
+                                                    "The column " + str(
+                                                        value_entered_column) + " has been added to the file.",
                                                     QMessageBox.Ok)
 
-                    if (value_entered == 'PlateSanofi_Well'):
-                        df = pd.read_csv(file)
-                        if ('Plate_Sanofi' in df.columns and 'Well' in df.columns):
-                            df['PlateSanofi_Well'] = df['Plate_Sanofi'] + '_' + df['Well']
+                    if new_column not in df.columns:
+                        df[new_column] = '' + value_entered_rowval + ''
+                        t1 = os.path.dirname(file)
+                        print('f')
+                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                        df.to_csv(t1 + '\\' + 'newcolumn_' + file_name1 + '.csv', index=None)
+                        print('f')
+                        self.reloaddata_fromfilepath(t1 + '\\' + 'newcolumn_' + file_name1 + '.csv')
+                        print('rrr')
+                        self.lineEdit_filepath.setText(t1 + '/' + 'newcolumn_' + file_name1 + '.csv')
+                        print('fv')
+                        QMessageBox.information(None, "Column added",
+                                                "The column " + str(value_entered_column) + " has been added to the file.",
+                                                QMessageBox.Ok)
+
+        self.comboBox_addcolumn.setCurrentText('Add column')
+
+        if (_value == 'Merge 2 columns'):
+            if file == "File path":
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != "File path":
+                value_entered_column, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
+                                                                       QLineEdit.Normal, "")
+                header = self.select_multicolumns()
+                if value_entered_column in df.columns and value_entered_column != '':
+                    buttonReply = QMessageBox.question(None, 'Error',
+                                                       "The column " +  str(value_entered_column) + " already exists in the file.\n"
+                                                       "Press Yes if you want to overwrite the column.\n"
+                                                       "Press No to ignore.",
+                                                       QMessageBox.Yes | QMessageBox.No,
+                                                       QMessageBox.Yes)
+                    if buttonReply == QMessageBox.No:
+                        print('w')
+                    if buttonReply == QMessageBox.Yes:
+                        if (len(header) > 2):
+                            QMessageBox.information(None, "Error ",
+                                                    "You must select only 2 columns.\nNo file to save!",
+                                                    QMessageBox.Ok)
+                        if (len(header) == 0):
+                            QMessageBox.information(None, "Error ",
+                                                    "You must select 2 columns.\nNo file to save!",
+                                                    QMessageBox.Ok)
+                        if len(header) == 2:
+                            df[value_entered_column] = df[header[0]] + '_' + df[header[1]]
                             t1 = os.path.dirname(file)
                             file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            df.to_csv(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv', index=None)
-                            self.reloaddata_fromfilepath(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '/' + 'PlateSanofi_Well_' + file_name1 + '.csv')
-                        #         list_files.append(df)
-                        #         b = pd.DataFrame(pd.concat(list_files, axis=0))
-                        #         self.setPlateWellText_intblview(df)
-                        #         self.lineEdit_filepath.setText(
-                        #             out_dir + '/' + t1 + '_PlateSanofi_Well_' + file_read)
-                        #         self.reloaddata_fromfilepath(
-                        #             out_dir + '/' + t1 + '_PlateSanofi_Well_' + file_read)
-                        # buttonReply = QMessageBox.question(None, 'Concatenated file',
-                        #                                    "Press Yes if you want to save the concatenated file.\n"
-                        #                                    "Press No to ignore.",
-                        #                                    QMessageBox.Yes | QMessageBox.No,
-                        #                                    QMessageBox.Yes)
-                        # if buttonReply == QMessageBox.Yes:
-                        #     b.to_csv(out_dir + '\\' + t1 + '_Concat_withPlateSanofiWell.csv', index=None)
-                        #     self.reloaddata_fromfilepath(out_dir +
-                        #                                  '\\' + t1 + '_Concat_withPlateSanofiWell.csv')
-                        #     self.lineEdit_filepath.setText(
-                        #         out_dir +
-                        #         '\\' + t1 + '_Concat_withPlateSanofiWell.csv')
-                        # #
-                        # if buttonReply == QMessageBox.No:
-                        #     self.reloaddata_fromdataframe(b, 9)
-                        #     self.comboBox_dropfrom.setCurrentText('Drop / Change')
-                        #     self.lineEdit_filepath.setText(
-                        #         out_dir +
-                        #         '\\' + t1 + '_Concat_withPlateSanofiWell.csv')
-                        #
-                        #         if ('Plate_Sanofi' not in df.columns or 'Well' not in df.columns):
-                        #             QMessageBox.information(None, "Error ",
-                        #                                     "The column Plate, Well or Plate_Sanofi not in the file! No column to add!\nNo file to save.",
-                        #                                     QMessageBox.Ok)
+                            df.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
+                            self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'merge_' + file_name1 + '.csv')
+
+                if value_entered_column == '':
+                    QMessageBox.information(None, "Error ",
+                                                "You have not entered a column name.\nNo file to save.",
+                                                QMessageBox.Ok)
+                if value_entered_column not in df.columns and value_entered_column != '':
+                    if (len(header) > 2):
+                        QMessageBox.information(None, "Error ",
+                                                "You must select only 2 columns.\nNo file to save!",
+                                                QMessageBox.Ok)
+                    if (len(header) == 0):
+                        QMessageBox.information(None, "Error ",
+                                                "You must select 2 columns.\nNo file to save!",
+                                                QMessageBox.Ok)
+                    if len(header) == 2:
+                        df[value_entered_column] = df[header[0]] + '_' + df[header[1]]
+                        t1 = os.path.dirname(file)
+                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                        df.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
+                        self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
+                        self.lineEdit_filepath.setText(t1 + '/' + 'merge_' + file_name1 + '.csv')
+
+                        # print(header)
+                        # if not all(x.is_integer() for x in df.v):
+                        #     print('m')
+                        # if all(x.is_integer() for x in df.v):
+                        #     print('d')
+                        # if type(df[header[0]].values) != int:
+                        #     print('nf')
+                        #     df[value_entered_column] = df[header[0]] + '_' + df[header[1]]
+                        #     df.to_csv('ok.csv')
+
+                # if file == "File path":
+            #     QMessageBox.information(None, "Error ",
+            #                             "No loaded file.\nPlease load a file first.",
+            #                             QMessageBox.Ok)
+            # if file != "File path":
+            #     d1 = pd.read_csv(file)
+            #     value_entered, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
+            #                                                     QLineEdit.Normal, "")
+            #     if (value_entered in d1.columns):
+            #         QMessageBox.information(None, "Error ",
+            #                                 "The column " + value_entered + " you entered already exists \nNo file to save ",
+            #                                 QMessageBox.Ok)
+            #     if (value_entered == ''):
+            #         QMessageBox.information(None, "Error ",
+            #                                 "No entry value !\nPlease enter a value in the input text.\nExample: Plate_Well or Plate_WELL",
+            #                                 QMessageBox.Ok)
+            #     if (value_entered not in d1.columns):
+            #         if (value_entered == 'Plate_Well'):
+            #             if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' in d1.columns):
+            #                 QMessageBox.information(None, "Error ",
+            #                                         "You cannot add the column Plate_Well. The column Plate_Sanofi exists in the file.\nPlease use the option "
+            #                                         "PlateSanofi_Well to add the column.",
+            #                                         QMessageBox.Ok)
+            #         if (value_entered == 'Plate_Well'):
+            #             if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' not in d1.columns):
+            #                 d1['Plate_Well'] = d1['Plate'] + '_' + d1['Well']
+            #                 out_dir = QFileDialog.getExistingDirectory(
+            #                     None,
+            #                     "Select output folder",
+            #                     "",
+            #                     QFileDialog.ShowDirsOnly)
+            #                 if out_dir:
+            #                     t1 = out_dir.split('/')[2]
+            #                     d1.to_csv(out_dir + '\\' + t1 + '_Plate_Well.csv', index=None)
+            #                     QMessageBox.information(None, "Column added ",
+            #                                             "The column " + value_entered + " has been successfully added.\nSuccessfully saved the file!",
+            #                                             QMessageBox.Ok)
+            #                     self.reloaddata_fromDF(d1)
+            #                     self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_Well.csv')
+            #             if ('Plate' not in d1.columns or 'Well' not in d1.columns):
+            #                 QMessageBox.information(None, "Error ",
+            #                                         "The column Plate or Well not in the file! No column to add!\nNo file to save.",
+            #                                         QMessageBox.Ok)
+            #         if (value_entered == 'Plate_WELL'):
+            #             if ('Barcode_AssayPlate' in d1.columns and 'WELL' in d1.columns and 'Plate_Sanofi' not in d1.columns):
+            #                 d1['Plate_WELL'] = d1['Barcode_AssayPlate'] + '_' + d1['WELL']
+            #                 out_dir = QFileDialog.getExistingDirectory(
+            #                     None,
+            #                     "Select output folder",
+            #                     "",
+            #                     QFileDialog.ShowDirsOnly)
+            #                 if out_dir:
+            #                     t1 = out_dir.split('/')[2]
+            #                     d1.to_csv(out_dir + '\\' + t1 + '_Plate_WELL.csv', index=None)
+            #                     QMessageBox.information(None, "Column added ",
+            #                                             "Column '" + value_entered + "' has been successfully added.\nSuccessfully saved the file!",
+            #                                             QMessageBox.Ok)
+            #                     self.reloaddata_fromDF(d1)
+            #                     self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_WELL.csv')
+            #
+            #             if ('Plate' not in d1.columns and 'WELL' not in d1.columns and 'Well' not in d1.columns and
+            #                     'Barcode_AssayPlate' not in d1.columns and 'Plate_Sanofi' not in d1.columns):
+            #                 QMessageBox.information(None, "Error ",
+            #                                         "Columns 'Plate' or 'Well' not in the file! No column to add!\nNo file to save.",
+            #                                         QMessageBox.Ok)
+            #         if (value_entered == 'Concentration'):
+            #             conc_value, okPressed = QInputDialog.getText(None,
+            #                                                         "Concentration: ",
+            #                                                         "Concentration",
+            #                                                         QLineEdit.Normal,
+            #                                                         "Value")
+            #             if okPressed:
+            #                 d1['Concentration'] = conc_value
+            #                 t1 = os.path.dirname(file)
+            #                 file_name1 = os.path.splitext(os.path.basename(file))[0]
+            #                 d1.to_csv(t1 + '\\' + 'File_' + file_name1 + '.csv', index=None)
+            #                 self.reloaddata_fromfilepath(t1 + '\\' + 'File_' + file_name1 + '.csv')
+            #                 self.lineEdit_filepath.setText(t1 + '/' + 'File_' + file_name1 + '.csv')
+            #                 QMessageBox.information(None, "Concentration added",
+            #                                         "The column Concentration has been added!",
+            #                                         QMessageBox.Ok)
+            #         if (value_entered == 'PlateSanofi_Well'):
+            #             df = pd.read_csv(file)
+            #             if ('Plate_Sanofi' in df.columns and 'Well' in df.columns):
+            #                 if 'PlateSanofi_Well' not in df.columns:
+            #                     df['PlateSanofi_Well'] = df['Plate_Sanofi'] + '_' + df['Well']
+            #                     t1 = os.path.dirname(file)
+            #                     file_name1 = os.path.splitext(os.path.basename(file))[0]
+            #                     df.to_csv(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv', index=None)
+            #                     self.reloaddata_fromfilepath(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv')
+            #                     self.lineEdit_filepath.setText(t1 + '/' + 'PlateSanofi_Well_' + file_name1 + '.csv')
+            #                     QMessageBox.information(None, "Column added",
+            #                                             "The column 'PlateSanofi_Well' has been added to the file.",
+            #                                             QMessageBox.Ok)
+            #
+            #                 if 'PlateSanofi_Well' in df.columns:
+            #                     buttonReply = QMessageBox.question(None, 'Error',
+            #                                                        "The column PlateSanofi_Well already exists in the file.\n"
+            #                                                        "Press Yes if you want to overwrite the column.\n"
+            #                                                        "Press No to ignore.",
+            #                                                        QMessageBox.Yes | QMessageBox.No,
+            #                                                        QMessageBox.Yes)
+            #                     if buttonReply == QMessageBox.Yes:
+            #                         df['PlateSanofi_Well'] = df['Plate_Sanofi'] + '_' + df['Well']
+            #                         t1 = os.path.dirname(file)
+            #                         file_name1 = os.path.splitext(os.path.basename(file))[0]
+            #                         df.to_csv(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv', index=None)
+            #                         self.reloaddata_fromfilepath(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv')
+            #                         self.lineEdit_filepath.setText(t1 + '/' + 'PlateSanofi_Well_' + file_name1 + '.csv')
+            #                         QMessageBox.information(None, "Column added",
+            #                                                 "The column 'PlateSanofi_Well' has been added to the file.",
+            #                                                 QMessageBox.Ok)
+            #
+            #                     if buttonReply == QMessageBox.No:
+            #                         QMessageBox.information(None, "Error",
+            #                                                 "No file to save.",
+            #                                                 QMessageBox.Ok)
+            #
+            #             # if ('Plate_Sanofi' not in df.columns or 'Well' not in df.columns):
+            #             #                 QMessageBox.information(None, "Error ",
+            #             #                                         "The column Plate, Well or Plate_Sanofi not in the file! No column to add!\nNo file to save.",
+            #             #                                         QMessageBox.Ok)
                 self.comboBox_addcolumn.setCurrentText('Add column')
 
     def on_comboboxdropfrom_changed(self, val):
@@ -1897,27 +2143,26 @@ class Ui_Form_loadDataframe(object):
                 boolk = df_mask.duplicated(subset=header, keep=False)
                 df_duplicated = df_mask[boolk]
                 if (len(df_duplicated) == 0):
+                    print('1')
                     QMessageBox.information(None, "Duplicated values ",
                                             "No duplicated values have been detected in the column " + str(
                                                 header) + "!\nNo file to save.",
                                             QMessageBox.Ok)
                 if (len(df_duplicated) > 1):
-                    out_dir = QFileDialog.getExistingDirectory(
-                        None,
-                        "Select a folder",
-                        "",
-                        QFileDialog.ShowDirsOnly)
-                    t1 = out_dir.split('/')[2]
+                    t1 = os.path.dirname(file)
+                    file_name1 = os.path.splitext(os.path.basename(file))[0]
                     QMessageBox.information(None, "Duplicated values ",
                                             str(len(
                                                 df_duplicated)) + " duplicated values have been detected in the column " + str(
                                                 header) +
                                             ".\nSuccessfully saved the file!",
                                             QMessageBox.Ok)
-                    df_duplicated.to_csv(out_dir + '\\' + t1 + '_duplicatedValuesfrom_' + header + '.csv', index=None)
+                    df_duplicated.to_csv(t1 + '\\' + 'duplicatedValuesfrom_' + header + file_name1 +'.csv', index=None)
                     self.setPlateWellText_intblview(df_duplicated)
-                    self.reloaddata_fromfilepath(out_dir + '//' + t1 + '_duplicatedValuesfrom_' + header + '.csv')
-                    self.lineEdit_filepath.setText(out_dir + '/' + t1 + '_duplicatedValuesfrom_' + header + '.csv')
+                    # t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv'
+                    self.reloaddata_fromfilepath(t1 + '//' +  'duplicatedValuesfrom_' + header + file_name1 +'.csv')
+                    self.lineEdit_filepath.setText(t1 + '//' +  'duplicatedValuesfrom_' + header + file_name1 +'.csv')
+
             self.comboBox_duplicates.setCurrentText('Duplicates')
 
         if (value == 'Number of duplicates'):
@@ -1954,24 +2199,18 @@ class Ui_Form_loadDataframe(object):
                                             "No value has been dropped from " + str(header) + "\nNo file to save",
                                             QMessageBox.Ok)
                 if (len_init - len(df) > 0):
-                    out_dir = QFileDialog.getExistingDirectory(
-                        None,
-                        "Select output folder",
-                        "",
-                        QFileDialog.ShowDirsOnly)
-                    if out_dir:
-                        t1 = out_dir.split('/')[2]
-                        df.to_csv(out_dir + '\\' + t1 + '_afterdropduplicatesfrom_' + header + '.csv', index=None)
-                        self.setPlateWellText_intblview(df)
-                        self.lineEdit_filepath.setText(
-                            out_dir + '/' + t1 + '_afterdropduplicatesfrom_' + header + '.csv')
-                        self.reloaddata_fromfilepath(
-                            out_dir + '//' + t1 + '_afterdropduplicatesfrom_' + header + '.csv')
-                        QMessageBox.information(None, "Dropped duplicates",
-                                                str(len_init - len(df)) + " value has been dropped from " + str(
-                                                    header) + "\nYour file has been saved",
-                                                QMessageBox.Ok)
-
+                    t1 = os.path.dirname(file)
+                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                    df.to_csv(t1 + '\\' +  'afterdropduplicatesfrom_' + header + '_' + file_name1 + '.csv', index=None)
+                    self.setPlateWellText_intblview(df)
+                    self.lineEdit_filepath.setText(
+                        t1 + '/' + 'afterdropduplicatesfrom_' + header + '_' + file_name1 + '.csv')
+                    self.reloaddata_fromfilepath(
+                        t1 + '//' + 'afterdropduplicatesfrom_' + header + '_' + file_name1 + '.csv')
+                    QMessageBox.information(None, "Dropped duplicates",
+                                            str(len_init - len(df)) + " value has been dropped from " + str(
+                                                header) + "\nYour file has been saved",
+                                            QMessageBox.Ok)
             self.comboBox_duplicates.setCurrentText('Duplicates')
 
     def getncpdsbatches(self, dataframe):
@@ -2005,41 +2244,47 @@ class Ui_Form_loadDataframe(object):
                                                   "",
                                                   "CSV Files (*.csv)")
         if fileName:
-            self.lineEdit_filepath.setText(fileName)
-            df = pd.read_csv(fileName, low_memory=False)
-            model = PandasModel(df.head(1000))
-            self.tableView_dataframe.setModel(model)
+            exists = os.path.isfile(fileName)
+            if exists:
 
-            if ('Plate' in df.columns and 'Well' in df.columns):
-                self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
-                self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
-                self.getncpdsbatches(df)
+                self.lineEdit_filepath.setText(fileName)
+                df = pd.read_csv(fileName, low_memory=False)
+                model = PandasModel(df.head(1000))
+                self.tableView_dataframe.setModel(model)
 
-            if ('Plate' in df.columns and 'WELL' in df.columns):
-                self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
-                self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
-                self.getncpdsbatches(df)
+                if ('Plate' in df.columns and 'Well' in df.columns):
+                    self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
+                    self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
+                    self.getncpdsbatches(df)
 
-            if ('Plate' not in df.columns and 'Well' not in df.columns):
-                self.lineEdit_plate.setText('No plate')
-                self.lineEdit_well.setText('No wells')
-                self.getncpdsbatches(df)
+                if ('Plate' in df.columns and 'WELL' in df.columns):
+                    self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
+                    self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
+                    self.getncpdsbatches(df)
 
-            if ('Plate' not in df.columns and 'Well' in df.columns):
-                self.lineEdit_plate.setText('No plate')
-                self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
-                self.getncpdsbatches(df)
+                if ('Plate' not in df.columns and 'Well' not in df.columns):
+                    self.lineEdit_plate.setText('No plate')
+                    self.lineEdit_well.setText('No wells')
+                    self.getncpdsbatches(df)
 
-            if ('Plate' not in df.columns and 'WELL' in df.columns):
-                self.lineEdit_plate.setText('No plate')
-                self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
-                self.getncpdsbatches(df)
+                if ('Plate' not in df.columns and 'Well' in df.columns):
+                    self.lineEdit_plate.setText('No plate')
+                    self.lineEdit_well.setText(str(len(df['Well'])) + ' wells')
+                    self.getncpdsbatches(df)
 
-            if ('Plate' in df.columns and 'Well' not in df.columns):
-                self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
-                self.lineEdit_well.setText('No wells')
-                self.getncpdsbatches(df)
+                if ('Plate' not in df.columns and 'WELL' in df.columns):
+                    self.lineEdit_plate.setText('No plate')
+                    self.lineEdit_well.setText(str(len(df['WELL'])) + ' WELLs')
+                    self.getncpdsbatches(df)
 
+                if ('Plate' in df.columns and 'Well' not in df.columns):
+                    self.lineEdit_plate.setText(str(df['Plate'].nunique()) + ' plates')
+                    self.lineEdit_well.setText('No wells')
+                    self.getncpdsbatches(df)
+            else:
+                QMessageBox.information(None, "Error",
+                                        "The loaded file does not exist.\n",
+                                        QMessageBox.Ok)
     def on_textedit_clicked(self):
         self.text_path = str(self.lineEdit_filepath.text())
         return self.text_path
@@ -2059,7 +2304,8 @@ class Ui_Form_loadDataframe(object):
                 b = pd.DataFrame(pd.concat(list_files, axis=0))
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\'  + 'Concatenated_File.csv')
-                self.lineEdit_filepath.setText(t1 + '/'  + 'Concatenated_File.csv')
+                self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
+
 
 if __name__ == "__main__":
     import sys
