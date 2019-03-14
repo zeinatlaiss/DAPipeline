@@ -1,4 +1,4 @@
-from Pandaswidget import PandasModel
+from DApandaswidget import PandasModel
 import numpy as np
 import os
 from PyQt5.QtWidgets import *
@@ -133,25 +133,43 @@ class Ui_Form_CheckBoxes(object):
 
                     if self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked() and not self.checkBox_nan.isChecked() and not \
                             self.checkBox_valueendswith.isChecked():
-                        df[header].fillna("missing", inplace=True)
-                        if any(df[header] == 'missing') == False:
-                            print('dd2')
-                            QMessageBox.information(None, "No missing values",
-                                                    "No missing values to drop in the column " + str(header) +".\nNo file to save.", QMessageBox.Ok)
-                        if any(df[header] == 'missing') == True:
-                            print('f')
-                            d = df[df[header] == 'missing']
-                            df.drop(df.loc[df[header] == 'missing'].index, inplace=True)
-                            dir = os.path.dirname(file)
-                            file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            df.to_csv(dir + '\\' + file_name1 + '_droppedMissingValues.csv', index=None)
-                            QMessageBox.information(None, "Missing values",
-                                                    str(len(d)) + " empty cells have been dropped from the column " +  str(header) + "\nSaved file.",
-                                                    QMessageBox.Ok)
-                            self.lineEdit_filepath_checkboxes.setText(dir + '/' + file_name1 + '_droppedMissingValues.csv')
-                            self.reloaddata_fromfilepath(dir + '\\' + file_name1 + '_droppedMissingValues.csv')
 
-                            # Form_CheckBoxes.hide()
+                        if df[header].dtypes != str:
+                            df = pd.read_csv(file,
+                                             dtype={header: str})
+                            df[header].fillna("missing", inplace=True)
+                            if any(df[header] == 'missing') == False:
+                                QMessageBox.information(None, "No missing values",
+                                                        "No missing values to drop in the column " + str(header) +".\nNo file to save.", QMessageBox.Ok)
+                            if any(df[header] == 'missing') == True:
+                                d = df[df[header] == 'missing']
+                                df.drop(df.loc[df[header] == 'missing'].index, inplace=True)
+                                dir = os.path.dirname(file)
+                                file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                df.to_csv(dir + '\\' + file_name1 + '_droppedMissingValues.csv', index=None)
+                                QMessageBox.information(None, "Missing values",
+                                                        str(len(d)) + " empty cells have been dropped from the column " +  str(header) + "\nSaved file.",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath_checkboxes.setText(dir + '/' + file_name1 + '_droppedMissingValues.csv')
+                                self.reloaddata_fromfilepath(dir + '\\' + file_name1 + '_droppedMissingValues.csv')
+
+                        if df[header].dtypes == str:
+                            df[header].fillna("missing", inplace=True)
+                            if any(df[header] == 'missing') == False:
+                                QMessageBox.information(None, "No missing values",
+                                                        "No missing values to drop in the column " + str(header) +".\nNo file to save.", QMessageBox.Ok)
+                            if any(df[header] == 'missing') == True:
+                                d = df[df[header] == 'missing']
+                                df.drop(df.loc[df[header] == 'missing'].index, inplace=True)
+                                dir = os.path.dirname(file)
+                                file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                df.to_csv(dir + '\\' + file_name1 + '_droppedMissingValues.csv', index=None)
+                                QMessageBox.information(None, "Missing values",
+                                                        str(len(d)) + " empty cells have been dropped from the column " +  str(header) + "\nSaved file.",
+                                                        QMessageBox.Ok)
+                                self.lineEdit_filepath_checkboxes.setText(dir + '/' + file_name1 + '_droppedMissingValues.csv')
+                                self.reloaddata_fromfilepath(dir + '\\' + file_name1 + '_droppedMissingValues.csv')
+                                # Form_CheckBoxes.hide()
 
                     if self.checkBox_valueendswith.isChecked() and not self.checkBox_value.isChecked() and not self.checkBox_missingvalue.isChecked() and not \
                             self.checkBox_nan.isChecked():
