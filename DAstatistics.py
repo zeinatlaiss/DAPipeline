@@ -10,7 +10,6 @@ import pandas as pd
 from requests.packages.urllib3.packages.six.moves import xrange
 from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
-from DAform_checkboxes_renamevalues import Ui_Form_checkboxes_RenameValues
 from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
@@ -37,17 +36,10 @@ class Ui_Form_loadDataframe(object):
         # Form_loadDataframe.hide()
         self.window.show()
 
-    def openwindow_renamevalues(self):
-        self.window = QtWidgets.QMainWindow()
-        self.ui = Ui_Form_checkboxes_RenameValues()
-        self.ui.setupUi(self.window)
-        # Form_loadDataframe.hide()
-        self.window.show()
-
     def setupUi(self, Form_loadDataframe):
         Form_loadDataframe.setObjectName("Form_loadDataframe")
         Form_loadDataframe.setEnabled(True)
-        Form_loadDataframe.resize(1455, 876)
+        Form_loadDataframe.resize(1477, 876)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -55,15 +47,15 @@ class Ui_Form_loadDataframe(object):
         Form_loadDataframe.setSizePolicy(sizePolicy)
         Form_loadDataframe.setSizeIncrement(QtCore.QSize(25, 25))
         self.pushButton_loadfile = QtWidgets.QPushButton(Form_loadDataframe)
-        self.pushButton_loadfile.setGeometry(QtCore.QRect(650, 60, 61, 21))
+        self.pushButton_loadfile.setGeometry(QtCore.QRect(650, 30, 61, 21))
         self.pushButton_loadfile.setMouseTracking(False)
         self.pushButton_loadfile.setAutoFillBackground(False)
         self.pushButton_loadfile.setObjectName("pushButton_loadfile")
         self.lineEdit_filepath = QtWidgets.QLineEdit(Form_loadDataframe)
-        self.lineEdit_filepath.setGeometry(QtCore.QRect(10, 60, 631, 21))
+        self.lineEdit_filepath.setGeometry(QtCore.QRect(10, 30, 631, 21))
         self.lineEdit_filepath.setObjectName("lineEdit_filepath")
         self.comboBox_plot = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_plot.setGeometry(QtCore.QRect(1010, 120, 151, 22))
+        self.comboBox_plot.setGeometry(QtCore.QRect(1010, 150, 271, 22))
         self.comboBox_plot.setObjectName("comboBox_plot")
         self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
@@ -71,18 +63,18 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
         self.pushButton_concatfiles = QtWidgets.QPushButton(Form_loadDataframe)
-        self.pushButton_concatfiles.setGeometry(QtCore.QRect(720, 60, 101, 21))
+        self.pushButton_concatfiles.setGeometry(QtCore.QRect(720, 30, 101, 21))
         self.pushButton_concatfiles.setObjectName("pushButton_concatfiles")
         self.lineEdit_plate = QtWidgets.QLabel(Form_loadDataframe)
-        self.lineEdit_plate.setGeometry(QtCore.QRect(10, 110, 111, 21))
+        self.lineEdit_plate.setGeometry(QtCore.QRect(10, 80, 111, 21))
         self.lineEdit_plate.setText("")
         self.lineEdit_plate.setObjectName("lineEdit_plate")
         self.lineEdit_well = QtWidgets.QLabel(Form_loadDataframe)
-        self.lineEdit_well.setGeometry(QtCore.QRect(130, 110, 121, 20))
+        self.lineEdit_well.setGeometry(QtCore.QRect(130, 80, 121, 20))
         self.lineEdit_well.setText("")
         self.lineEdit_well.setObjectName("lineEdit_well")
         self.tableView_dataframe = QtWidgets.QTableView(Form_loadDataframe)
-        self.tableView_dataframe.setGeometry(QtCore.QRect(10, 200, 1431, 671))
+        self.tableView_dataframe.setGeometry(QtCore.QRect(10, 200, 1451, 671))
         self.tableView_dataframe.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableView_dataframe.setDragEnabled(True)
         self.tableView_dataframe.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
@@ -91,14 +83,14 @@ class Ui_Form_loadDataframe(object):
         self.tableView_dataframe.setSortingEnabled(True)
         self.tableView_dataframe.setObjectName("tableView_dataframe")
         self.comboBox_duplicates = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_duplicates.setGeometry(QtCore.QRect(1170, 90, 131, 22))
+        self.comboBox_duplicates.setGeometry(QtCore.QRect(1290, 30, 171, 22))
         self.comboBox_duplicates.setObjectName("comboBox_duplicates")
         self.comboBox_duplicates.addItem("")
         self.comboBox_duplicates.addItem("")
         self.comboBox_duplicates.addItem("")
         self.comboBox_duplicates.addItem("")
         self.comboBox_dropfrom = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_dropfrom.setGeometry(QtCore.QRect(1010, 60, 151, 22))
+        self.comboBox_dropfrom.setGeometry(QtCore.QRect(1010, 30, 271, 22))
         self.comboBox_dropfrom.setObjectName("comboBox_dropfrom")
         self.comboBox_dropfrom.addItem("")
         self.comboBox_dropfrom.addItem("")
@@ -109,33 +101,32 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_dropfrom.addItem("")
         self.comboBox_dropfrom.addItem("")
         self.comboBox_linkfileby = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_linkfileby.setGeometry(QtCore.QRect(1310, 90, 131, 22))
+        self.comboBox_linkfileby.setGeometry(QtCore.QRect(1290, 90, 171, 22))
         self.comboBox_linkfileby.setObjectName("comboBox_linkfileby")
         self.comboBox_linkfileby.addItem("")
         self.comboBox_linkfileby.addItem("")
         self.comboBox_linkfileby.addItem("")
-        self.comboBox_linkfileby.addItem("")
         self.comboBox_machinelearning = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_machinelearning.setGeometry(QtCore.QRect(1310, 150, 131, 22))
+        self.comboBox_machinelearning.setGeometry(QtCore.QRect(1290, 150, 171, 22))
         self.comboBox_machinelearning.setObjectName("comboBox_machinelearning")
         self.comboBox_machinelearning.addItem("")
         self.comboBox_machinelearning.addItem("")
         self.comboBox_normalize = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_normalize.setGeometry(QtCore.QRect(1010, 90, 151, 22))
+        self.comboBox_normalize.setGeometry(QtCore.QRect(1290, 60, 171, 22))
         self.comboBox_normalize.setObjectName("comboBox_normalize")
         self.comboBox_normalize.addItem("")
         self.comboBox_normalize.addItem("")
         self.comboBox_normalize.addItem("")
         self.comboBox_normalize.addItem("")
         self.comboBox_removeoutliers = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_removeoutliers.setGeometry(QtCore.QRect(1170, 60, 271, 22))
+        self.comboBox_removeoutliers.setGeometry(QtCore.QRect(1010, 60, 271, 22))
         self.comboBox_removeoutliers.setObjectName("comboBox_removeoutliers")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_extracthits = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_extracthits.setGeometry(QtCore.QRect(1310, 120, 131, 22))
+        self.comboBox_extracthits.setGeometry(QtCore.QRect(1290, 120, 171, 22))
         self.comboBox_extracthits.setObjectName("comboBox_extracthits")
         self.comboBox_extracthits.addItem("")
         self.comboBox_extracthits.addItem("")
@@ -146,7 +137,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_extracthits.addItem("")
         self.comboBox_extracthits.addItem("")
         self.comboBox_statistics = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_statistics.setGeometry(QtCore.QRect(1010, 150, 151, 22))
+        self.comboBox_statistics.setGeometry(QtCore.QRect(1010, 120, 271, 22))
         self.comboBox_statistics.setObjectName("comboBox_statistics")
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
@@ -154,29 +145,26 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
         self.pushButton_addclasses = QtWidgets.QPushButton(Form_loadDataframe)
-        self.pushButton_addclasses.setGeometry(QtCore.QRect(830, 60, 80, 21))
+        self.pushButton_addclasses.setGeometry(QtCore.QRect(830, 30, 80, 21))
         self.pushButton_addclasses.setObjectName("pushButton_addclasses")
         self.comboBox_aggregate = QtWidgets.QComboBox(Form_loadDataframe)
-        self.comboBox_aggregate.setGeometry(QtCore.QRect(1170, 120, 131, 22))
+        self.comboBox_aggregate.setGeometry(QtCore.QRect(1010, 90, 271, 22))
         self.comboBox_aggregate.setObjectName("comboBox_aggregate")
         self.comboBox_aggregate.addItem("")
         self.comboBox_aggregate.addItem("")
         self.comboBox_aggregate.addItem("")
         self.label_nbcpdid = QtWidgets.QLabel(Form_loadDataframe)
-        self.label_nbcpdid.setGeometry(QtCore.QRect(260, 110, 131, 20))
+        self.label_nbcpdid.setGeometry(QtCore.QRect(260, 80, 131, 20))
         self.label_nbcpdid.setText("")
         self.label_nbcpdid.setObjectName("label_nbcpdid")
         self.label_nbbatchid = QtWidgets.QLabel(Form_loadDataframe)
-        self.label_nbbatchid.setGeometry(QtCore.QRect(410, 110, 131, 20))
+        self.label_nbbatchid.setGeometry(QtCore.QRect(410, 80, 131, 20))
         self.label_nbbatchid.setText("")
         self.label_nbbatchid.setObjectName("label_nbbatchid")
         self.label_nbrrows = QtWidgets.QLabel(Form_loadDataframe)
-        self.label_nbrrows.setGeometry(QtCore.QRect(570, 110, 131, 21))
+        self.label_nbrrows.setGeometry(QtCore.QRect(570, 80, 131, 21))
         self.label_nbrrows.setText("")
         self.label_nbrrows.setObjectName("label_nbrrows")
-        self.pushButton_editvalues = QtWidgets.QPushButton(Form_loadDataframe)
-        self.pushButton_editvalues.setGeometry(QtCore.QRect(830, 90, 80, 21))
-        self.pushButton_editvalues.setObjectName("pushButton_editvalues")
 
         self.lineEdit_filepath.setText('File path')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
@@ -198,7 +186,7 @@ class Ui_Form_loadDataframe(object):
 
     def retranslateUi(self, Form_loadDataframe):
         _translate = QtCore.QCoreApplication.translate
-        Form_loadDataframe.setWindowTitle(_translate("Form_loadDataframe", "Pandas form"))
+        Form_loadDataframe.setWindowTitle(_translate("Form_loadDataframe", "Main window"))
         self.pushButton_loadfile.setText(_translate("Form_loadDataframe", "Load File"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe", "Plot"))
         self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe", "Correlation"))
@@ -210,18 +198,17 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_duplicates.setItemText(1, _translate("Form_loadDataframe", "Get duplicated values"))
         self.comboBox_duplicates.setItemText(2, _translate("Form_loadDataframe", "Number of duplicates"))
         self.comboBox_duplicates.setItemText(3, _translate("Form_loadDataframe", "Drop duplicated values"))
-        self.comboBox_dropfrom.setItemText(0, _translate("Form_loadDataframe", "Drop / Change"))
+        self.comboBox_dropfrom.setItemText(0, _translate("Form_loadDataframe", "Edit rows columns"))
         self.comboBox_dropfrom.setItemText(1, _translate("Form_loadDataframe", "Merge 2 columns"))
         self.comboBox_dropfrom.setItemText(2, _translate("Form_loadDataframe", "Rename columns"))
         self.comboBox_dropfrom.setItemText(3, _translate("Form_loadDataframe", "Drop from columns"))
         self.comboBox_dropfrom.setItemText(4, _translate("Form_loadDataframe", "Order columns"))
-        self.comboBox_dropfrom.setItemText(5, _translate("Form_loadDataframe", "Drop from rows"))
+        self.comboBox_dropfrom.setItemText(5, _translate("Form_loadDataframe", "Drop/ Rename/ Keep values in rows"))
         self.comboBox_dropfrom.setItemText(6, _translate("Form_loadDataframe", "Rename value in rows"))
         self.comboBox_dropfrom.setItemText(7, _translate("Form_loadDataframe", "Extract value from rows"))
         self.comboBox_linkfileby.setItemText(0, _translate("Form_loadDataframe", "Link file by"))
         self.comboBox_linkfileby.setItemText(1, _translate("Form_loadDataframe", "Well"))
         self.comboBox_linkfileby.setItemText(2, _translate("Form_loadDataframe", "Plate_Well"))
-        self.comboBox_linkfileby.setItemText(3, _translate("Form_loadDataframe", "PLATEBARCODE"))
         self.comboBox_machinelearning.setItemText(0, _translate("Form_loadDataframe", "Machine learning"))
         self.comboBox_machinelearning.setItemText(1, _translate("Form_loadDataframe", "LDA"))
         self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe", "Normalise"))
@@ -249,7 +236,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_aggregate.setItemText(0, _translate("Form_loadDataframe", "Aggregate"))
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe", "Aggregated grouping by"))
-        self.pushButton_editvalues.setText(_translate("Form_loadDataframe", "Edit values"))
+
 
 
     def on_comboboxnormalize_changed(self, value_nor):
@@ -359,15 +346,13 @@ class Ui_Form_loadDataframe(object):
                             QMessageBox.information(None, "Mean and STD ",
                                                     "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
                                                     QMessageBox.Ok)
-                        if buttonReply == QMessageBox.No:
-                            print('no pressed')
+
                     if df[columnname].isna().any() == False:
                         mean_df = df[columnname].mean()
                         std_df = df[columnname].std()
                         QMessageBox.information(None, "Mean and STD ",
                                                 "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
                                                 QMessageBox.Ok)
-
         self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Z factor & Robust Z factor":
@@ -400,7 +385,6 @@ class Ui_Form_loadDataframe(object):
                                 QMessageBox.information(None, "Error ",
                                                         "The Plate is not unique.\nPlease group your data first.",
                                                         QMessageBox.Ok)
-
         if value_st == "Intersection":
             if file == "File path":
                 QMessageBox.information(None, "Error ",
@@ -440,7 +424,6 @@ class Ui_Form_loadDataframe(object):
                                 QMessageBox.information(None, "Intersection",
                                             "The number of intersected data = " + str(len(inter)) + "\nSaved file.",
                                             QMessageBox.Ok)
-
             self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Union":
@@ -749,7 +732,6 @@ class Ui_Form_loadDataframe(object):
                                                         QMessageBox.Ok)
                                 self.lineEdit_filepath.setText(my_dir + '/' + 'Active_compounds.csv')
                                 self.reloaddata_fromfilepath(outfile)
-
         self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "> value"):
@@ -875,7 +857,6 @@ class Ui_Form_loadDataframe(object):
                     if 'Well' in df_toremoveout:
                         value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
                         if value_sigma1:
-
                             stdval = df_toremoveout[columnname].std()
                             meanval = df_toremoveout[columnname].mean()
                             df_toremoveout['Outliers'] = 'outlier'
@@ -1350,24 +1331,6 @@ class Ui_Form_loadDataframe(object):
             if file != "File path":
                 file = self.lineEdit_filepath.text()
                 df = pd.read_csv(file)
-                # header_1 = self.select_column()
-                # if not header_1:
-                #     QMessageBox.information(None, "Error",
-                #                                 "Please select a column to link the file.\n",
-                #                                 QMessageBox.Ok)
-                # if header_1:
-                # #     print(df[header_1].nunique())
-                #     if (len(df[header_1]) > 1):
-                #         print('d')
-                #         buttonReply = QMessageBox.question(None, 'Duplicated key',
-                #                "Press Yes if you want to continue linking with duplicated keys.\n"
-                #                "Press No to ignore.",
-                #                "Do you like PyQt5?",
-                               # QMessageBox.Yes | QMessageBox.No,
-                               # QMessageBox.Yes)
-                        # print('mfd')
-                        # if buttonReply == QMessageBox.Yes:
-                        #     print('ndnd')
                 fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
                                                                "",
                                                                "CSV Files (*.csv)")
@@ -1401,10 +1364,6 @@ class Ui_Form_loadDataframe(object):
                     QMessageBox.information(None, "File linked",
                                             "Successfully linked and saved the files!",
                                             QMessageBox.Ok)
-                                # if buttonReply == QMessageBox.No:
-                                    #     QMessageBox.information(None, "Error ",
-                                    #                             "The column selected has duplicated values, you cannot link the file.\nNo file to save.",
-                                    #                             QMessageBox.Ok)
                     # if (df[header_1].nunique() == 0):
                     #     fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File with Plate_WELL and CPD_ID",
                     #                                               "",
@@ -1688,8 +1647,6 @@ class Ui_Form_loadDataframe(object):
                                                                            "Press No to ignore.",
                                                                            QMessageBox.Yes | QMessageBox.No,
                                                                            QMessageBox.Yes)
-                        if buttonReply == QMessageBox.No:
-                            print('1')
                         if buttonReply == QMessageBox.Yes:
                             df[new_column] = '' + value_entered_rowval + ''
                             t1 = os.path.dirname(file)
@@ -1715,9 +1672,35 @@ class Ui_Form_loadDataframe(object):
 
         self.comboBox_addcolumn.setCurrentText('Add column')
 
-
     def on_comboboxdropfrom_changed(self, val):
         file = self.lineEdit_filepath.text()
+        if (val == 'Order columns'):
+            if file == "File path":
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != "File path":
+                exists = os.path.isfile(file)
+                if exists:
+                    t1 = os.path.dirname(file)
+                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                    header = self.select_multicolumns()
+                    if len(header) == 0:
+                        QMessageBox.information(None, "Error ",
+                                                "You must select at least 1 column.\nNo file to save!",
+                                                QMessageBox.Ok)
+                    if len(header) > 0:
+                        df = pd.read_csv(file)
+                        df =  df[header]
+                        df.to_csv(t1 + '\\' + 'ordered_' + file_name1 + '.csv', index=None)
+                        self.reloaddata_fromfilepath(t1 + '\\' + 'ordered_' + file_name1 + '.csv')
+                        self.lineEdit_filepath.setText(t1 + '/' + 'ordered_' + file_name1 + '.csv')
+                else:
+                    QMessageBox.information(None, "Error",
+                                            "The loaded file does not exist.\n",
+                                            QMessageBox.Ok)
+        self.comboBox_dropfrom.setCurrentText('Edit rows columns')
+
         if (val == 'Merge 2 columns'):
             if file == "File path":
                 QMessageBox.information(None, "Error ",
@@ -1770,10 +1753,6 @@ class Ui_Form_loadDataframe(object):
                                                                                                    "Press No to ignore.",
                                                                        QMessageBox.Yes | QMessageBox.No,
                                                                        QMessageBox.Yes)
-                                    if buttonReply == QMessageBox.No:
-                                        QMessageBox.information(None, "No file to save",
-                                                                "No file to save.",
-                                                                QMessageBox.Ok)
                                     if buttonReply == QMessageBox.Yes:
                                         df2[value_entered_column] = df2[header[0]] + '_' + df2[header[1]]
                                         t1 = os.path.dirname(file)
@@ -1789,10 +1768,6 @@ class Ui_Form_loadDataframe(object):
                                                                                                    "Press No to ignore.",
                                                                        QMessageBox.Yes | QMessageBox.No,
                                                                        QMessageBox.Yes)
-                                    if buttonReply == QMessageBox.No:
-                                        QMessageBox.information(None, "No file to save",
-                                                                "No file to save.",
-                                                                QMessageBox.Ok)
                                     if buttonReply == QMessageBox.Yes:
                                         df2[value_entered_column] = df2[header[0]] + '_' + df2[header[1]]
                                     t1 = os.path.dirname(file)
@@ -1805,7 +1780,7 @@ class Ui_Form_loadDataframe(object):
                                             "The loaded file does not exist.\n",
                                             QMessageBox.Ok)
 
-                self.comboBox_dropfrom.setCurrentText('Drop / Change')
+                self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Extract value from rows'):
             if file == 'File path':
@@ -1827,7 +1802,7 @@ class Ui_Form_loadDataframe(object):
                     self.reloaddata_fromfilepath(t1 + '\\' + 'file_PlateWell' + file_name1 + '.csv')
                     self.lineEdit_filepath.setText(t1 + '/' + 'file_PlateWell' + file_name1 + '.csv')
 
-            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Rename value in rows'):
             if file == 'File path':
@@ -1836,7 +1811,7 @@ class Ui_Form_loadDataframe(object):
                                         QMessageBox.Ok)
             if file != 'File path':
                 self.openwindow_renamevalues()
-            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Rename columns'):
             if file == "File path":
@@ -1873,7 +1848,7 @@ class Ui_Form_loadDataframe(object):
                                 self.lineEdit_filepath.setText(out_dir + '/' + t1 + '_renamedcolumn_' + header + '.csv')
                                 self.reloaddata_fromfilepath(out_dir + '\\' + t1 + '_renamedcolumn_' + header + '.csv')
 
-            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Drop from columns'):
             if file == "File path":
@@ -1915,7 +1890,7 @@ class Ui_Form_loadDataframe(object):
                                                 "Columns: " + str(
                                                     header) + " have been dropped from your file!\nFile successfully saved.",
                                                 QMessageBox.Ok)
-            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Drop from rows'):
             if file == 'File path':
@@ -1924,7 +1899,7 @@ class Ui_Form_loadDataframe(object):
                                             QMessageBox.Ok)
             if file != 'File path':
                 self.openwindow_form_checkboxes()
-            self.comboBox_dropfrom.setCurrentText('Drop / Change')
+            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
 
     def get_filename_path(self):
@@ -2104,6 +2079,8 @@ class Ui_Form_loadDataframe(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\'  + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
+
+
 
 if __name__ == "__main__":
     import sys
