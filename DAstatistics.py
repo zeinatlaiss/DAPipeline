@@ -1736,193 +1736,89 @@ class Ui_Form_loadDataframe(object):
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
             if file != "File path":
-                value_entered_column, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
-                                                                       QLineEdit.Normal, "")
-                header = self.select_multicolumns()
-                if value_entered_column in df.columns and value_entered_column != '':
-                    buttonReply = QMessageBox.question(None, 'Error',
-                                                       "The column " +  str(value_entered_column) + " already exists in the file.\n"
-                                                       "Press Yes if you want to overwrite the column.\n"
-                                                       "Press No to ignore.",
-                                                       QMessageBox.Yes | QMessageBox.No,
-                                                       QMessageBox.Yes)
-                    if buttonReply == QMessageBox.No:
-                        print('w')
-                    if buttonReply == QMessageBox.Yes:
-                        if (len(header) > 2):
-                            QMessageBox.information(None, "Error ",
-                                                    "You must select only 2 columns.\nNo file to save!",
-                                                    QMessageBox.Ok)
-                        if (len(header) == 0):
-                            QMessageBox.information(None, "Error ",
-                                                    "You must select 2 columns.\nNo file to save!",
-                                                    QMessageBox.Ok)
-                        if len(header) == 2:
-                            df[value_entered_column] = df[header[0]] + '_' + df[header[1]]
-                            t1 = os.path.dirname(file)
-                            file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            df.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
-                            self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '/' + 'merge_' + file_name1 + '.csv')
-
-                if value_entered_column == '':
-                    QMessageBox.information(None, "Error ",
-                                                "You have not entered a column name.\nNo file to save.",
-                                                QMessageBox.Ok)
-                if value_entered_column not in df.columns and value_entered_column != '':
-                    if (len(header) > 2):
+                exists = os.path.isfile(file)
+                if exists:
+                    t1 = os.path.dirname(file)
+                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                    header = self.select_multicolumns()
+                    if len(header) == 0:
                         QMessageBox.information(None, "Error ",
                                                 "You must select only 2 columns.\nNo file to save!",
                                                 QMessageBox.Ok)
-                    if (len(header) == 0):
+                    if (len(header) > 2 or len(header) < 2):
                         QMessageBox.information(None, "Error ",
-                                                "You must select 2 columns.\nNo file to save!",
+                                                "You can select only 2 columns.\nNo file to save!",
                                                 QMessageBox.Ok)
                     if len(header) == 2:
-                        df[value_entered_column] = df[header[0]] + '_' + df[header[1]]
-                        t1 = os.path.dirname(file)
-                        file_name1 = os.path.splitext(os.path.basename(file))[0]
-                        df.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
-                        self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
-                        self.lineEdit_filepath.setText(t1 + '/' + 'merge_' + file_name1 + '.csv')
+                        value_entered_column, okPressed = QInputDialog.getText(None, "Enter column name to add",
+                                                                               "Column name ",
+                                                                               QLineEdit.Normal, "")
+                        if value_entered_column == '':
+                            QMessageBox.information(None, "Error ",
+                                                        "You have not entered a column name.\nNo file to save.",
+                                                        QMessageBox.Ok)
+                        if value_entered_column != '':
+                            df1 = pd.read_csv(file)
+                            if value_entered_column not in df1.columns:
+                                if df1[header[0]].dtypes != str or  df1[header[1]].dtypes != str:
+                                    df1 = pd.read_csv(file, dtype={header[0]: str, header[1]: str})
+                                    df1[value_entered_column] = df1[header[0]] + '_' + df1[header[1]]
+                                    df1.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
+                                    self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
+                                    self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + file_name1 + '.csv')
+                                if df1[header[0]].dtypes == str and df1[header[1]].dtypes == str:
+                                    df1[value_entered_column] = df1[header[0]] + '_' + df1[header[1]]
+                                    df1.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
+                                    self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
+                                    self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + file_name1 + '.csv')
+                        if value_entered_column != '':
+                            df2 = pd.read_csv(file)
+                            if value_entered_column in df2.columns:
+                                if df2[header[0]].dtypes != str or df2[header[1]].dtypes != str:
+                                    df2 = pd.read_csv(file, dtype={header[0]: str, header[1]: str})
+                                    buttonReply = QMessageBox.question(None, 'Error',
+                                                                   "The column " +  str(value_entered_column) + " already exists in the file.\n"
+                                                                   "Press Yes if you want to overwrite the column.\n"
+                                                                   "Press No to ignore.",
+                                                                   QMessageBox.Yes | QMessageBox.No,
+                                                                   QMessageBox.Yes)
+                                    if buttonReply == QMessageBox.No:
+                                        print('w')
+                                    if buttonReply == QMessageBox.Yes:
+                                        df2[value_entered_column] = df2[header[0]] + '_' + df2[header[1]]
+                                        t1 = os.path.dirname(file)
+                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                        df2.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
+                                        self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
+                                        self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + file_name1 + '.csv')
+                                if df2[header[0]].dtypes == str and df2[header[1]].dtypes == str:
+                                    buttonReply = QMessageBox.question(None, 'Error',
+                                                                       "The column " + str(
+                                                                           value_entered_column) + " already exists in the file.\n"
+                                                                                                   "Press Yes if you want to overwrite the column.\n"
+                                                                                                   "Press No to ignore.",
+                                                                       QMessageBox.Yes | QMessageBox.No,
+                                                                       QMessageBox.Yes)
+                                    if buttonReply == QMessageBox.No:
+                                        QMessageBox.information(None, "No file to save",
+                                                                "No file to save.",
+                                                                QMessageBox.Ok)
+                                    if buttonReply == QMessageBox.Yes:
+                                        df2[value_entered_column] = df2[header[0]] + '_' + df2[header[1]]
+                                    t1 = os.path.dirname(file)
+                                    file_name1 = os.path.splitext(os.path.basename(file))[0]
+                                    df2.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
+                                    self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
+                                    self.lineEdit_filepath.setText(t1 + '/' + 'merge_' + file_name1 + '.csv')
+                else:
+                    QMessageBox.information(None, "Error",
+                                            "The loaded file does not exist.\n",
+                                            QMessageBox.Ok)
 
-                        # print(header)
-                        # if not all(x.is_integer() for x in df.v):
-                        #     print('m')
-                        # if all(x.is_integer() for x in df.v):
-                        #     print('d')
-                        # if type(df[header[0]].values) != int:
-                        #     print('nf')
-                        #     df[value_entered_column] = df[header[0]] + '_' + df[header[1]]
-                        #     df.to_csv('ok.csv')
-
-                # if file == "File path":
-            #     QMessageBox.information(None, "Error ",
-            #                             "No loaded file.\nPlease load a file first.",
-            #                             QMessageBox.Ok)
-            # if file != "File path":
-            #     d1 = pd.read_csv(file)
-            #     value_entered, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
-            #                                                     QLineEdit.Normal, "")
-            #     if (value_entered in d1.columns):
-            #         QMessageBox.information(None, "Error ",
-            #                                 "The column " + value_entered + " you entered already exists \nNo file to save ",
-            #                                 QMessageBox.Ok)
-            #     if (value_entered == ''):
-            #         QMessageBox.information(None, "Error ",
-            #                                 "No entry value !\nPlease enter a value in the input text.\nExample: Plate_Well or Plate_WELL",
-            #                                 QMessageBox.Ok)
-            #     if (value_entered not in d1.columns):
-            #         if (value_entered == 'Plate_Well'):
-            #             if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' in d1.columns):
-            #                 QMessageBox.information(None, "Error ",
-            #                                         "You cannot add the column Plate_Well. The column Plate_Sanofi exists in the file.\nPlease use the option "
-            #                                         "PlateSanofi_Well to add the column.",
-            #                                         QMessageBox.Ok)
-            #         if (value_entered == 'Plate_Well'):
-            #             if ('Plate' in d1.columns and 'Well' in d1.columns and 'Plate_Sanofi' not in d1.columns):
-            #                 d1['Plate_Well'] = d1['Plate'] + '_' + d1['Well']
-            #                 out_dir = QFileDialog.getExistingDirectory(
-            #                     None,
-            #                     "Select output folder",
-            #                     "",
-            #                     QFileDialog.ShowDirsOnly)
-            #                 if out_dir:
-            #                     t1 = out_dir.split('/')[2]
-            #                     d1.to_csv(out_dir + '\\' + t1 + '_Plate_Well.csv', index=None)
-            #                     QMessageBox.information(None, "Column added ",
-            #                                             "The column " + value_entered + " has been successfully added.\nSuccessfully saved the file!",
-            #                                             QMessageBox.Ok)
-            #                     self.reloaddata_fromDF(d1)
-            #                     self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_Well.csv')
-            #             if ('Plate' not in d1.columns or 'Well' not in d1.columns):
-            #                 QMessageBox.information(None, "Error ",
-            #                                         "The column Plate or Well not in the file! No column to add!\nNo file to save.",
-            #                                         QMessageBox.Ok)
-            #         if (value_entered == 'Plate_WELL'):
-            #             if ('Barcode_AssayPlate' in d1.columns and 'WELL' in d1.columns and 'Plate_Sanofi' not in d1.columns):
-            #                 d1['Plate_WELL'] = d1['Barcode_AssayPlate'] + '_' + d1['WELL']
-            #                 out_dir = QFileDialog.getExistingDirectory(
-            #                     None,
-            #                     "Select output folder",
-            #                     "",
-            #                     QFileDialog.ShowDirsOnly)
-            #                 if out_dir:
-            #                     t1 = out_dir.split('/')[2]
-            #                     d1.to_csv(out_dir + '\\' + t1 + '_Plate_WELL.csv', index=None)
-            #                     QMessageBox.information(None, "Column added ",
-            #                                             "Column '" + value_entered + "' has been successfully added.\nSuccessfully saved the file!",
-            #                                             QMessageBox.Ok)
-            #                     self.reloaddata_fromDF(d1)
-            #                     self.lineEdit_filepath.setText(out_dir + '//' + t1 + '_Plate_WELL.csv')
-            #
-            #             if ('Plate' not in d1.columns and 'WELL' not in d1.columns and 'Well' not in d1.columns and
-            #                     'Barcode_AssayPlate' not in d1.columns and 'Plate_Sanofi' not in d1.columns):
-            #                 QMessageBox.information(None, "Error ",
-            #                                         "Columns 'Plate' or 'Well' not in the file! No column to add!\nNo file to save.",
-            #                                         QMessageBox.Ok)
-            #         if (value_entered == 'Concentration'):
-            #             conc_value, okPressed = QInputDialog.getText(None,
-            #                                                         "Concentration: ",
-            #                                                         "Concentration",
-            #                                                         QLineEdit.Normal,
-            #                                                         "Value")
-            #             if okPressed:
-            #                 d1['Concentration'] = conc_value
-            #                 t1 = os.path.dirname(file)
-            #                 file_name1 = os.path.splitext(os.path.basename(file))[0]
-            #                 d1.to_csv(t1 + '\\' + 'File_' + file_name1 + '.csv', index=None)
-            #                 self.reloaddata_fromfilepath(t1 + '\\' + 'File_' + file_name1 + '.csv')
-            #                 self.lineEdit_filepath.setText(t1 + '/' + 'File_' + file_name1 + '.csv')
-            #                 QMessageBox.information(None, "Concentration added",
-            #                                         "The column Concentration has been added!",
-            #                                         QMessageBox.Ok)
-            #         if (value_entered == 'PlateSanofi_Well'):
-            #             df = pd.read_csv(file)
-            #             if ('Plate_Sanofi' in df.columns and 'Well' in df.columns):
-            #                 if 'PlateSanofi_Well' not in df.columns:
-            #                     df['PlateSanofi_Well'] = df['Plate_Sanofi'] + '_' + df['Well']
-            #                     t1 = os.path.dirname(file)
-            #                     file_name1 = os.path.splitext(os.path.basename(file))[0]
-            #                     df.to_csv(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv', index=None)
-            #                     self.reloaddata_fromfilepath(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv')
-            #                     self.lineEdit_filepath.setText(t1 + '/' + 'PlateSanofi_Well_' + file_name1 + '.csv')
-            #                     QMessageBox.information(None, "Column added",
-            #                                             "The column 'PlateSanofi_Well' has been added to the file.",
-            #                                             QMessageBox.Ok)
-            #
-            #                 if 'PlateSanofi_Well' in df.columns:
-            #                     buttonReply = QMessageBox.question(None, 'Error',
-            #                                                        "The column PlateSanofi_Well already exists in the file.\n"
-            #                                                        "Press Yes if you want to overwrite the column.\n"
-            #                                                        "Press No to ignore.",
-            #                                                        QMessageBox.Yes | QMessageBox.No,
-            #                                                        QMessageBox.Yes)
-            #                     if buttonReply == QMessageBox.Yes:
-            #                         df['PlateSanofi_Well'] = df['Plate_Sanofi'] + '_' + df['Well']
-            #                         t1 = os.path.dirname(file)
-            #                         file_name1 = os.path.splitext(os.path.basename(file))[0]
-            #                         df.to_csv(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv', index=None)
-            #                         self.reloaddata_fromfilepath(t1 + '\\' + 'PlateSanofi_Well_' + file_name1 + '.csv')
-            #                         self.lineEdit_filepath.setText(t1 + '/' + 'PlateSanofi_Well_' + file_name1 + '.csv')
-            #                         QMessageBox.information(None, "Column added",
-            #                                                 "The column 'PlateSanofi_Well' has been added to the file.",
-            #                                                 QMessageBox.Ok)
-            #
-            #                     if buttonReply == QMessageBox.No:
-            #                         QMessageBox.information(None, "Error",
-            #                                                 "No file to save.",
-            #                                                 QMessageBox.Ok)
-            #
-            #             # if ('Plate_Sanofi' not in df.columns or 'Well' not in df.columns):
-            #             #                 QMessageBox.information(None, "Error ",
-            #             #                                         "The column Plate, Well or Plate_Sanofi not in the file! No column to add!\nNo file to save.",
-            #             #                                         QMessageBox.Ok)
                 self.comboBox_addcolumn.setCurrentText('Add column')
 
     def on_comboboxdropfrom_changed(self, val):
         file = self.lineEdit_filepath.text()
-
         if (val == 'Extract value from rows'):
             if file == 'File path':
                 QMessageBox.information(None, "Error",
@@ -2246,7 +2142,6 @@ class Ui_Form_loadDataframe(object):
         if fileName:
             exists = os.path.isfile(fileName)
             if exists:
-
                 self.lineEdit_filepath.setText(fileName)
                 df = pd.read_csv(fileName, low_memory=False)
                 model = PandasModel(df.head(1000))
