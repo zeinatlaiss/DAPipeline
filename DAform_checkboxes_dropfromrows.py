@@ -1,4 +1,4 @@
-from Pandaswidget import PandasModel
+from DApandaswidget import PandasModel
 import numpy as np
 import os
 from PyQt5.QtWidgets import *

@@ -8,9 +8,9 @@ import os
 from PyQt5.QtWidgets import *
 import pandas as pd
 from requests.packages.urllib3.packages.six.moves import xrange
-from form_checkboxes_dropfromrows import Ui_Form_CheckBoxes
-from form_table_addclasses import Ui_form_table_addclasses
-from Pandaswidget import PandasModel
+from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
+from DAform_table_addclasses import Ui_form_table_addclasses
+from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe.ui'
