@@ -171,6 +171,12 @@ class Ui_form_table_addclasses(object):
                                 if df1['Check_if_in_WELL'].any() == False:
                                     print('1')
                                 if df1['Check_if_in_WELL'].any() == True:
+                                    for i in range(len(l)):
+                                        df['c'] = df['Well'].apply(lambda x: any([k in x for k in l]))
+                                        # d1 = df[df['Check_if_String1']==True]
+                                        df.to_csv('out.csv', index=None)
+                                        print(df)
+
                                     df1['Class'] = cl_nb
                                     t1 = os.path.dirname(file)
                                     file_name1 = os.path.splitext(os.path.basename(file))[0]
@@ -200,9 +206,7 @@ class Ui_form_table_addclasses(object):
                                             self.comboBox_featuresfromdataframe.addItems(list_descriptors)
                                             self.df = df
                                             self.fill_tablewidget()
-                if buttonReply == QMessageBox.No:
-                    print('')
-
+                                            self.lineEdit_filepathfromdataframe.setText(t1 + '//' + file_name1 + '_withclasses' +   '.csv')
 
 
     def load_dict(self, plate, desc):
