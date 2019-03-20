@@ -85,7 +85,6 @@ class Ui_form_table_addclasses(object):
         self.comboBox_addclass.addItem("")
         self.comboBox_addclass.addItem("")
 
-
         cols = 24
         rows = 16
         ll2 = list(
@@ -243,7 +242,6 @@ class Ui_form_table_addclasses(object):
     def on_reloadFile_clicked(self, file):
         self.tableWidget_toaddclasses.clearContents()
         self.comboBox_plates.clear()
-        # self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
         self.lineEdit_filepathfromdataframe.setText(file)
         df = pd.read_csv(file, low_memory=False)
         if 'Well' not in df:
@@ -259,10 +257,8 @@ class Ui_form_table_addclasses(object):
             number_of_rows = self.tableWidget_toaddclasses.rowCount()
             number_of_columns = self.tableWidget_toaddclasses.columnCount()
             list_descriptors = df.columns
-            # if 'Plate' in df.columns:
             list_plates = list(df['Plate'].drop_duplicates(keep="first"))
             nbr_rows = len(df)
-
             self.comboBox_plates.addItems((list_plates))
             self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
             self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
