@@ -7,7 +7,6 @@ import seaborn as sns
 import os
 from PyQt5.QtWidgets import *
 import pandas as pd
-from requests.packages.urllib3.packages.six.moves import xrange
 from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
 from DApandaswidget import PandasModel
@@ -27,12 +26,16 @@ class Ui_Form_loadDataframe(object):
         self.ui = Ui_Form_CheckBoxes()
         self.ui.setupUi(self.window)
         # Form_loadDataframe.hide()
+        self.ui.lineEdit_filepath_checkboxes.setText(self.lineEdit_filepath.text())
+        self.ui.loadFile()
         self.window.show()
 
     def openwindow_addclasses(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_form_table_addclasses()
         self.ui.setupUi(self.window)
+        self.ui.lineEdit_filepathfromdataframe.setText(self.lineEdit_filepath.text())
+        self.ui.loadFile()
         # Form_loadDataframe.hide()
         self.window.show()
 
@@ -1421,6 +1424,7 @@ class Ui_Form_loadDataframe(object):
         self.comboBox_addcolumn.setCurrentText('Add column')
 
     def on_comboboxdropfrom_changed(self, val):
+
         file = self.lineEdit_filepath.text()
         if (val == 'Order columns'):
             if file == "File path":
@@ -1550,15 +1554,6 @@ class Ui_Form_loadDataframe(object):
                     self.reloaddata_fromfilepath(t1 + '\\' + 'file_PlateWell' + file_name1 + '.csv')
                     self.lineEdit_filepath.setText(t1 + '/' + 'file_PlateWell' + file_name1 + '.csv')
 
-            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
-
-        if (val == 'Rename value in rows'):
-            if file == 'File path':
-                QMessageBox.information(None, "Error",
-                                        "Please load a file first.",
-                                        QMessageBox.Ok)
-            if file != 'File path':
-                self.openwindow_renamevalues()
             self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Rename columns'):

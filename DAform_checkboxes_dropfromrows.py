@@ -125,6 +125,7 @@ class Ui_Form_CheckBoxes(object):
         model = PandasModel(df.head(500))
         self.tableView_dropfromrows.setModel(model)
 
+
     def on_loadFilecheckboxes_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(None, "Open File",
                                                   "",
@@ -134,6 +135,12 @@ class Ui_Form_CheckBoxes(object):
             df = pd.read_csv(fileName, low_memory=False)
             model = PandasModel(df.head(500))
             self.tableView_dropfromrows.setModel(model)
+
+    def loadFile(self):
+        fileName = self.lineEdit_filepath_checkboxes.text()
+        df = pd.read_csv(fileName, low_memory=False)
+        model = PandasModel(df.head(500))
+        self.tableView_dropfromrows.setModel(model)
 
     def on_apply_clicked(self):
         file = self.lineEdit_filepath_checkboxes.text()
@@ -176,6 +183,8 @@ class Ui_Form_CheckBoxes(object):
                                                         "The value " + str(self.lineEdit_valuetokeep.text()) +
                                                         " does not exist in the column " + str(header) + ".\nTry again",
                                                         QMessageBox.Ok)
+
+
                             if self.lineEdit_valuetokeep.text() in df[header].values:
                                 value = self.lineEdit_valuetokeep.text()
                                 df = df[df[header] ==value]
@@ -189,6 +198,8 @@ class Ui_Form_CheckBoxes(object):
                                     t1 + '\\' + 'kept_' + header + '_' + file_name1 + '.csv')
                                 self.lineEdit_filepath_checkboxes.setText(
                                     t1 + '/' + 'kept_' + header + '_' + file_name1 + '.csv')
+
+
 
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked() and not \
                             self.checkBox_valueendswith.isChecked()and not self.checkBox_keepvalue.isChecked() and self.checkBox_text.isChecked():
