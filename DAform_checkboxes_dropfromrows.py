@@ -141,6 +141,7 @@ class Ui_Form_CheckBoxes(object):
         df = pd.read_csv(fileName, low_memory=False)
         model = PandasModel(df.head(500))
         self.tableView_dropfromrows.setModel(model)
+        self.df = df
 
     def on_apply_clicked(self):
         file = self.lineEdit_filepath_checkboxes.text()
