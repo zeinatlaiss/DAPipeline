@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import *
 import pandas as pd
 from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
+from DAform_checkboxes_editincolumns import Ui_Form_editcolumns
 from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
@@ -21,19 +22,51 @@ from DApandaswidget import PandasModel
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe_tabs(object):
+
+    def openwindow_form_checkboxes(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Form_CheckBoxes()
+        self.ui.setupUi(self.window)
+        # Form_loadDataframe.hide()
+        self.ui.lineEdit_filepath_checkboxes.setText(self.lineEdit_filepath.text())
+        self.ui.loadFile()
+        self.window.show()
+
+    def openwindow_addclasses(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui1 = Ui_form_table_addclasses()
+        self.ui1.setupUi(self.window)
+        self.ui1.lineEdit_filepathfromdataframe.setText(self.lineEdit_filepath.text())
+        self.ui1.loadFile()
+        # Form_loadDataframe.hide()
+        self.window.show()
+
+    def openwindow_form_checkboxes_editincolumns(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui2 = Ui_Form_editcolumns()
+        self.ui2.setupUi(self.window)
+        self.ui2.lineedit_file_path_to_edit = self.lineEdit_filepath.text()
+        self.ui2.tableView_dataframe_to_edit = self.tableView_dataframe
+        self.ui2.t1_new = os.path.dirname(self.lineEdit_filepath.text())
+        self.ui2.file_name1_new = os.path.splitext(os.path.basename(self.ui2.lineedit_file_path_to_edit))[0]
+        self.lineEdit_filepath.setText(self.ui2.t1_new + '/' + 'column_edited_' + self.ui2.file_name1_new + '.csv')
+        # self.ui.loadFile()
+        self.window.show()
+
     def setupUi(self, Form_loadDataframe_tabs):
         Form_loadDataframe_tabs.setObjectName("Form_loadDataframe_tabs")
+        Form_loadDataframe_tabs.setWindowModality(QtCore.Qt.WindowModal)
         Form_loadDataframe_tabs.setEnabled(True)
-        Form_loadDataframe_tabs.resize(1536, 1050)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Preferred)
+        Form_loadDataframe_tabs.resize(1524, 1066)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form_loadDataframe_tabs.sizePolicy().hasHeightForWidth())
         Form_loadDataframe_tabs.setSizePolicy(sizePolicy)
         Form_loadDataframe_tabs.setSizeIncrement(QtCore.QSize(25, 25))
-        Form_loadDataframe_tabs.setStyleSheet("background-color: rgb(24, 32, 177);")
+        Form_loadDataframe_tabs.setStyleSheet("background-color: rgb(222, 241, 255);")
         self.tabWidget_filestatistics = QtWidgets.QTabWidget(Form_loadDataframe_tabs)
-        self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 991))
+        self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1021))
         self.tabWidget_filestatistics.setStyleSheet("background-color: rgb(229, 241, 255);\n"
 "font: 10pt \"MS Shell Dlg 2\";\n"
 "font: 87 8pt \"Arial Black\";")
@@ -57,11 +90,17 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_concatfiles.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_concatfiles.setObjectName("pushButton_concatfiles")
         self.pushButton_loadfile = QtWidgets.QPushButton(self.tab_file)
-        self.pushButton_loadfile.setGeometry(QtCore.QRect(1370, 900, 101, 31))
+        self.pushButton_loadfile.setGeometry(QtCore.QRect(1350, 900, 111, 31))
         self.pushButton_loadfile.setMouseTracking(False)
         self.pushButton_loadfile.setAutoFillBackground(False)
-        self.pushButton_loadfile.setStyleSheet("background-color: rgb(220, 236, 255);")
+        self.pushButton_loadfile.setStyleSheet("background-color: rgb(220, 236, 255);\n"
+"font: 87 8pt \"Arial Black\";\n"
+"")
         self.pushButton_loadfile.setObjectName("pushButton_loadfile")
+        self.pushButton_addclasses.raise_()
+        self.pushButton_onlinkfiles.raise_()
+        self.pushButton_concatfiles.raise_()
+        self.pushButton_loadfile.raise_()
         self.tabWidget_filestatistics.addTab(self.tab_file, "")
         self.tab_statistics = QtWidgets.QWidget()
         self.tab_statistics.setObjectName("tab_statistics")
@@ -84,7 +123,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_edit = QtWidgets.QWidget()
         self.tab_edit.setObjectName("tab_edit")
         self.comboBox_dropfrom = QtWidgets.QComboBox(self.tab_edit)
-        self.comboBox_dropfrom.setGeometry(QtCore.QRect(990, 890, 271, 22))
+        self.comboBox_dropfrom.setGeometry(QtCore.QRect(780, 890, 271, 22))
         self.comboBox_dropfrom.setObjectName("comboBox_dropfrom")
         self.comboBox_dropfrom.addItem("")
         self.comboBox_dropfrom.addItem("")
@@ -94,6 +133,15 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_dropfrom.addItem("")
         self.comboBox_dropfrom.addItem("")
         self.comboBox_dropfrom.addItem("")
+        self.pushButton_editinrows = QtWidgets.QPushButton(self.tab_edit)
+        self.pushButton_editinrows.setGeometry(QtCore.QRect(1200, 890, 100, 31))
+        self.pushButton_editinrows.setObjectName("pushButton_editinrows")
+        self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
+        self.pushButton_editincolumns.setGeometry(QtCore.QRect(1320, 890, 111, 31))
+        self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
+        self.pushButton_apply = QtWidgets.QPushButton(self.tab_edit)
+        self.pushButton_apply.setGeometry(QtCore.QRect(1260, 940, 91, 31))
+        self.pushButton_apply.setObjectName("pushButton_apply")
         self.tabWidget_filestatistics.addTab(self.tab_edit, "")
         self.tab_detectvalue = QtWidgets.QWidget()
         self.tab_detectvalue.setObjectName("tab_detectvalue")
@@ -214,6 +262,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_onlinkfiles.clicked.connect(self.on_linkfiles_clicked)
         self.pushButton_concatfiles.clicked.connect(self.on_concatenatefiles_clicked)
         self.pushButton_addclasses.clicked.connect(self.on_addclasses_clicked)
+        self.pushButton_editincolumns.clicked.connect(self.on_editcolumns_clicked)
         self.comboBox_duplicates.currentTextChanged.connect(self.on_comboboxduplicates_changed)
         self.comboBox_dropfrom.currentTextChanged.connect(self.on_comboboxdropfrom_changed)
         self.comboBox_extracthits.currentTextChanged.connect(self.on_comboboxactivecompounds_changed)
@@ -254,6 +303,9 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_dropfrom.setItemText(5, _translate("Form_loadDataframe_tabs", "Drop/ Rename/ Keep values in rows"))
         self.comboBox_dropfrom.setItemText(6, _translate("Form_loadDataframe_tabs", "Rename value in rows"))
         self.comboBox_dropfrom.setItemText(7, _translate("Form_loadDataframe_tabs", "Extract value from rows"))
+        self.pushButton_editinrows.setText(_translate("Form_loadDataframe_tabs", "Edit in rows"))
+        self.pushButton_editincolumns.setText(_translate("Form_loadDataframe_tabs", "Edit in columns"))
+        self.pushButton_apply.setText(_translate("Form_loadDataframe_tabs", "Apply"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_edit), _translate("Form_loadDataframe_tabs", "Edit"))
         self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe_tabs", "Normalise"))
         self.comboBox_normalize.setItemText(1, _translate("Form_loadDataframe_tabs", "Median"))
@@ -1474,113 +1526,6 @@ class Ui_Form_loadDataframe_tabs(object):
     def on_comboboxdropfrom_changed(self, val):
 
         file = self.lineEdit_filepath.text()
-        if (val == 'Order columns'):
-            if file == "File path":
-                QMessageBox.information(None, "Error ",
-                                        "No loaded file.\nPlease load a file first.",
-                                        QMessageBox.Ok)
-            if file != "File path":
-                exists = os.path.isfile(file)
-                if exists:
-                    t1 = os.path.dirname(file)
-                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                    header = self.select_multicolumns()
-                    if len(header) == 0:
-                        QMessageBox.information(None, "Error ",
-                                                "You must select at least 1 column.\nNo file to save!",
-                                                QMessageBox.Ok)
-                    if len(header) > 0:
-                        df = pd.read_csv(file)
-                        df = df[header]
-                        df.to_csv(t1 + '\\' + 'ordered_' + file_name1 + '.csv', index=None)
-                        self.reloaddata_fromfilepath(t1 + '\\' + 'ordered_' + file_name1 + '.csv')
-                        self.lineEdit_filepath.setText(t1 + '/' + 'ordered_' + file_name1 + '.csv')
-                else:
-                    QMessageBox.information(None, "Error",
-                                            "The loaded file does not exist anymore.\n",
-                                            QMessageBox.Ok)
-        self.comboBox_dropfrom.setCurrentText('Edit rows columns')
-
-        if (val == 'Merge 2 columns'):
-            if file == "File path":
-                QMessageBox.information(None, "Error ",
-                                        "No loaded file.\nPlease load a file first.",
-                                        QMessageBox.Ok)
-            if file != "File path":
-                exists = os.path.isfile(file)
-                if exists:
-                    t1 = os.path.dirname(file)
-                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                    header = self.select_multicolumns()
-                    if len(header) == 0:
-                        QMessageBox.information(None, "Error ",
-                                                "You must select only 2 columns.\nNo file to save!",
-                                                QMessageBox.Ok)
-                    if (len(header) > 2 or len(header) < 2):
-                        QMessageBox.information(None, "Error ",
-                                                "You can select only 2 columns.\nNo file to save!",
-                                                QMessageBox.Ok)
-                    if len(header) == 2:
-                        value_entered_column, okPressed = QInputDialog.getText(None, "Enter column name to add",
-                                                                               "Column name ",
-                                                                               QLineEdit.Normal, "")
-                        if value_entered_column == '':
-                            QMessageBox.information(None, "Error ",
-                                                    "You have not entered a column name.\nNo file to save.",
-                                                    QMessageBox.Ok)
-                        if value_entered_column != '':
-                            df1 = pd.read_csv(file)
-                            if value_entered_column not in df1.columns:
-                                if df1[header[0]].dtypes != str or df1[header[1]].dtypes != str:
-                                    df1 = pd.read_csv(file, dtype={header[0]: str, header[1]: str})
-                                    df1[value_entered_column] = df1[header[0]] + '_' + df1[header[1]]
-                                    df1.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
-                                    self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
-                                    self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + file_name1 + '.csv')
-                                if df1[header[0]].dtypes == str and df1[header[1]].dtypes == str:
-                                    df1[value_entered_column] = df1[header[0]] + '_' + df1[header[1]]
-                                    df1.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
-                                    self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
-                                    self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + file_name1 + '.csv')
-                            df2 = pd.read_csv(file)
-                            if value_entered_column in df2.columns:
-                                if df2[header[0]].dtypes != str or df2[header[1]].dtypes != str:
-                                    df2 = pd.read_csv(file, dtype={header[0]: str, header[1]: str})
-                                    buttonReply = QMessageBox.question(None, 'Error',
-                                                                       "The column " + str(
-                                                                           value_entered_column) + " already exists in the file.\n"
-                                                                                                   "Press Yes if you want to overwrite the column.\n"
-                                                                                                   "Press No to ignore.",
-                                                                       QMessageBox.Yes | QMessageBox.No,
-                                                                       QMessageBox.Yes)
-                                    if buttonReply == QMessageBox.Yes:
-                                        df2[value_entered_column] = df2[header[0]] + '_' + df2[header[1]]
-                                        t1 = os.path.dirname(file)
-                                        file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                        df2.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
-                                        self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
-                                        self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + file_name1 + '.csv')
-                                if df2[header[0]].dtypes == str and df2[header[1]].dtypes == str:
-                                    buttonReply = QMessageBox.question(None, 'Error',
-                                                                       "The column " + str(
-                                                                           value_entered_column) + " already exists in the file.\n"
-                                                                                                   "Press Yes if you want to overwrite the column.\n"
-                                                                                                   "Press No to ignore.",
-                                                                       QMessageBox.Yes | QMessageBox.No,
-                                                                       QMessageBox.Yes)
-                                    if buttonReply == QMessageBox.Yes:
-                                        df2[value_entered_column] = df2[header[0]] + '_' + df2[header[1]]
-                                    t1 = os.path.dirname(file)
-                                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                    df2.to_csv(t1 + '\\' + 'merged_' + file_name1 + '.csv', index=None)
-                                    self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + file_name1 + '.csv')
-                                    self.lineEdit_filepath.setText(t1 + '/' + 'merge_' + file_name1 + '.csv')
-                else:
-                    QMessageBox.information(None, "Error",
-                                            "The loaded file does not exist anymore.\n",
-                                            QMessageBox.Ok)
-
-                self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Extract value from rows'):
             if file == 'File path':
@@ -1605,72 +1550,6 @@ class Ui_Form_loadDataframe_tabs(object):
 
             self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
-        if (val == 'Rename columns'):
-            if file == "File path":
-                QMessageBox.information(None, "Error ",
-                                        "No loaded file.\nPlease load a file first.",
-                                        QMessageBox.Ok)
-            if file != "File path":
-                df = pd.read_csv(file)
-                header = self.select_column()
-                if len(header) == 0:
-                    QMessageBox.information(None, "Error ",
-                                            "You must select a column No file to save \nTry again",
-                                            QMessageBox.Ok)
-                if len(header) > 1:
-                    new_value, okPressed = QInputDialog.getText(None, "Value to rename value in column " + str(header),
-                                                                "Column name ",
-                                                                QLineEdit.Normal, "New column name for " + str(header))
-                    if okPressed:
-                        if new_value in df:
-                            QMessageBox.information(None, "Error ",
-                                                    "The value you just entered already exists in the file.\nNo file to save.",
-                                                    QMessageBox.Ok)
-                        if new_value not in df:
-                            df.rename(columns={header: new_value}, inplace=True)
-                            t1 = os.path.dirname(file)
-                            file_name1 = os.path.splitext(os.path.basename(file))[0]
-                            df.to_csv(t1 + '\\' + '_renamedcolumn_' + header + file_name1 + '.csv', index=None)
-                            self.lineEdit_filepath.setText(t1 + '//' + '_renamedcolumn_' + header + file_name1 + '.csv')
-                            self.reloaddata_fromfilepath(t1 + '\\' + '_renamedcolumn_' + header + file_name1 + '.csv')
-
-            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
-
-        if (val == 'Drop from columns'):
-            if file == "File path":
-                QMessageBox.information(None, "Error ",
-                                        "No loaded file.\nPlease load a file first.",
-                                        QMessageBox.Ok)
-            if file != "File path":
-                df = pd.read_csv(file)
-                header = self.select_multicolumns()
-                if (len(header) == 0):
-                    QMessageBox.information(None, "Error ",
-                                            "You must select a column.\nNo file to save!",
-                                            QMessageBox.Ok)
-                if len(header) > 0:
-                    t1 = os.path.dirname(file)
-                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                    d_dropped = df.drop(header, axis=1)
-                    d_dropped.to_csv(t1 + '\\' + 'droppedcol_' + file_name1 + '.csv', index=None)
-                    self.reloaddata_fromfilepath(t1 + '//' + 'droppedcol_' + file_name1 + '.csv')
-                    self.lineEdit_filepath.setText(t1 + '//' + 'droppedcol_' + file_name1 + '.csv')
-                    if 'Plate' in d_dropped and 'Well' in d_dropped:
-                        self.setPlateWellText_intblview(d_dropped)
-                    if 'Plate' in d_dropped and 'Well' not in d_dropped:
-                        self.lineEdit_plate.setText(str(d_dropped['Plate'].nunique()) + ' unique plate')
-                        self.lineEdit_well.setText('No well')
-                    if 'Plate' not in d_dropped and 'Well' in d_dropped:
-                        self.lineEdit_plate.setText('No plate')
-                        self.lineEdit_well.setText(str(len(d_dropped['Well'])) + ' wells')
-                    if 'Plate' not in d_dropped and 'Well' not in d_dropped:
-                        self.lineEdit_plate.setText('No plate')
-                        self.lineEdit_well.setText('No well')
-                    QMessageBox.information(None, "Dropped columns ",
-                                            "Columns: " + str(
-                                                header) + " have been dropped from your file!\nFile successfully saved.",
-                                            QMessageBox.Ok)
-            self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
         if (val == 'Rename value in rows'):
             file = self.lineEdit_filepath.text()
@@ -1841,6 +1720,9 @@ class Ui_Form_loadDataframe_tabs(object):
             self.label_nbcpdid.setText('No X_CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
 
+    def on_editcolumns_clicked(self):
+        self.openwindow_form_checkboxes_editincolumns()
+
     def on_addclasses_clicked(self, t):
         self.openwindow_addclasses()
 
@@ -1910,6 +1792,7 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
+
 
 
 if __name__ == "__main__":

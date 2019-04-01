@@ -322,6 +322,7 @@ class Ui_form_table_addclasses(object):
 
     def on_loadFile_clicked(self):
         self.tableWidget_toaddclasses.clearContents()
+        self.comboBox_plates.clear()
         fileName, _ = QFileDialog.getOpenFileName(None, "Open File",
                                                   "",
                                                   "CSV Files (*.csv)")
@@ -333,7 +334,6 @@ class Ui_form_table_addclasses(object):
                 QMessageBox.information(None, "Error ",
                                     "The column Well is not in the file.\nTry again.",
                                     QMessageBox.Ok)
-
             if 'Well' in df:
                 df_rows = df.count()
                 cols = 24
@@ -350,6 +350,7 @@ class Ui_form_table_addclasses(object):
                     self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
                     self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
                     self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+                    self.descriptors_df =  list_descriptors
                     self.df = df
 
     def loadFile(self):        
