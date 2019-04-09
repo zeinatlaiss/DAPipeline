@@ -29,6 +29,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.ui.setupUi(self.window)
         # Form_loadDataframe.hide()
         self.ui.lineEdit_filepath_checkboxes.setText(self.lineEdit_filepath.text())
+        self.load_ddf()
         self.ui.loadFile()
         self.window.show()
 
@@ -49,7 +50,12 @@ class Ui_Form_loadDataframe_tabs(object):
         self.ui2.tableView_dataframe_to_edit = self.tableView_dataframe
         self.ui2.t1_new = os.path.dirname(self.lineEdit_filepath.text())
         self.ui2.file_name1_new = os.path.splitext(os.path.basename(self.ui2.lineedit_file_path_to_edit))[0]
-        self.lineEdit_filepath.setText(self.ui2.t1_new + '/' + 'column_edited_' + self.ui2.file_name1_new + '.csv')
+        # self.ui2.lineedit_to_read = self.lineEdit_filepath.text()
+        self.ui2.lineEdit_plate_new = self.lineEdit_plate
+        self.ui2.lineEdit_well_new = self.lineEdit_well
+        self.ui2.label_nbcpdid_new = self.label_nbcpdid
+        self.ui2.label_nbbatchid_new = self.label_nbbatchid
+        self.lineEdit_filepath.setText(self.ui2.t1_new + '/' + self.ui2.file_name1_new + '.csv')
         # self.ui.loadFile()
         self.window.show()
 
@@ -139,9 +145,6 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
         self.pushButton_editincolumns.setGeometry(QtCore.QRect(1320, 890, 111, 31))
         self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
-        self.pushButton_apply = QtWidgets.QPushButton(self.tab_edit)
-        self.pushButton_apply.setGeometry(QtCore.QRect(1260, 940, 91, 31))
-        self.pushButton_apply.setObjectName("pushButton_apply")
         self.tabWidget_filestatistics.addTab(self.tab_edit, "")
         self.tab_detectvalue = QtWidgets.QWidget()
         self.tab_detectvalue.setObjectName("tab_detectvalue")
@@ -198,21 +201,21 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_plot, "")
         self.label_nbcpdid = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.label_nbcpdid.setGeometry(QtCore.QRect(1050, 70, 141, 20))
+        self.label_nbcpdid.setGeometry(QtCore.QRect(1200, 70, 141, 20))
         self.label_nbcpdid.setAutoFillBackground(False)
         self.label_nbcpdid.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
         self.label_nbcpdid.setText("")
         self.label_nbcpdid.setObjectName("label_nbcpdid")
         self.label_nbbatchid = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.label_nbbatchid.setGeometry(QtCore.QRect(1200, 70, 141, 20))
+        self.label_nbbatchid.setGeometry(QtCore.QRect(1350, 70, 141, 20))
         self.label_nbbatchid.setAutoFillBackground(False)
         self.label_nbbatchid.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
         self.label_nbbatchid.setText("")
         self.label_nbbatchid.setObjectName("label_nbbatchid")
         self.lineEdit_well = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.lineEdit_well.setGeometry(QtCore.QRect(900, 70, 141, 20))
+        self.lineEdit_well.setGeometry(QtCore.QRect(1050, 70, 141, 20))
         self.lineEdit_well.setAutoFillBackground(False)
         self.lineEdit_well.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
@@ -220,7 +223,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.lineEdit_well.setObjectName("lineEdit_well")
         self.lineEdit_filepath = QtWidgets.QLineEdit(Form_loadDataframe_tabs)
         self.lineEdit_filepath.setEnabled(True)
-        self.lineEdit_filepath.setGeometry(QtCore.QRect(40, 70, 650, 21))
+        self.lineEdit_filepath.setGeometry(QtCore.QRect(40, 70, 821, 21))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(8)
@@ -236,7 +239,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.lineEdit_filepath.setReadOnly(True)
         self.lineEdit_filepath.setObjectName("lineEdit_filepath")
         self.lineEdit_plate = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.lineEdit_plate.setGeometry(QtCore.QRect(750, 70, 141, 21))
+        self.lineEdit_plate.setGeometry(QtCore.QRect(900, 70, 141, 21))
         self.lineEdit_plate.setAutoFillBackground(False)
         self.lineEdit_plate.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
@@ -305,7 +308,6 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_dropfrom.setItemText(7, _translate("Form_loadDataframe_tabs", "Extract value from rows"))
         self.pushButton_editinrows.setText(_translate("Form_loadDataframe_tabs", "Edit in rows"))
         self.pushButton_editincolumns.setText(_translate("Form_loadDataframe_tabs", "Edit in columns"))
-        self.pushButton_apply.setText(_translate("Form_loadDataframe_tabs", "Apply"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_edit), _translate("Form_loadDataframe_tabs", "Edit"))
         self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe_tabs", "Normalise"))
         self.comboBox_normalize.setItemText(1, _translate("Form_loadDataframe_tabs", "Median"))
@@ -337,6 +339,10 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
         self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
+
+    def get_linedit(self):
+        line_edit_main = self.lineEdit_filepath.text()
+        return line_edit_main
 
     def on_comboboxnormalize_changed(self, value_nor):
         file = self.lineEdit_filepath.text()
@@ -450,7 +456,7 @@ class Ui_Form_loadDataframe_tabs(object):
                         if len(mergedStuff) > 0:
                             mergedStuff.to_csv(t1 + '\\' + 'merged_' + header + '_' + file_name1 + '.csv', index=None)
                             self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + header + '_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '\\' + 'merged_' + header + '_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + header + '_' + file_name1 + '.csv')
                             QMessageBox.information(None, "Merge",
                                                     "Successfully merged the 2 files" + "\nSaved file.",
                                                     QMessageBox.Ok)
@@ -652,7 +658,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                         value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
                                                     + "\nSuccessfully saved the file!",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(t1 + '//' + 'Activecpds_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'Activecpds_' + file_name1 + '.csv')
                             self.reloaddata_fromfilepath(t1 + '\\' + 'Activecpds_' + file_name1 + '.csv')
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
@@ -703,7 +709,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                         value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
                                                     + "\nSuccessfully saved the file!",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(t1 + '//' + 'ToxCpds_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'ToxCpds_' + file_name1 + '.csv')
                             self.reloaddata_fromfilepath(t1 + '\\' + 'ToxCpds_' + file_name1 + '.csv')
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
@@ -751,7 +757,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                         value_sigma1) + ' ' + ' * ' + ' ' + str(stdval)
                                                     + "\nSuccessfully saved the file!",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath.setText(t1 + '//' + 'ToxCpds_' + file_name1 + '.csv')
+                            self.lineEdit_filepath.setText(t1 + '/' + 'ToxCpds_' + file_name1 + '.csv')
                             self.reloaddata_fromfilepath(t1 + '\\' + 'ToxCpds_' + file_name1 + '.csv')
 
             self.comboBox_extracthits.setCurrentText("Detect compounds")
@@ -796,7 +802,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                     + "Successfully saved the file!",
                                                     QMessageBox.Ok)
                             self.lineEdit_filepath.setText(
-                                t1 + '//' + 'ActiveCpds_' + file_name1 + '.csv')
+                                t1 + '/' + 'ActiveCpds_' + file_name1 + '.csv')
                             self.reloaddata_fromfilepath(
                                 t1 + '\\' + 'ActiveCpds_' + file_name1 + '.csv')
             self.comboBox_extracthits.setCurrentText("Detect compounds")
@@ -1000,7 +1006,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                         value_sigma1) + 'sigma' + file_name1 + '.csv'
                                     data_dropped.to_csv(outfile, index=None)
                                     self.lineEdit_filepath.setText(
-                                        t1 + '//' + '_WithoutOutliers_' + str(
+                                        t1 + '/' + '_WithoutOutliers_' + str(
                                             value_sigma1) + 'sigma' + file_name1 + '.csv')
                                     QMessageBox.information(None, "Outliers",
                                                             str(len(df_toremoveout) - len(data_dropped)) +
@@ -1053,7 +1059,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                     + "Successfully saved the file!",
                                                     QMessageBox.Ok)
                             self.lineEdit_filepath.setText(
-                                t1 + '//' + '_WithoutOutliers' + file_name1 + '.csv')
+                                t1 + '/' + '_WithoutOutliers' + file_name1 + '.csv')
                             self.reloaddata_fromfilepath(t1 + '\\' + '_WithoutOutliers' + file_name1 + '.csv')
             self.comboBox_removeoutliers.setCurrentText("Remove outliers")
 
@@ -1116,6 +1122,12 @@ class Ui_Form_loadDataframe_tabs(object):
                                                                       QtCore.Qt.DisplayRole)
             list_col.append(column_name)
         return list_col
+
+    def load_ddf(self):
+        file = self.lineEdit_filepath.text()
+        df = pd.read_csv(file)
+        model = PandasModel(df.head(100))
+        self.tableView_dataframe.setModel(model)
 
     def select_column(self):
         col_nb = self.tableView_dataframe.currentIndex().column()
@@ -1428,7 +1440,7 @@ class Ui_Form_loadDataframe_tabs(object):
                         df_AGG = df.groupby(header).agg({'min', 'max', 'mean', 'sum', 'std'})
                         outfile = t2 + '\\' + t3 + '\\' + t1 + '\\' + t1 + '_agg.csv'
                         df_AGG.to_csv(outfile)
-                        self.lineEdit_filepath.setText(t2 + '//' + t3 + '//' + t1 + '//' + t1 + '_agg.csv')
+                        self.lineEdit_filepath.setText(t2 + '/' + t3 + '/' + t1 + '/' + t1 + '_agg.csv')
                         self.reloaddata_fromfilepath(outfile)
                         QMessageBox.information(None, "Aggregate",
                                                 "File has been successfully saved!",
@@ -1524,9 +1536,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                         QMessageBox.Ok)
 
     def on_comboboxdropfrom_changed(self, val):
-
         file = self.lineEdit_filepath.text()
-
         if (val == 'Extract value from rows'):
             if file == 'File path':
                 QMessageBox.information(None, "Error",
@@ -1549,7 +1559,6 @@ class Ui_Form_loadDataframe_tabs(object):
                     self.lineEdit_filepath.setText(t1 + '/' + 'PlateWell' + file_name1 + '.csv')
 
             self.comboBox_dropfrom.setCurrentText('Edit rows columns')
-
 
         if (val == 'Rename value in rows'):
             file = self.lineEdit_filepath.text()
@@ -1646,7 +1655,7 @@ class Ui_Form_loadDataframe_tabs(object):
                     self.setPlateWellText_intblview(df_duplicated)
                     # t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv'
                     self.reloaddata_fromfilepath(t1 + '//' + 'duplicatedValuesfrom_' + header + file_name1 + '.csv')
-                    self.lineEdit_filepath.setText(t1 + '//' + 'duplicatedValuesfrom_' + header + file_name1 + '.csv')
+                    self.lineEdit_filepath.setText(t1 + '/' + 'duplicatedValuesfrom_' + header + file_name1 + '.csv')
 
             self.comboBox_duplicates.setCurrentText('Duplicates')
 
@@ -1792,7 +1801,6 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
-
 
 
 if __name__ == "__main__":

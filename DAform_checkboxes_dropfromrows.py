@@ -158,7 +158,7 @@ class Ui_Form_CheckBoxes(object):
                 df = pd.read_csv(file)
                 header = self.select_column()
                 if (len(header) < 1):
-                    QMessageBox.information(None, "Error ",
+                    QMessageBox.information(None, "Error",
                                             "You must select a column.\nTry again",
                                             QMessageBox.Ok)
                 if len(header) >= 1:
@@ -167,12 +167,10 @@ class Ui_Form_CheckBoxes(object):
                         QMessageBox.information(None, "Error",
                                                 "Please check at least one of the cases.",
                                                 QMessageBox.Ok)
-
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked() and not \
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_text.isChecked() and self.checkBox_keepvalue.isChecked():
                         df = pd.read_csv(file)
                         header = self.select_column()
-
                         if len(header) ==0:
                             QMessageBox.information(None, "Error ",
                                                     "You must select a column.\nTry again",
@@ -184,8 +182,6 @@ class Ui_Form_CheckBoxes(object):
                                                         "The value " + str(self.lineEdit_valuetokeep.text()) +
                                                         " does not exist in the column " + str(header) + ".\nTry again",
                                                         QMessageBox.Ok)
-
-
                             if self.lineEdit_valuetokeep.text() in df[header].values:
                                 value = self.lineEdit_valuetokeep.text()
                                 df = df[df[header] ==value]
@@ -199,8 +195,6 @@ class Ui_Form_CheckBoxes(object):
                                     t1 + '\\' + 'kept_' + header + '_' + file_name1 + '.csv')
                                 self.lineEdit_filepath_checkboxes.setText(
                                     t1 + '/' + 'kept_' + header + '_' + file_name1 + '.csv')
-
-
 
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_value.isChecked() and not \
                             self.checkBox_valueendswith.isChecked()and not self.checkBox_keepvalue.isChecked() and self.checkBox_text.isChecked():
@@ -243,6 +237,7 @@ class Ui_Form_CheckBoxes(object):
                                                     QMessageBox.Ok)
                             self.lineEdit_filepath_checkboxes.setText(t1 + '/'+ file_name1 + '_droppedNAN.csv')
                             self.reloaddata_fromfilepath(t1 + '/'+ file_name1 + '_droppedNAN.csv')
+
                             # Form_CheckBoxes.hide()
 
                     if not self.checkBox_value.isChecked() and not self.checkBox_nan.isChecked() and not self.checkBox_text.isChecked() and not \
@@ -255,12 +250,12 @@ class Ui_Form_CheckBoxes(object):
                         if any(df[header] == 'missing') == True:
                             d = df[df[header] == 'missing']
                             df.drop(df.loc[df[header] == 'missing'].index, inplace=True)
-                            df.to_csv(t1 + '\\' + file_name1 + '_droppedMissingValues.csv', index=None)
+                            df.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
                             QMessageBox.information(None, "Missing values",
                                                     str(len(d)) + " empty cells have been dropped from the column " +  str(header) + "\nSaved file.",
                                                     QMessageBox.Ok)
-                            self.lineEdit_filepath_checkboxes.setText(t1 + '/' + file_name1 + '_droppedMissingValues.csv')
-                            self.reloaddata_fromfilepath(t1 + '\\' + file_name1 + '_droppedMissingValues.csv')
+                            self.lineEdit_filepath_checkboxes.setText(t1 + '/' + file_name1 + '.csv')
+                            self.reloaddata_fromfilepath(t1 + '\\' + file_name1 + '.csv')
                             # Form_CheckBoxes.hide()
 
                     if not self.checkBox_value.isChecked() and not self.checkBox_missingvalue.isChecked() and not self.checkBox_text.isChecked() and not \
@@ -292,6 +287,7 @@ class Ui_Form_CheckBoxes(object):
                                                     QMessageBox.Ok)
                             self.lineEdit_filepath_checkboxes.setText(t1 + '/' + file_name1 + '_droppedValue_str.csv')
                             self.reloaddata_fromfilepath(t1 + '\\' + file_name1 + '_droppedValue_str.csv')
+
             else:
                 QMessageBox.information(None, "Error",
                                         "The loaded file does not exist anymore.\nPlease load a file.",
