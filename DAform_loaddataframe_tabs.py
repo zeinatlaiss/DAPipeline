@@ -59,6 +59,23 @@ class Ui_Form_loadDataframe_tabs(object):
         # self.ui.loadFile()
         self.window.show()
 
+    def openwindow_form_checkboxes_editinrows(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui3 = Ui_Form_CheckBoxes()
+        self.ui3.setupUi(self.window)
+        self.ui3.lineedit_file_path_to_edit = self.lineEdit_filepath.text()
+        self.ui3.tableView_dataframe_to_edit = self.tableView_dataframe
+        self.ui3.t1_rows = os.path.dirname(self.lineEdit_filepath.text())
+        self.ui3.file_name1_rows = os.path.splitext(os.path.basename(self.ui3.lineedit_file_path_to_edit))[0]
+        # self.ui3.lineedit_to_read = self.lineEdit_filepath.text()
+        self.ui3.lineEdit_plate_rows = self.lineEdit_plate
+        self.ui3.lineEdit_well_rows = self.lineEdit_well
+        self.ui3.label_nbcpdid_rows = self.label_nbcpdid
+        self.ui3.label_nbbatchid_rows = self.label_nbbatchid
+        self.lineEdit_filepath.setText(self.ui3.t1_rows + '/' + self.ui3.file_name1_rows + '.csv')
+        # self.ui.loadFile()
+        self.window.show()
+
     def setupUi(self, Form_loadDataframe_tabs):
         Form_loadDataframe_tabs.setObjectName("Form_loadDataframe_tabs")
         Form_loadDataframe_tabs.setWindowModality(QtCore.Qt.WindowModal)
@@ -108,6 +125,15 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_concatfiles.raise_()
         self.pushButton_loadfile.raise_()
         self.tabWidget_filestatistics.addTab(self.tab_file, "")
+        self.tab_edit = QtWidgets.QWidget()
+        self.tab_edit.setObjectName("tab_edit")
+        self.pushButton_editinrows = QtWidgets.QPushButton(self.tab_edit)
+        self.pushButton_editinrows.setGeometry(QtCore.QRect(1200, 890, 100, 31))
+        self.pushButton_editinrows.setObjectName("pushButton_editinrows")
+        self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
+        self.pushButton_editincolumns.setGeometry(QtCore.QRect(1320, 890, 111, 31))
+        self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
+        self.tabWidget_filestatistics.addTab(self.tab_edit, "")
         self.tab_statistics = QtWidgets.QWidget()
         self.tab_statistics.setObjectName("tab_statistics")
         self.comboBox_statistics = QtWidgets.QComboBox(self.tab_statistics)
@@ -126,26 +152,6 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_aggregate.addItem("")
         self.comboBox_aggregate.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_statistics, "")
-        self.tab_edit = QtWidgets.QWidget()
-        self.tab_edit.setObjectName("tab_edit")
-        self.comboBox_dropfrom = QtWidgets.QComboBox(self.tab_edit)
-        self.comboBox_dropfrom.setGeometry(QtCore.QRect(780, 890, 271, 22))
-        self.comboBox_dropfrom.setObjectName("comboBox_dropfrom")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.comboBox_dropfrom.addItem("")
-        self.pushButton_editinrows = QtWidgets.QPushButton(self.tab_edit)
-        self.pushButton_editinrows.setGeometry(QtCore.QRect(1200, 890, 100, 31))
-        self.pushButton_editinrows.setObjectName("pushButton_editinrows")
-        self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
-        self.pushButton_editincolumns.setGeometry(QtCore.QRect(1320, 890, 111, 31))
-        self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
-        self.tabWidget_filestatistics.addTab(self.tab_edit, "")
         self.tab_detectvalue = QtWidgets.QWidget()
         self.tab_detectvalue.setObjectName("tab_detectvalue")
         self.comboBox_normalize = QtWidgets.QComboBox(self.tab_detectvalue)
@@ -266,8 +272,8 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_concatfiles.clicked.connect(self.on_concatenatefiles_clicked)
         self.pushButton_addclasses.clicked.connect(self.on_addclasses_clicked)
         self.pushButton_editincolumns.clicked.connect(self.on_editcolumns_clicked)
+        self.pushButton_editinrows.clicked.connect(self.on_editrows_clicked)
         self.comboBox_duplicates.currentTextChanged.connect(self.on_comboboxduplicates_changed)
-        self.comboBox_dropfrom.currentTextChanged.connect(self.on_comboboxdropfrom_changed)
         self.comboBox_extracthits.currentTextChanged.connect(self.on_comboboxactivecompounds_changed)
         self.comboBox_removeoutliers.currentTextChanged.connect(self.on_comboboxremoveoutliers_changed)
         self.comboBox_machinelearning.currentTextChanged.connect(self.on_machinelearning_changed)
@@ -288,6 +294,9 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_concatfiles.setText(_translate("Form_loadDataframe_tabs", "Concatenate Files"))
         self.pushButton_loadfile.setText(_translate("Form_loadDataframe_tabs", "Load File"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_file), _translate("Form_loadDataframe_tabs", "File"))
+        self.pushButton_editinrows.setText(_translate("Form_loadDataframe_tabs", "Edit in rows"))
+        self.pushButton_editincolumns.setText(_translate("Form_loadDataframe_tabs", "Edit in columns"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_edit), _translate("Form_loadDataframe_tabs", "Edit"))
         self.comboBox_statistics.setItemText(0, _translate("Form_loadDataframe_tabs", "Statistics"))
         self.comboBox_statistics.setItemText(1, _translate("Form_loadDataframe_tabs", "Z factor & Robust Z factor"))
         self.comboBox_statistics.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean and STD"))
@@ -298,17 +307,6 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe_tabs", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe_tabs", "Aggregate grouping by"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_statistics), _translate("Form_loadDataframe_tabs", "Statistics"))
-        self.comboBox_dropfrom.setItemText(0, _translate("Form_loadDataframe_tabs", "Edit rows columns"))
-        self.comboBox_dropfrom.setItemText(1, _translate("Form_loadDataframe_tabs", "Merge 2 columns"))
-        self.comboBox_dropfrom.setItemText(2, _translate("Form_loadDataframe_tabs", "Rename columns"))
-        self.comboBox_dropfrom.setItemText(3, _translate("Form_loadDataframe_tabs", "Drop from columns"))
-        self.comboBox_dropfrom.setItemText(4, _translate("Form_loadDataframe_tabs", "Order columns"))
-        self.comboBox_dropfrom.setItemText(5, _translate("Form_loadDataframe_tabs", "Drop/ Rename/ Keep values in rows"))
-        self.comboBox_dropfrom.setItemText(6, _translate("Form_loadDataframe_tabs", "Rename value in rows"))
-        self.comboBox_dropfrom.setItemText(7, _translate("Form_loadDataframe_tabs", "Extract value from rows"))
-        self.pushButton_editinrows.setText(_translate("Form_loadDataframe_tabs", "Edit in rows"))
-        self.pushButton_editincolumns.setText(_translate("Form_loadDataframe_tabs", "Edit in columns"))
-        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_edit), _translate("Form_loadDataframe_tabs", "Edit"))
         self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe_tabs", "Normalise"))
         self.comboBox_normalize.setItemText(1, _translate("Form_loadDataframe_tabs", "Median"))
         self.comboBox_normalize.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean"))
@@ -339,6 +337,8 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
         self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
+
+
 
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
@@ -1729,6 +1729,9 @@ class Ui_Form_loadDataframe_tabs(object):
             self.label_nbcpdid.setText('No X_CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
 
+    def on_editrows_clicked(self):
+        self.openwindow_form_checkboxes_editinrows()
+
     def on_editcolumns_clicked(self):
         self.openwindow_form_checkboxes_editincolumns()
 
@@ -1801,7 +1804,6 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
-
 
 if __name__ == "__main__":
     import sys
