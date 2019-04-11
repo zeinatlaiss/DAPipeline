@@ -35,14 +35,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="23" />
-          <entry key="py" value="7115" />
+          <entry key="py" value="7446" />
           <entry key="txt" value="78" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="78" />
-          <entry key="Python" value="7138" />
+          <entry key="Python" value="7469" />
         </counts>
       </usages-collector>
     </session>
@@ -85,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DAform_checkboxes_editincolumns.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="272">
-              <caret line="244" column="40" selection-start-line="243" selection-start-column="40" selection-end-line="244" selection-end-column="40" />
+              <caret line="201" column="67" lean-forward="true" selection-start-line="201" selection-start-column="67" selection-end-line="201" selection-end-column="67" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
                 <marker date="1554718506642" expanded="true" signature="430:434" ph="..." />
@@ -102,8 +102,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DAform_loaddataframe_tabs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="60" selection-start-line="60" selection-end-line="60" />
+            <state relative-caret-position="221">
+              <caret line="69" column="67" lean-forward="true" selection-start-line="69" selection-start-column="67" selection-end-line="69" selection-end-column="67" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -111,11 +111,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DAform_checkboxes_dropfromrows.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="446">
-              <caret line="274" column="110" selection-start-line="274" selection-start-column="110" selection-end-line="274" selection-end-column="110" />
+            <state relative-caret-position="273">
+              <caret line="268" column="53" selection-start-line="268" selection-start-column="53" selection-end-line="268" selection-end-column="53" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -126,8 +126,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/backup_form_checkboxes_dropfromrows.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="352" selection-start-line="106" selection-end-line="352" />
+            <state relative-caret-position="475">
+              <caret line="225" column="52" selection-start-line="225" selection-start-column="52" selection-end-line="225" selection-end-column="52" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -163,15 +163,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>select_col</find>
-      <find>select_c</find>
-      <find>apply</find>
-      <find>table</find>
-      <find>tableview</find>
-      <find>please check</find>
-      <find>please chec</find>
-      <find>pLEASE CHEC</find>
-      <find>CHECK</find>
       <find>dropfro</find>
       <find>checkBox_text</find>
       <find>lineEdit_newvalue_text</find>
@@ -184,7 +175,6 @@
       <find>and self.checkBox_keepvalue.isC</find>
       <find>lineEdit_valuetokeep</find>
       <find>pr</find>
-      <find>pri</find>
       <find>does not exi</find>
       <find>df</find>
       <find>ends</find>
@@ -193,6 +183,16 @@
       <find>checkBox_value</find>
       <find>valueends</find>
       <find>value</find>
+      <find>select</find>
+      <find>selec</find>
+      <find>nan value</find>
+      <find>select_</find>
+      <find>select_column</find>
+      <find>sele</find>
+      <find>multi</find>
+      <find>[header].fillna(&quot;m</find>
+      <find>pri</find>
+      <find>prin</find>
     </findStrings>
     <replaceStrings>
       <replace>column_edited_</replace>
@@ -467,7 +467,14 @@
       <option name="project" value="LOCAL" />
       <updated>1554971878936</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="commit daform_editinrows daform_loaddataframe_tabs">
+      <created>1554984092238</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1554984092238</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
@@ -590,18 +597,6 @@
     <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/backup_form_checkboxes_dropfromrows - Copy.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAform_checkboxes_editincolumns.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="244" column="40" selection-start-line="243" selection-start-column="40" selection-end-line="244" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <marker date="1554718506642" expanded="true" signature="430:434" ph="..." />
-            <marker date="1554718506642" expanded="true" signature="470:479" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/backup_form_checkboxes_editinrows - Copy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -613,16 +608,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="341">
           <caret line="1804" selection-start-line="339" selection-end-line="1804" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAform_loaddataframe_tabs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
           </folding>
@@ -641,8 +626,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/backup_form_checkboxes_dropfromrows.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="352" selection-start-line="106" selection-end-line="352" />
+        <state relative-caret-position="475">
+          <caret line="225" column="52" selection-start-line="225" selection-start-column="52" selection-end-line="225" selection-end-column="52" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
@@ -651,10 +636,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DAform_checkboxes_dropfromrows.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="274" column="110" selection-start-line="274" selection-start-column="110" selection-end-line="274" selection-end-column="110" />
+        <state relative-caret-position="273">
+          <caret line="268" column="53" selection-start-line="268" selection-start-column="53" selection-end-line="268" selection-end-column="53" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAform_loaddataframe_tabs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="69" column="67" lean-forward="true" selection-start-line="69" selection-start-column="67" selection-end-line="69" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAform_checkboxes_editincolumns.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="201" column="67" lean-forward="true" selection-start-line="201" selection-start-column="67" selection-end-line="201" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1554718506642" expanded="true" signature="430:434" ph="..." />
+            <marker date="1554718506642" expanded="true" signature="470:479" ph="..." />
           </folding>
         </state>
       </provider>
