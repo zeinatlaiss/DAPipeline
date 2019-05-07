@@ -22,7 +22,6 @@ from DApandaswidget import PandasModel
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe_tabs(object):
-
     def openwindow_form_checkboxes(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Form_CheckBoxes()
@@ -89,7 +88,7 @@ class Ui_Form_loadDataframe_tabs(object):
         Form_loadDataframe_tabs.setSizeIncrement(QtCore.QSize(25, 25))
         Form_loadDataframe_tabs.setStyleSheet("background-color: rgb(222, 241, 255);")
         self.tabWidget_filestatistics = QtWidgets.QTabWidget(Form_loadDataframe_tabs)
-        self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1021))
+        self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1031))
         self.tabWidget_filestatistics.setStyleSheet("background-color: rgb(229, 241, 255);\n"
 "font: 10pt \"MS Shell Dlg 2\";\n"
 "font: 87 8pt \"Arial Black\";")
@@ -120,10 +119,6 @@ class Ui_Form_loadDataframe_tabs(object):
 "font: 87 8pt \"Arial Black\";\n"
 "")
         self.pushButton_loadfile.setObjectName("pushButton_loadfile")
-        self.pushButton_addclasses.raise_()
-        self.pushButton_onlinkfiles.raise_()
-        self.pushButton_concatfiles.raise_()
-        self.pushButton_loadfile.raise_()
         self.tabWidget_filestatistics.addTab(self.tab_file, "")
         self.tab_edit = QtWidgets.QWidget()
         self.tab_edit.setObjectName("tab_edit")
@@ -133,7 +128,24 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
         self.pushButton_editincolumns.setGeometry(QtCore.QRect(1320, 890, 111, 31))
         self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
+        self.comboBox_duplicates = QtWidgets.QComboBox(self.tab_edit)
+        self.comboBox_duplicates.setGeometry(QtCore.QRect(1200, 940, 231, 31))
+        self.comboBox_duplicates.setObjectName("comboBox_duplicates")
+        self.comboBox_duplicates.addItem("")
+        self.comboBox_duplicates.addItem("")
+        self.comboBox_duplicates.addItem("")
+        self.comboBox_duplicates.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_edit, "")
+        self.tab_normalisation = QtWidgets.QWidget()
+        self.tab_normalisation.setObjectName("tab_normalisation")
+        self.comboBox_normalize = QtWidgets.QComboBox(self.tab_normalisation)
+        self.comboBox_normalize.setGeometry(QtCore.QRect(1280, 890, 191, 22))
+        self.comboBox_normalize.setObjectName("comboBox_normalize")
+        self.comboBox_normalize.addItem("")
+        self.comboBox_normalize.addItem("")
+        self.comboBox_normalize.addItem("")
+        self.comboBox_normalize.addItem("")
+        self.tabWidget_filestatistics.addTab(self.tab_normalisation, "")
         self.tab_statistics = QtWidgets.QWidget()
         self.tab_statistics.setObjectName("tab_statistics")
         self.comboBox_statistics = QtWidgets.QComboBox(self.tab_statistics)
@@ -152,23 +164,9 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_aggregate.addItem("")
         self.comboBox_aggregate.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_statistics, "")
-        self.tab_detectvalue = QtWidgets.QWidget()
-        self.tab_detectvalue.setObjectName("tab_detectvalue")
-        self.comboBox_normalize = QtWidgets.QComboBox(self.tab_detectvalue)
-        self.comboBox_normalize.setGeometry(QtCore.QRect(1120, 900, 91, 22))
-        self.comboBox_normalize.setObjectName("comboBox_normalize")
-        self.comboBox_normalize.addItem("")
-        self.comboBox_normalize.addItem("")
-        self.comboBox_normalize.addItem("")
-        self.comboBox_normalize.addItem("")
-        self.comboBox_duplicates = QtWidgets.QComboBox(self.tab_detectvalue)
-        self.comboBox_duplicates.setGeometry(QtCore.QRect(940, 900, 171, 22))
-        self.comboBox_duplicates.setObjectName("comboBox_duplicates")
-        self.comboBox_duplicates.addItem("")
-        self.comboBox_duplicates.addItem("")
-        self.comboBox_duplicates.addItem("")
-        self.comboBox_duplicates.addItem("")
-        self.comboBox_extracthits = QtWidgets.QComboBox(self.tab_detectvalue)
+        self.tab_detectvalues = QtWidgets.QWidget()
+        self.tab_detectvalues.setObjectName("tab_detectvalues")
+        self.comboBox_extracthits = QtWidgets.QComboBox(self.tab_detectvalues)
         self.comboBox_extracthits.setGeometry(QtCore.QRect(940, 930, 271, 22))
         self.comboBox_extracthits.setObjectName("comboBox_extracthits")
         self.comboBox_extracthits.addItem("")
@@ -179,14 +177,17 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_extracthits.addItem("")
         self.comboBox_extracthits.addItem("")
         self.comboBox_extracthits.addItem("")
-        self.comboBox_removeoutliers = QtWidgets.QComboBox(self.tab_detectvalue)
-        self.comboBox_removeoutliers.setGeometry(QtCore.QRect(940, 870, 271, 22))
+        self.tabWidget_filestatistics.addTab(self.tab_detectvalues, "")
+        self.tab_detectoutliers = QtWidgets.QWidget()
+        self.tab_detectoutliers.setObjectName("tab_detectoutliers")
+        self.comboBox_removeoutliers = QtWidgets.QComboBox(self.tab_detectoutliers)
+        self.comboBox_removeoutliers.setGeometry(QtCore.QRect(1190, 900, 271, 22))
         self.comboBox_removeoutliers.setObjectName("comboBox_removeoutliers")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
-        self.tabWidget_filestatistics.addTab(self.tab_detectvalue, "")
+        self.tabWidget_filestatistics.addTab(self.tab_detectoutliers, "")
         self.tab_machinelearning = QtWidgets.QWidget()
         self.tab_machinelearning.setObjectName("tab_machinelearning")
         self.comboBox_machinelearning = QtWidgets.QComboBox(self.tab_machinelearning)
@@ -195,6 +196,13 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_machinelearning.addItem("")
         self.comboBox_machinelearning.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_machinelearning, "")
+        self.tab_deeplearning = QtWidgets.QWidget()
+        self.tab_deeplearning.setEnabled(False)
+        self.tab_deeplearning.setObjectName("tab_deeplearning")
+        self.pushButton = QtWidgets.QPushButton(self.tab_deeplearning)
+        self.pushButton.setGeometry(QtCore.QRect(1380, 910, 80, 21))
+        self.pushButton.setObjectName("pushButton")
+        self.tabWidget_filestatistics.addTab(self.tab_deeplearning, "")
         self.tab_plot = QtWidgets.QWidget()
         self.tab_plot.setObjectName("tab_plot")
         self.comboBox_plot = QtWidgets.QComboBox(self.tab_plot)
@@ -283,7 +291,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_aggregate.currentTextChanged.connect(self.on_comboboxaggregate_changed)
 
         self.retranslateUi(Form_loadDataframe_tabs)
-        self.tabWidget_filestatistics.setCurrentIndex(0)
+        self.tabWidget_filestatistics.setCurrentIndex(7)
         QtCore.QMetaObject.connectSlotsByName(Form_loadDataframe_tabs)
 
     def retranslateUi(self, Form_loadDataframe_tabs):
@@ -296,7 +304,16 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_file), _translate("Form_loadDataframe_tabs", "File"))
         self.pushButton_editinrows.setText(_translate("Form_loadDataframe_tabs", "Edit in rows"))
         self.pushButton_editincolumns.setText(_translate("Form_loadDataframe_tabs", "Edit in columns"))
+        self.comboBox_duplicates.setItemText(0, _translate("Form_loadDataframe_tabs", "Duplicates"))
+        self.comboBox_duplicates.setItemText(1, _translate("Form_loadDataframe_tabs", "Get duplicated values"))
+        self.comboBox_duplicates.setItemText(2, _translate("Form_loadDataframe_tabs", "Number of duplicates"))
+        self.comboBox_duplicates.setItemText(3, _translate("Form_loadDataframe_tabs", "Drop duplicated values"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_edit), _translate("Form_loadDataframe_tabs", "Edit"))
+        self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe_tabs", "Normalise"))
+        self.comboBox_normalize.setItemText(1, _translate("Form_loadDataframe_tabs", "Median"))
+        self.comboBox_normalize.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean"))
+        self.comboBox_normalize.setItemText(3, _translate("Form_loadDataframe_tabs", "Min-Max"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_normalisation), _translate("Form_loadDataframe_tabs", "Page"))
         self.comboBox_statistics.setItemText(0, _translate("Form_loadDataframe_tabs", "Statistics"))
         self.comboBox_statistics.setItemText(1, _translate("Form_loadDataframe_tabs", "Z factor & Robust Z factor"))
         self.comboBox_statistics.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean and STD"))
@@ -307,15 +324,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe_tabs", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe_tabs", "Aggregate grouping by"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_statistics), _translate("Form_loadDataframe_tabs", "Statistics"))
-        self.comboBox_normalize.setItemText(0, _translate("Form_loadDataframe_tabs", "Normalise"))
-        self.comboBox_normalize.setItemText(1, _translate("Form_loadDataframe_tabs", "Median"))
-        self.comboBox_normalize.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean"))
-        self.comboBox_normalize.setItemText(3, _translate("Form_loadDataframe_tabs", "Min-Max"))
-        self.comboBox_duplicates.setItemText(0, _translate("Form_loadDataframe_tabs", "Duplicates"))
-        self.comboBox_duplicates.setItemText(1, _translate("Form_loadDataframe_tabs", "Get duplicated values"))
-        self.comboBox_duplicates.setItemText(2, _translate("Form_loadDataframe_tabs", "Number of duplicates"))
-        self.comboBox_duplicates.setItemText(3, _translate("Form_loadDataframe_tabs", "Drop duplicated values"))
-        self.comboBox_extracthits.setItemText(0, _translate("Form_loadDataframe_tabs", "Detect compounds"))
+        self.comboBox_extracthits.setItemText(0, _translate("Form_loadDataframe_tabs", "Detect values"))
         self.comboBox_extracthits.setItemText(1, _translate("Form_loadDataframe_tabs", "> mean + value * sigma"))
         self.comboBox_extracthits.setItemText(2, _translate("Form_loadDataframe_tabs", "> mean - value * sigma"))
         self.comboBox_extracthits.setItemText(3, _translate("Form_loadDataframe_tabs", "< mean - value * sigma"))
@@ -323,22 +332,23 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_extracthits.setItemText(5, _translate("Form_loadDataframe_tabs", "< mean"))
         self.comboBox_extracthits.setItemText(6, _translate("Form_loadDataframe_tabs", "> value"))
         self.comboBox_extracthits.setItemText(7, _translate("Form_loadDataframe_tabs", "< value"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_detectvalues), _translate("Form_loadDataframe_tabs", "Detect values"))
         self.comboBox_removeoutliers.setItemText(0, _translate("Form_loadDataframe_tabs", "Remove outliers"))
         self.comboBox_removeoutliers.setItemText(1, _translate("Form_loadDataframe_tabs", "Mean-value*sigma <value< Mean+value*sigma"))
         self.comboBox_removeoutliers.setItemText(2, _translate("Form_loadDataframe_tabs", "> mean"))
         self.comboBox_removeoutliers.setItemText(3, _translate("Form_loadDataframe_tabs", "> value"))
-        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_detectvalue), _translate("Form_loadDataframe_tabs", "Detect values"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_detectoutliers), _translate("Form_loadDataframe_tabs", "Detect outliers"))
         self.comboBox_machinelearning.setItemText(0, _translate("Form_loadDataframe_tabs", "Machine learning"))
         self.comboBox_machinelearning.setItemText(1, _translate("Form_loadDataframe_tabs", "LDA"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_machinelearning), _translate("Form_loadDataframe_tabs", "Machine Learning"))
+        self.pushButton.setText(_translate("Form_loadDataframe_tabs", "PushButton"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_deeplearning), _translate("Form_loadDataframe_tabs", "Deep learning"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe_tabs", "Plot"))
         self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe_tabs", "Correlation"))
         self.comboBox_plot.setItemText(2, _translate("Form_loadDataframe_tabs", "Swarm plot with error bar"))
         self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
         self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
-
-
 
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
@@ -354,7 +364,6 @@ class Ui_Form_loadDataframe_tabs(object):
             if file != 'File path':
                 df2 = pd.read_csv(file)
                 t1 = os.path.dirname(file)
-                # file_name1 = os.path.splitext(os.path.basename(file))[0]
                 if 'Plate' not in df2.columns and 'Class' not in df2.columns:
                     QMessageBox.information(None, "Error ",
                                             "Columns 'Plate' and 'Class' do not exist in the file.\nYou cannot apply the normalisation",
@@ -387,7 +396,6 @@ class Ui_Form_loadDataframe_tabs(object):
         if (value_nor == "Median"):
             df2 = pd.read_csv(file)
             t1 = os.path.dirname(file)
-            # file_name1 = os.path.splitext(os.path.basename(file))[0]
             if 'Plate' not in df2.columns and 'Class' not in df2.columns:
                 QMessageBox.information(None, "Error ",
                                         "Columns 'Plate' and 'Class' do not exist in the file.\nYou cannot apply the normalisation",
@@ -965,13 +973,12 @@ class Ui_Form_loadDataframe_tabs(object):
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
             if file != "File path":
-                print('dmdk')
                 columnname = self.select_column()
                 print(columnname)
-                df1 = pd.read_csv(file)
-                if df1[columnname].dtypes == str or df1[columnname].dtypes == bool or df1[columnname].dtypes == object:
+                df_toremoveout = pd.read_csv(file)
+                if df_toremoveout[columnname].dtypes == str or df_toremoveout[columnname].dtypes == bool or df_toremoveout[columnname].dtypes == object:
                     print('fmjfkkd')
-                if df1[columnname].dtypes != str or df1[columnname].dtypes != bool or df1[columnname].dtypes != object:
+                if df_toremoveout[columnname].dtypes != str or df_toremoveout[columnname].dtypes != bool or df_toremoveout[columnname].dtypes != object:
                     if columnname == 'Outliers':
                         QMessageBox.information(None, "Error ",
                                                 "Please select a column to remove the outliers\nTry again. No file to save",
@@ -984,7 +991,6 @@ class Ui_Form_loadDataframe_tabs(object):
                         if 'Well' in df_toremoveout:
                             value_sigma1, ok = QInputDialog.getDouble(None, "Input", "Sigma:")
                             if value_sigma1:
-
                                 stdval = df_toremoveout[columnname].std()
                                 meanval = df_toremoveout[columnname].mean()
                                 df_toremoveout['Outliers'] = 'outlier'
@@ -1492,6 +1498,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                 if len(df_duplicated1) == 0:
                                     df_withcpds = pd.read_csv(fileName_cpds, index_col=header)
                                     d_merged = df.merge(df_withcpds, on=header[0])
+                                    # d_merged =
                                     t1 = os.path.dirname(file)
                                     file_name1 = os.path.splitext(os.path.basename(file))[0]
                                     d_merged.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
@@ -1804,6 +1811,7 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
+
 
 if __name__ == "__main__":
     import sys
