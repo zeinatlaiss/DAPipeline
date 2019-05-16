@@ -100,15 +100,15 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_file = QtWidgets.QWidget()
         self.tab_file.setObjectName("tab_file")
         self.pushButton_addclasses = QtWidgets.QPushButton(self.tab_file)
-        self.pushButton_addclasses.setGeometry(QtCore.QRect(1170, 900, 101, 31))
+        self.pushButton_addclasses.setGeometry(QtCore.QRect(1210, 900, 101, 31))
         self.pushButton_addclasses.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_addclasses.setObjectName("pushButton_addclasses")
         self.pushButton_onlinkfiles = QtWidgets.QPushButton(self.tab_file)
-        self.pushButton_onlinkfiles.setGeometry(QtCore.QRect(1040, 900, 111, 31))
+        self.pushButton_onlinkfiles.setGeometry(QtCore.QRect(1080, 900, 111, 31))
         self.pushButton_onlinkfiles.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_onlinkfiles.setObjectName("pushButton_onlinkfiles")
         self.pushButton_concatfiles = QtWidgets.QPushButton(self.tab_file)
-        self.pushButton_concatfiles.setGeometry(QtCore.QRect(880, 900, 141, 31))
+        self.pushButton_concatfiles.setGeometry(QtCore.QRect(920, 900, 141, 31))
         self.pushButton_concatfiles.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_concatfiles.setObjectName("pushButton_concatfiles")
         self.pushButton_loadfile = QtWidgets.QPushButton(self.tab_file)
@@ -123,13 +123,13 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_edit = QtWidgets.QWidget()
         self.tab_edit.setObjectName("tab_edit")
         self.pushButton_editinrows = QtWidgets.QPushButton(self.tab_edit)
-        self.pushButton_editinrows.setGeometry(QtCore.QRect(1200, 890, 100, 31))
+        self.pushButton_editinrows.setGeometry(QtCore.QRect(1230, 900, 100, 31))
         self.pushButton_editinrows.setObjectName("pushButton_editinrows")
         self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
-        self.pushButton_editincolumns.setGeometry(QtCore.QRect(1320, 890, 111, 31))
+        self.pushButton_editincolumns.setGeometry(QtCore.QRect(1350, 900, 111, 31))
         self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
         self.comboBox_duplicates = QtWidgets.QComboBox(self.tab_edit)
-        self.comboBox_duplicates.setGeometry(QtCore.QRect(1200, 940, 231, 31))
+        self.comboBox_duplicates.setGeometry(QtCore.QRect(1230, 940, 231, 31))
         self.comboBox_duplicates.setObjectName("comboBox_duplicates")
         self.comboBox_duplicates.addItem("")
         self.comboBox_duplicates.addItem("")
@@ -139,7 +139,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_normalisation = QtWidgets.QWidget()
         self.tab_normalisation.setObjectName("tab_normalisation")
         self.comboBox_normalize = QtWidgets.QComboBox(self.tab_normalisation)
-        self.comboBox_normalize.setGeometry(QtCore.QRect(1280, 890, 191, 22))
+        self.comboBox_normalize.setGeometry(QtCore.QRect(1270, 900, 191, 31))
         self.comboBox_normalize.setObjectName("comboBox_normalize")
         self.comboBox_normalize.addItem("")
         self.comboBox_normalize.addItem("")
@@ -149,7 +149,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_statistics = QtWidgets.QWidget()
         self.tab_statistics.setObjectName("tab_statistics")
         self.comboBox_statistics = QtWidgets.QComboBox(self.tab_statistics)
-        self.comboBox_statistics.setGeometry(QtCore.QRect(980, 880, 271, 22))
+        self.comboBox_statistics.setGeometry(QtCore.QRect(890, 900, 271, 41))
         self.comboBox_statistics.setObjectName("comboBox_statistics")
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
@@ -158,7 +158,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
         self.comboBox_aggregate = QtWidgets.QComboBox(self.tab_statistics)
-        self.comboBox_aggregate.setGeometry(QtCore.QRect(980, 920, 271, 22))
+        self.comboBox_aggregate.setGeometry(QtCore.QRect(1190, 900, 271, 41))
         self.comboBox_aggregate.setObjectName("comboBox_aggregate")
         self.comboBox_aggregate.addItem("")
         self.comboBox_aggregate.addItem("")
@@ -167,7 +167,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_detectvalues = QtWidgets.QWidget()
         self.tab_detectvalues.setObjectName("tab_detectvalues")
         self.comboBox_extracthits = QtWidgets.QComboBox(self.tab_detectvalues)
-        self.comboBox_extracthits.setGeometry(QtCore.QRect(940, 930, 271, 22))
+        self.comboBox_extracthits.setGeometry(QtCore.QRect(1190, 900, 271, 31))
         self.comboBox_extracthits.setObjectName("comboBox_extracthits")
         self.comboBox_extracthits.addItem("")
         self.comboBox_extracthits.addItem("")
@@ -181,7 +181,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_detectoutliers = QtWidgets.QWidget()
         self.tab_detectoutliers.setObjectName("tab_detectoutliers")
         self.comboBox_removeoutliers = QtWidgets.QComboBox(self.tab_detectoutliers)
-        self.comboBox_removeoutliers.setGeometry(QtCore.QRect(1190, 900, 271, 22))
+        self.comboBox_removeoutliers.setGeometry(QtCore.QRect(1190, 900, 271, 31))
         self.comboBox_removeoutliers.setObjectName("comboBox_removeoutliers")
         self.comboBox_removeoutliers.addItem("")
         self.comboBox_removeoutliers.addItem("")
@@ -191,7 +191,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_machinelearning = QtWidgets.QWidget()
         self.tab_machinelearning.setObjectName("tab_machinelearning")
         self.comboBox_machinelearning = QtWidgets.QComboBox(self.tab_machinelearning)
-        self.comboBox_machinelearning.setGeometry(QtCore.QRect(1090, 890, 171, 22))
+        self.comboBox_machinelearning.setGeometry(QtCore.QRect(1290, 900, 171, 31))
         self.comboBox_machinelearning.setObjectName("comboBox_machinelearning")
         self.comboBox_machinelearning.addItem("")
         self.comboBox_machinelearning.addItem("")
@@ -199,14 +199,29 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_deeplearning = QtWidgets.QWidget()
         self.tab_deeplearning.setEnabled(False)
         self.tab_deeplearning.setObjectName("tab_deeplearning")
+        self.pushButton_2 = QtWidgets.QPushButton(self.tab_deeplearning)
+        self.pushButton_2.setGeometry(QtCore.QRect(880, 900, 80, 31))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_3 = QtWidgets.QPushButton(self.tab_deeplearning)
+        self.pushButton_3.setGeometry(QtCore.QRect(980, 900, 80, 31))
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_4 = QtWidgets.QPushButton(self.tab_deeplearning)
+        self.pushButton_4.setGeometry(QtCore.QRect(1080, 900, 80, 31))
+        self.pushButton_4.setObjectName("pushButton_4")
         self.pushButton = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton.setGeometry(QtCore.QRect(1380, 910, 80, 21))
+        self.pushButton.setGeometry(QtCore.QRect(1180, 900, 80, 31))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton_5 = QtWidgets.QPushButton(self.tab_deeplearning)
+        self.pushButton_5.setGeometry(QtCore.QRect(1280, 900, 80, 31))
+        self.pushButton_5.setObjectName("pushButton_5")
+        self.pushButton_6 = QtWidgets.QPushButton(self.tab_deeplearning)
+        self.pushButton_6.setGeometry(QtCore.QRect(1380, 900, 80, 31))
+        self.pushButton_6.setObjectName("pushButton_6")
         self.tabWidget_filestatistics.addTab(self.tab_deeplearning, "")
         self.tab_plot = QtWidgets.QWidget()
         self.tab_plot.setObjectName("tab_plot")
         self.comboBox_plot = QtWidgets.QComboBox(self.tab_plot)
-        self.comboBox_plot.setGeometry(QtCore.QRect(1120, 890, 171, 22))
+        self.comboBox_plot.setGeometry(QtCore.QRect(1290, 900, 171, 31))
         self.comboBox_plot.setObjectName("comboBox_plot")
         self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
@@ -274,7 +289,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tableView_dataframe.setSortingEnabled(True)
         self.tableView_dataframe.setObjectName("tableView_dataframe")
 
-        self.lineEdit_filepath.setText('File path')
+        self.lineEdit_filepath.setText('  ')
         self.pushButton_loadfile.clicked.connect(self.on_loadFile_clicked)
         self.pushButton_onlinkfiles.clicked.connect(self.on_linkfiles_clicked)
         self.pushButton_concatfiles.clicked.connect(self.on_concatenatefiles_clicked)
@@ -291,7 +306,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_aggregate.currentTextChanged.connect(self.on_comboboxaggregate_changed)
 
         self.retranslateUi(Form_loadDataframe_tabs)
-        self.tabWidget_filestatistics.setCurrentIndex(7)
+        self.tabWidget_filestatistics.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form_loadDataframe_tabs)
 
     def retranslateUi(self, Form_loadDataframe_tabs):
@@ -313,7 +328,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_normalize.setItemText(1, _translate("Form_loadDataframe_tabs", "Median"))
         self.comboBox_normalize.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean"))
         self.comboBox_normalize.setItemText(3, _translate("Form_loadDataframe_tabs", "Min-Max"))
-        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_normalisation), _translate("Form_loadDataframe_tabs", "Page"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_normalisation), _translate("Form_loadDataframe_tabs", "Normalise"))
         self.comboBox_statistics.setItemText(0, _translate("Form_loadDataframe_tabs", "Statistics"))
         self.comboBox_statistics.setItemText(1, _translate("Form_loadDataframe_tabs", "Z factor & Robust Z factor"))
         self.comboBox_statistics.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean and STD"))
@@ -341,7 +356,12 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_machinelearning.setItemText(0, _translate("Form_loadDataframe_tabs", "Machine learning"))
         self.comboBox_machinelearning.setItemText(1, _translate("Form_loadDataframe_tabs", "LDA"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_machinelearning), _translate("Form_loadDataframe_tabs", "Machine Learning"))
-        self.pushButton.setText(_translate("Form_loadDataframe_tabs", "PushButton"))
+        self.pushButton_2.setText(_translate("Form_loadDataframe_tabs", "Label"))
+        self.pushButton_3.setText(_translate("Form_loadDataframe_tabs", "Pickle"))
+        self.pushButton_4.setText(_translate("Form_loadDataframe_tabs", "Load pickle"))
+        self.pushButton.setText(_translate("Form_loadDataframe_tabs", "Train"))
+        self.pushButton_5.setText(_translate("Form_loadDataframe_tabs", "Predict"))
+        self.pushButton_6.setText(_translate("Form_loadDataframe_tabs", "Validate"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_deeplearning), _translate("Form_loadDataframe_tabs", "Deep learning"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe_tabs", "Plot"))
         self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe_tabs", "Correlation"))
@@ -350,6 +370,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
 
+
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
         return line_edit_main
@@ -357,11 +378,11 @@ class Ui_Form_loadDataframe_tabs(object):
     def on_comboboxnormalize_changed(self, value_nor):
         file = self.lineEdit_filepath.text()
         if (value_nor == "Mean"):
-            if file == 'File path':
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != 'File path':
+            if file != '  ':
                 df2 = pd.read_csv(file)
                 t1 = os.path.dirname(file)
                 if 'Plate' not in df2.columns and 'Class' not in df2.columns:
@@ -470,11 +491,11 @@ class Ui_Form_loadDataframe_tabs(object):
                                                     QMessageBox.Ok)
 
         if value_st == "Mean and STD":
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 columnname = self.select_column()
                 df = pd.read_csv(file)
                 df['Check_if_String'] = [isinstance(x, str) for x in df[columnname]]
@@ -506,11 +527,11 @@ class Ui_Form_loadDataframe_tabs(object):
 
         if value_st == "Z factor & Robust Z factor":
             file = self.lineEdit_filepath.text()
-            if file == 'File path':
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != 'File path':
+            if file != '  ':
                 df = pd.read_csv(file)
                 if 'Plate' not in df.columns:
                     QMessageBox.information(None, "Error ",
@@ -537,7 +558,7 @@ class Ui_Form_loadDataframe_tabs(object):
                                                         "The Plate is not unique.\nPlease group your data first.",
                                                         QMessageBox.Ok)
         if value_st == "Intersection":
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
@@ -579,7 +600,7 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Union":
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
@@ -623,11 +644,11 @@ class Ui_Form_loadDataframe_tabs(object):
     def on_comboboxactivecompounds_changed(self, value_c):
         file = self.lineEdit_filepath.text()
         if (value_c == "> mean + value * sigma"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_multicolumns()
                 if columnname == 'Active_compounds':
@@ -671,11 +692,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "> mean - value * sigma"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Active_compounds':
@@ -722,11 +743,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "< mean - value * sigma"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Toxic_compounds':
@@ -771,11 +792,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "> mean"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Outliers':
@@ -816,11 +837,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "< mean"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Active_compounds':
@@ -864,11 +885,11 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_extracthits.setCurrentText("Detect compounds")
 
         if (value_c == "> value"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Active_compounds':
@@ -913,11 +934,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_statistics.setCurrentText("Detect compounds")
 
         if (value_c == "< value"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Active_compounds':
@@ -968,11 +989,11 @@ class Ui_Form_loadDataframe_tabs(object):
         file = self.lineEdit_filepath.text()
         if (value_cb == "Mean-value*sigma <value< Mean+value*sigma"):
             print('dkdkdkdk')
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 columnname = self.select_column()
                 print(columnname)
                 df_toremoveout = pd.read_csv(file)
@@ -1025,11 +1046,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_removeoutliers.setCurrentText("Remove outliers")
 
         if (value_cb == "> mean"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Outliers':
@@ -1070,11 +1091,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_removeoutliers.setCurrentText("Remove outliers")
 
         if (value_cb == "> value"):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_toremoveout = pd.read_csv(file)
                 columnname = self.select_column()
                 if columnname == 'Outliers':
@@ -1271,11 +1292,11 @@ class Ui_Form_loadDataframe_tabs(object):
     def on_plot_changed(self, vl):
         if (vl == 'Correlation'):
             file = self.lineEdit_filepath.text()
-            if file == 'File path':
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != 'File path':
+            if file != '  ':
                 df_data1 = pd.read_csv(file)
                 if 'Class' not in df_data1.columns:
                     QMessageBox.information(None, "Error ",
@@ -1316,11 +1337,11 @@ class Ui_Form_loadDataframe_tabs(object):
 
         if (vl == 'Swarm plot with error bar'):
             file = self.lineEdit_filepath.text()
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 header = self.select_multicolumns()
                 df_1 = pd.read_csv(file)
 
@@ -1369,11 +1390,11 @@ class Ui_Form_loadDataframe_tabs(object):
 
         if (vl == 'Swarm plot without error bar'):
             file = self.lineEdit_filepath.text()
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 header = self.select_multicolumns()
                 df_1 = pd.read_csv(file)
 
@@ -1427,11 +1448,11 @@ class Ui_Form_loadDataframe_tabs(object):
                                     QMessageBox.Ok)
         if (value_agg == 'Aggregate - Min Max Mean Sum STD'):
             file = self.lineEdit_filepath.text()
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df = pd.read_csv(file)
                 header = self.select_column()
                 if 'Class' in df.columns:
@@ -1455,11 +1476,11 @@ class Ui_Form_loadDataframe_tabs(object):
 
     def on_linkfiles_clicked(self):
         file = self.lineEdit_filepath.text()
-        if file == "File path":
+        if file == "  ":
             QMessageBox.information(None, "Error",
                                     "No loaded file.\nPlease load a file first.",
                                     QMessageBox.Ok)
-        if file != "File path":
+        if file != "  ":
             file = self.lineEdit_filepath.text()
             df = pd.read_csv(file)
             header = self.select_multicolumns()
@@ -1545,11 +1566,11 @@ class Ui_Form_loadDataframe_tabs(object):
     def on_comboboxdropfrom_changed(self, val):
         file = self.lineEdit_filepath.text()
         if (val == 'Extract value from rows'):
-            if file == 'File path':
+            if file == '  ':
                 QMessageBox.information(None, "Error",
                                         "Please load a file first.",
                                         QMessageBox.Ok)
-            if file != 'File path':
+            if file != '  ':
                 header = self.select_column()
                 if not header:
                     QMessageBox.information(None, "Error ",
@@ -1571,11 +1592,11 @@ class Ui_Form_loadDataframe_tabs(object):
             file = self.lineEdit_filepath.text()
             t1 = os.path.dirname(file)
             file_name1 = os.path.splitext(os.path.basename(file))[0]
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df = pd.read_csv(file)
                 value_entered_column, okPressed = QInputDialog.getText(None, "Enter column name to add", "Column name ",
                                                                        QLineEdit.Normal, "")
@@ -1620,11 +1641,11 @@ class Ui_Form_loadDataframe_tabs(object):
                                             QMessageBox.Ok)
 
         if (val == 'Drop/ Rename/ Keep values in rows'):
-            if file == 'File path':
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != 'File path':
+            if file != '  ':
                 self.openwindow_form_checkboxes()
             self.comboBox_dropfrom.setCurrentText('Edit rows columns')
 
@@ -1635,11 +1656,11 @@ class Ui_Form_loadDataframe_tabs(object):
     def on_comboboxduplicates_changed(self, value):
         file = self.lineEdit_filepath.text()
         if (value == 'Get duplicated values'):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df_mask = pd.read_csv(file, low_memory=False)
                 header = self.select_column()
                 boolk = df_mask.duplicated(subset=header, keep=False)
@@ -1667,11 +1688,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_duplicates.setCurrentText('Duplicates')
 
         if (value == 'Number of duplicates'):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df = pd.read_csv(file, low_memory=False)
                 header = self.select_column()
                 nb_unique_header = df[header].nunique()
@@ -1681,16 +1702,16 @@ class Ui_Form_loadDataframe_tabs(object):
                                             QMessageBox.Ok)
                 if (len(df[header]) - nb_unique_header > 0):
                     QMessageBox.information(None, "Number of duplicates",
-                                            str(nb_unique_header) + " duplicated " + str(header) + '\n' + "",
+                                            "You have no duplicated values.\n" + str(nb_unique_header) + " unique values in column" + str(header) + '\n' + "",
                                             QMessageBox.Ok)
             self.comboBox_duplicates.setCurrentText('Duplicates')
 
         if (value == 'Drop duplicated values'):
-            if file == "File path":
+            if file == "  ":
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "File path":
+            if file != "  ":
                 df = pd.read_csv(file, low_memory=False)
                 len_init = len(df)
                 header = self.select_column()
@@ -1811,7 +1832,6 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
-
 
 if __name__ == "__main__":
     import sys
