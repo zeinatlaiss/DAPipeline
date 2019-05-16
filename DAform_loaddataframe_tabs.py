@@ -230,21 +230,21 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_plot, "")
         self.label_nbcpdid = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.label_nbcpdid.setGeometry(QtCore.QRect(1200, 70, 141, 20))
+        self.label_nbcpdid.setGeometry(QtCore.QRect(1150, 70, 171, 20))
         self.label_nbcpdid.setAutoFillBackground(False)
         self.label_nbcpdid.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
         self.label_nbcpdid.setText("")
         self.label_nbcpdid.setObjectName("label_nbcpdid")
         self.label_nbbatchid = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.label_nbbatchid.setGeometry(QtCore.QRect(1350, 70, 141, 20))
+        self.label_nbbatchid.setGeometry(QtCore.QRect(1340, 70, 151, 20))
         self.label_nbbatchid.setAutoFillBackground(False)
         self.label_nbbatchid.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
         self.label_nbbatchid.setText("")
         self.label_nbbatchid.setObjectName("label_nbbatchid")
         self.lineEdit_well = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.lineEdit_well.setGeometry(QtCore.QRect(1050, 70, 141, 20))
+        self.lineEdit_well.setGeometry(QtCore.QRect(990, 70, 141, 20))
         self.lineEdit_well.setAutoFillBackground(False)
         self.lineEdit_well.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
@@ -252,7 +252,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.lineEdit_well.setObjectName("lineEdit_well")
         self.lineEdit_filepath = QtWidgets.QLineEdit(Form_loadDataframe_tabs)
         self.lineEdit_filepath.setEnabled(True)
-        self.lineEdit_filepath.setGeometry(QtCore.QRect(40, 70, 821, 21))
+        self.lineEdit_filepath.setGeometry(QtCore.QRect(40, 70, 761, 21))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(8)
@@ -268,7 +268,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.lineEdit_filepath.setReadOnly(True)
         self.lineEdit_filepath.setObjectName("lineEdit_filepath")
         self.lineEdit_plate = QtWidgets.QLabel(Form_loadDataframe_tabs)
-        self.lineEdit_plate.setGeometry(QtCore.QRect(900, 70, 141, 21))
+        self.lineEdit_plate.setGeometry(QtCore.QRect(830, 70, 141, 21))
         self.lineEdit_plate.setAutoFillBackground(False)
         self.lineEdit_plate.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(229, 241, 255);")
@@ -369,7 +369,6 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
         self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
-
 
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
@@ -1738,10 +1737,15 @@ class Ui_Form_loadDataframe_tabs(object):
         if 'CPD_ID' in dataframe.columns and 'BATCH_ID' in dataframe.columns:
             self.label_nbcpdid.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+        if 'compound_id' in dataframe.columns and 'batch_id' in dataframe.columns:
+            self.label_nbcpdid.setText(str(dataframe['compound_id'].nunique()) + ' unique compound_id')
+            self.label_nbbatchid.setText(str(dataframe['batch_id'].nunique()) + ' unique batch_id')
         if 'X_CPD_ID' in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
             self.label_nbcpdid.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
-        if 'CPD_ID' not in dataframe.columns and 'X_CPD_ID' not in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
+        if 'CPD_ID' not in dataframe.columns and 'X_CPD_ID' not in dataframe.columns and \
+                'BATCH_ID' not in dataframe.columns and 'compound_id' not in dataframe.columns and \
+                'batch_id' not in dataframe.columns:
             self.label_nbcpdid.setText('No CPD_ID')
             self.label_nbbatchid.setText('No BATCH_ID')
         if 'CPD_ID' in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
@@ -1750,9 +1754,18 @@ class Ui_Form_loadDataframe_tabs(object):
         if 'X_CPD_ID' in dataframe.columns and 'X_BATCH_ID' not in dataframe.columns:
             self.label_nbcpdid.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
             self.label_nbbatchid.setText('No X_BATCH_ID')
+        if 'compound_id' in dataframe.columns and 'batch_id' not in dataframe.columns:
+            self.label_nbcpdid.setText(str(dataframe['compound_id'].nunique()) + ' unique compound_id')
+            self.label_nbbatchid.setText('No batch_id')
         if 'CPD_ID' not in dataframe.columns and 'BATCH_ID' in dataframe.columns:
             self.label_nbcpdid.setText('No CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+        if 'X_CPD_ID' not in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
+            self.label_nbcpdid.setText('No X_CPD_ID')
+            self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
+        if 'compound_id' not in dataframe.columns and 'batch_id' in dataframe.columns:
+            self.label_nbcpdid.setText('No compound_id')
+            self.label_nbbatchid.setText(str(dataframe['batch_id'].nunique()) + ' unique batch_id')
         if 'X_CPD_ID' not in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
             self.label_nbcpdid.setText('No X_CPD_ID')
             self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
@@ -1832,6 +1845,7 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
+
 
 if __name__ == "__main__":
     import sys
