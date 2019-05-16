@@ -236,19 +236,15 @@ class Ui_Form_CheckBoxes(object):
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_keepvalue.isChecked() and not self.checkBox_text.isChecked():
                         dd4 =  df
                         value_in_rows = self.lineEdit_valuetodrop.text()
-                        # if dd4[(dd4[header[0]].str.contains(self.lineEdit_valuetodrop.text()))].index:
-                        # if self.lineEdit_valuetodrop.text() not in dd4[header[0]].values:
-                        if dd4[(dd4[header[0]].str.contains(self.lineEdit_valuetodrop.text()))].index:
-                            print('111')
-                        QMessageBox.information(None, "Error ",
-                                                "The value " + str(
-                                                    self.lineEdit_valuetodrop.text()) + " does not exist in the column " + str(
-                                                    header) + ".\nTry again",
-                                                QMessageBox.Ok)
+
+                        if self.lineEdit_valuetodrop.text() not in dd4[header[0]].values:
+                            QMessageBox.information(None, "Error ",
+                                                    "The value " + str(
+                                                        self.lineEdit_valuetodrop.text()) + " does not exist in the column " + str(
+                                                        header) + ".\nTry again",
+                                                    QMessageBox.Ok)
                         dd5 = df
-                        if dd4[(dd4[header[0]].str.contains(self.lineEdit_valuetodrop.text()))].index:
-                        # if self.lineEdit_valuetodrop.text() in dd4[header[0]].values:
-                            print('11')
+                        if self.lineEdit_valuetodrop.text() in dd4[header[0]].values:
                             df_dropped = dd5.drop(dd5[(dd5[header[0]].str.contains(self.lineEdit_valuetodrop.text()))].index)
                             df_dropped.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
                             QMessageBox.information(None, "Value ends with " + str(value_in_rows) + "dropped",
