@@ -8,7 +8,7 @@ import string
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_table_addclasses.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.9.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,12 +17,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_form_table_addclasses(object):
     def setupUi(self, form_table_addclasses):
         form_table_addclasses.setObjectName("form_table_addclasses")
-        form_table_addclasses.resize(1262, 540)
-        self.pushButton_addclass = QtWidgets.QPushButton(form_table_addclasses)
-        self.pushButton_addclass.setGeometry(QtCore.QRect(1170, 500, 80, 21))
-        self.pushButton_addclass.setObjectName("pushButton_addclass")
+        form_table_addclasses.resize(1262, 593)
+        self.pushButton_apply = QtWidgets.QPushButton(form_table_addclasses)
+        self.pushButton_apply.setGeometry(QtCore.QRect(1170, 550, 80, 21))
+        self.pushButton_apply.setObjectName("pushButton_apply")
         self.tableWidget_toaddclasses = QtWidgets.QTableWidget(form_table_addclasses)
-        self.tableWidget_toaddclasses.setGeometry(QtCore.QRect(20, 130, 1231, 351))
+        self.tableWidget_toaddclasses.setGeometry(QtCore.QRect(20, 170, 1231, 351))
         self.tableWidget_toaddclasses.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidget_toaddclasses.setColumnCount(0)
         self.tableWidget_toaddclasses.setObjectName("tableWidget_toaddclasses")
@@ -85,6 +85,9 @@ class Ui_form_table_addclasses(object):
         self.comboBox_addclass.addItem("")
         self.comboBox_addclass.addItem("")
         self.comboBox_addclass.addItem("")
+        self.lineEdit_class = QtWidgets.QLineEdit(form_table_addclasses)
+        self.lineEdit_class.setGeometry(QtCore.QRect(1172, 120, 81, 21))
+        self.lineEdit_class.setObjectName("lineEdit_class")
 
         cols = 24
         rows = 16
@@ -105,7 +108,7 @@ class Ui_form_table_addclasses(object):
         self.tableWidget_toaddclasses.setHorizontalHeaderLabels(ll2)
 
         self.pushButton_loadfileaddclasses.clicked.connect(self.on_loadFile_clicked)
-        self.pushButton_addclass.clicked.connect(self.on_class_clicked)
+        self.pushButton_apply.clicked.connect(self.on_class_clicked)
         self.comboBox_featuresfromdataframe.currentTextChanged.connect(self.on_comboBox_featuresfromdataframe_changed)
         self.comboBox_plates.currentTextChanged.connect(self.on_comboBoxplates_changed)
         self.comboBox_addclass.currentTextChanged.connect(self.on_comboBoxaddclass_changed)
@@ -116,7 +119,7 @@ class Ui_form_table_addclasses(object):
     def retranslateUi(self, form_table_addclasses):
         _translate = QtCore.QCoreApplication.translate
         form_table_addclasses.setWindowTitle(_translate("form_table_addclasses", "Add classes form"))
-        self.pushButton_addclass.setText(_translate("form_table_addclasses", "Add class"))
+        self.pushButton_apply.setText(_translate("form_table_addclasses", "Apply"))
         self.pushButton_loadfileaddclasses.setText(_translate("form_table_addclasses", "Load file"))
         self.comboBox_addclass.setItemText(0, _translate("form_table_addclasses", "Add class"))
         self.comboBox_addclass.setItemText(1, _translate("form_table_addclasses", "Class 0"))
@@ -132,12 +135,13 @@ class Ui_form_table_addclasses(object):
         self.comboBox_addclass.setItemText(11, _translate("form_table_addclasses", "Class 10"))
         self.comboBox_addclass.setItemText(12, _translate("form_table_addclasses", "Class 11"))
         self.comboBox_addclass.setItemText(13, _translate("form_table_addclasses", "Class 12"))
+        self.lineEdit_class.setText(_translate("form_table_addclasses", "Add Class"))
 
     def interpolate(self, val, y0, x0, y1, x1):
         return (val - x0) * (y1 - y0) / (x1 - x0) + y0
 
     def baases(self, val):
-        if val <=0.75:
+        if val <= 0.75:
             return 0
         if val <= -0.25:
             return self.interpolate(val, 0.0, -0.75, 1.0, -0.25)
@@ -175,7 +179,7 @@ class Ui_form_table_addclasses(object):
 
     def get_color_colormap(self, val_min, val_max, val):
 
-        vv = ((float(val) -float(val_min) )/ float(val_max) )* 255.0
+        vv = ((float(val) - float(val_min)) / float(val_max)) * 255.0
         # norm = matplotlib.colors.Normalize(val_min, val_max)
         # print(norm)
         # # print(norm(val))
@@ -190,22 +194,29 @@ class Ui_form_table_addclasses(object):
         totalColumns = self.tableWidget_toaddclasses.selectionModel().selectedColumns()
         for idx in totalColumns:
             column_name = self.tableWidget_toaddclasses.model().headerData(idx.column(), QtCore.Qt.Horizontal,
-                                                                      QtCore.Qt.DisplayRole)
+                                                                           QtCore.Qt.DisplayRole)
             list_col.append(column_name)
         return list_col
 
     def on_comboBoxaddclass_changed(self):
         cb_value = self.comboBox_addclass.currentText()
         class_nb = cb_value.split(" ")[1]
-        self.ll =  class_nb
+        self.ll = class_nb
 
     def on_class_clicked(self):
         file = self.lineEdit_filepathfromdataframe.text()
+        # if str(self.lineEdit_class) == 'Add Class' and str(self.comboBox_addclass) != 'Add class':
+        #     QMessageBox.information(None, "Error ",
+        #                             "Please enter a class number in the text line or the combobox.",
+        #                             QMessageBox.Ok)
         exists = os.path.isfile(file)
         if exists:
+        # # if self.comboBox_addclass == 'Add class' and self.comboBox_addclass != 'Add class':
+        # #     print('ff')
+        # if self.comboBox_addclass != 'Add class' and self.comboBox_addclass == 'Add class':
+            print('1')
             t1 = os.path.dirname(file)
             file_name1 = os.path.splitext(os.path.basename(file))[0]
-        
             list_columnselected = self.select_multicolumns()
             if file == '':
                 QMessageBox.information(None, "Error ",
@@ -220,36 +231,34 @@ class Ui_form_table_addclasses(object):
                     self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
                     df1 = df
                     if 'Class' not in df1:
-                        if (self.comboBox_addclass.currentText() == "Add class"):
-                            QMessageBox.information(None, "Error ",
-                                                    "Please enter a class number from the combobox.\nTry again.",
-                                                    QMessageBox.Ok)
-                        else:
+                        # if (self.comboBox_addclass.currentText() == "Add class"):
+                        #
+                        # else:
                             # for i in range(len(list_columnselected)):
-                            cl_nb = self.ll
-                            #     for i in range(len(list_columnselected)):
-                            df1['c'] = df1['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
-                            if df1['c'].any() == True:
-                                dff1 = df1[df1['c'] == True]
-                                dff2 = df1[df1['c'] == False]
-                                dff1['Class'] = cl_nb
-                                dff2['Class'] = ''
-                                dff_conc = pd.concat([dff1, dff2])
-                                d_dropped = dff_conc.drop('c', axis=1)
-                                d_dropped.to_csv(t1 +  '\\' + file_name1  + '.csv', index=None)
-                                self.on_reloadFile_clicked(t1 + '\\' + file_name1 + '.csv')
-                                # self.comboBox_featuresfromdataframe.clear()
-                                self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
-                                d_dropped = pd.read_csv(t1 +  '\\' + file_name1  + '.csv')
-                                list_descriptors = d_dropped.columns
-                                self.comboBox_featuresfromdataframe.addItems(list_descriptors)
-    
+                        cl_nb = self.ll
+                        #     for i in range(len(list_columnselected)):
+                        df1['c'] = df1['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
+                        if df1['c'].any() == True:
+                            dff1 = df1[df1['c'] == True]
+                            dff2 = df1[df1['c'] == False]
+                            dff1['Class'] = cl_nb
+                            dff2['Class'] = ''
+                            dff_conc = pd.concat([dff1, dff2])
+                            d_dropped = dff_conc.drop('c', axis=1)
+                            d_dropped.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
+                            self.on_reloadFile_clicked(t1 + '\\' + file_name1 + '.csv')
+                            # self.comboBox_featuresfromdataframe.clear()
+                            self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
+                            d_dropped = pd.read_csv(t1 + '\\' + file_name1 + '.csv')
+                            list_descriptors = d_dropped.columns
+                            self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+
                     df2 = df
                     if 'Class' in df2:
                         buttonReply = QMessageBox.question(None, 'Mean and STD',
                                                            "The column 'Class' already exists in the file.\n"
-                                                                                        "Press Yes if you want to edit the Class.\n"
-                                                                                        "Press No to ignore.\n",
+                                                           "Press Yes if you want to edit the Class.\n"
+                                                           "Press No to ignore.\n",
                                                            QMessageBox.Yes | QMessageBox.No,
                                                            QMessageBox.Yes)
                         if buttonReply == QMessageBox.Yes:
@@ -258,9 +267,7 @@ class Ui_form_table_addclasses(object):
                                                         "Please enter a class number from the combobox.\nTry again.",
                                                         QMessageBox.Ok)
                             else:
-                                # for i in range(len(list_columnselected)):
                                 cl_nb = self.ll
-                                    # for i in range(len(list_columnselected)):
                                 df2['c'] = df2['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
                                 if df2['c'].any() == True:
                                     dfff1 = df2[df2['c'] == True]
@@ -268,7 +275,7 @@ class Ui_form_table_addclasses(object):
                                     dfff1['Class'] = cl_nb
                                     dff_conc1 = pd.concat([dfff1, dfff2])
                                     d_dropped1 = dff_conc1.drop('c', axis=1)
-                                    d_dropped1.to_csv(t1 +  '\\' + file_name1 + '.csv', index=None)
+                                    d_dropped1.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
                                     self.lineEdit_filepathfromdataframe.setText(t1 + '\\' + file_name1 + '.csv')
                                 self.on_reloadFile_clicked(t1 + '\\' + file_name1 + '.csv')
                                 d_dropped1 = pd.read_csv(t1 + '\\' + file_name1 + '.csv')
@@ -286,7 +293,7 @@ class Ui_form_table_addclasses(object):
                                     QMessageBox.Ok)
 
     def load_dict(self, plate, desc):
-        df_plate = self.df[self.df["Plate"]== plate]
+        df_plate = self.df[self.df["Plate"] == plate]
         if 'Well' not in df_plate:
             print('no')
         if 'Well' in df_plate:
@@ -332,8 +339,8 @@ class Ui_form_table_addclasses(object):
             if 'Well' not in df:
                 self.lineEdit_filepathfromdataframe.setText('')
                 QMessageBox.information(None, "Error ",
-                                    "The column Well is not in the file.\nTry again.",
-                                    QMessageBox.Ok)
+                                        "The column Well is not in the file.\nTry again.",
+                                        QMessageBox.Ok)
             if 'Well' in df:
                 df_rows = df.count()
                 cols = 24
@@ -350,22 +357,22 @@ class Ui_form_table_addclasses(object):
                     self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
                     self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
                     self.comboBox_featuresfromdataframe.addItems(list_descriptors)
-                    self.descriptors_df =  list_descriptors
+                    self.descriptors_df = list_descriptors
                     self.df = df
 
-    def loadFile(self):        
+    def loadFile(self):
         fileName = self.lineEdit_filepathfromdataframe.text()
         if fileName == 'File path':
-             QMessageBox.information(None, "Error ",
-                                "Please load a file first.",
-                                QMessageBox.Ok)
+            QMessageBox.information(None, "Error ",
+                                    "Please load a file first.",
+                                    QMessageBox.Ok)
         if fileName != 'File path':
             df = pd.read_csv(fileName, low_memory=False)
             if 'Well' not in df:
                 self.lineEdit_filepathfromdataframe.setText('')
                 QMessageBox.information(None, "Error ",
-                                    "The column Well is not in the file.\nTry again.",
-                                    QMessageBox.Ok)
+                                        "The column Well is not in the file.\nTry again.",
+                                        QMessageBox.Ok)
             if 'Well' in df:
                 df_rows = df.count()
                 cols = 24
@@ -395,14 +402,16 @@ class Ui_form_table_addclasses(object):
         cols = 24
         rows = 16
         ll1 = list(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'])
-        ll2 = list(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'])
+        ll2 = list(
+            ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18',
+             '19', '20', '21', '22', '23', '24'])
         plate_cb = self.comboBox_plates.currentText()
         desc_cb = self.comboBox_featuresfromdataframe.currentText()
         if desc_cb != 'Descriptor':
             dict_table_well = self.load_dict(plate_cb, desc_cb)
-            for row,i in enumerate(range(len(ll1))):
-                for col,j in enumerate(range(len(ll2))):
-                    well_from_list = str(ll1[row])+ str(ll2[col])
+            for row, i in enumerate(range(len(ll1))):
+                for col, j in enumerate(range(len(ll2))):
+                    well_from_list = str(ll1[row]) + str(ll2[col])
                     value = 0
                     if well_from_list in dict_table_well.keys():
                         value = dict_table_well[well_from_list]
@@ -429,27 +438,27 @@ class Ui_form_table_addclasses(object):
     #                         item = QTableWidgetItem(str(value))
     #                         self.tableWidget_toaddclasses.setItem(row, col, item)
     #                         color_value = self.get_color_colormap(min_value, max_value, value)
-    #                         if color_value < 255 / 10:      
+    #                         if color_value < 255 / 10:
     #                             self.tableWidget_toaddclasses.item(row, col).setBackground(QtGui.QColor(int(0), int(0), int(color_value)*10))
-    #                         if (color_value > 255 / 10) and (color_value < 255 / 3):                            
+    #                         if (color_value > 255 / 10) and (color_value < 255 / 3):
     #                             self.tableWidget_toaddclasses.item(row, col).setBackground(QtGui.QColor(int(0), int(color_value)*3, int(0)))
     #                         if color_value > 255 / 3:
     #                             self.tableWidget_toaddclasses.item(row, col).setBackground(QtGui.QColor(int(color_value), int(0), int(0)))
-                        
+
     # def fill_tablewidget(self):
-        #     cols = 24
-        #     rows = 16
-        #     l = list(string.ascii_uppercase)
-        #     for k in range(len(l)):
-        #         for i in range(rows):
-        #             for j in range(cols):
-        #                 if j + 1 <= 9:
-        #                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
-        #                 print(k)
-        #                 if j + 1 >= 10:
-        #                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + str(j + 1)))
-        #                 print(k)
-        #             i += 1
+    #     cols = 24
+    #     rows = 16
+    #     l = list(string.ascii_uppercase)
+    #     for k in range(len(l)):
+    #         for i in range(rows):
+    #             for j in range(cols):
+    #                 if j + 1 <= 9:
+    #                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + '0' + str(j + 1)))
+    #                 print(k)
+    #                 if j + 1 >= 10:
+    #                     self.tableWidget_toaddclasses.setItem(i + k, j, QTableWidgetItem(l[k] + str(j + 1)))
+    #                 print(k)
+    #             i += 1
 
 if __name__ == "__main__":
     import sys

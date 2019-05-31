@@ -1,6 +1,5 @@
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-import string
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,6 +9,7 @@ import pandas as pd
 from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
 from DAform_checkboxes_editincolumns import Ui_Form_editcolumns
+from DAform_table_linkfiles import Ui_form_table_linkfiles
 from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
@@ -22,11 +22,25 @@ from DApandaswidget import PandasModel
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe_tabs(object):
+
+    def openwindow_form_table_linkfiles(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui4 = Ui_form_table_linkfiles()
+        self.ui4.setupUi(self.window)
+        self.ui4.lineEdit_filepath_firstfile.setText(self.lineEdit_filepath.text())
+        exists = os.path.isfile(self.ui4.lineEdit_filepath_firstfile.text())
+        if exists:
+            self.ui4.on_loadFile1()
+            self.window.show()
+        else:
+            QMessageBox.information(None, "Error ",
+                "Please load a file first\n.The file does not exist anymore.",
+                QMessageBox.Ok)
+
     def openwindow_form_checkboxes(self):
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_Form_CheckBoxes()
         self.ui.setupUi(self.window)
-        # Form_loadDataframe.hide()
         self.ui.lineEdit_filepath_checkboxes.setText(self.lineEdit_filepath.text())
         self.load_ddf()
         self.ui.loadFile()
@@ -45,6 +59,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.window = QtWidgets.QMainWindow()
         self.ui2 = Ui_Form_editcolumns()
         self.ui2.setupUi(self.window)
+        self.ui2.lineEdit_filepath_firstfile = self.lineEdit_filepath.text()
         self.ui2.lineedit_file_path_to_edit = self.lineEdit_filepath.text()
         self.ui2.tableView_dataframe_to_edit = self.tableView_dataframe
         self.ui2.t1_new = os.path.dirname(self.lineEdit_filepath.text())
@@ -75,11 +90,25 @@ class Ui_Form_loadDataframe_tabs(object):
         # self.ui.loadFile()
         self.window.show()
 
+    def closeEvent(self, event):
+        close = QtWidgets.QMessageBox.question(self,
+                                               "QUIT",
+                                               "Are you sure want to stop process?",
+                                               QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        if close == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore
+
     def setupUi(self, Form_loadDataframe_tabs):
         Form_loadDataframe_tabs.setObjectName("Form_loadDataframe_tabs")
         Form_loadDataframe_tabs.setWindowModality(QtCore.Qt.WindowModal)
         Form_loadDataframe_tabs.setEnabled(True)
-        Form_loadDataframe_tabs.resize(1524, 1066)
+        Form_loadDataframe_tabs.resize(1524,1066)
+        # Form_loadDataframe_tabs.showMaximized()
+        width_wind = Form_loadDataframe_tabs.size()
+        height_wind = Form_loadDataframe_tabs.height()
+        print(width_wind, height_wind)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -88,7 +117,9 @@ class Ui_Form_loadDataframe_tabs(object):
         Form_loadDataframe_tabs.setSizeIncrement(QtCore.QSize(25, 25))
         Form_loadDataframe_tabs.setStyleSheet("background-color: rgb(222, 241, 255);")
         self.tabWidget_filestatistics = QtWidgets.QTabWidget(Form_loadDataframe_tabs)
+        # width_tabs =
         self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1031))
+        # self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1031))
         self.tabWidget_filestatistics.setStyleSheet("background-color: rgb(229, 241, 255);\n"
 "font: 10pt \"MS Shell Dlg 2\";\n"
 "font: 87 8pt \"Arial Black\";")
@@ -277,6 +308,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.lineEdit_plate.setObjectName("lineEdit_plate")
         self.tableView_dataframe = QtWidgets.QTableView(Form_loadDataframe_tabs)
         self.tableView_dataframe.setGeometry(QtCore.QRect(40, 120, 1460, 800))
+        # self.tableView_dataframe.setGeometry(QtCore.QRect(40, 120, 1460, 800))
         self.tableView_dataframe.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(157, 157, 157);\n"
 "color: rgb(24, 32, 177);\n"
@@ -1480,87 +1512,89 @@ class Ui_Form_loadDataframe_tabs(object):
                                     "No loaded file.\nPlease load a file first.",
                                     QMessageBox.Ok)
         if file != "  ":
-            file = self.lineEdit_filepath.text()
-            df = pd.read_csv(file)
-            header = self.select_multicolumns()
-            if len(header) == 0 or len(header) > 1:
-                QMessageBox.information(None, "Error",
-                                        "You must select one column to link the 2 files.",
-                                        QMessageBox.Ok)
-            if len(header) == 1:
-                boolk = df.duplicated(subset=header[0], keep=False)
-                df_duplicated = df[boolk]
-                if (len(df_duplicated) > 0):
-                    buttonReply = QMessageBox.question(None, 'Error',
-                                                       "Duplicated index in the column " + str(header) + "\n"
-                                                                                                         "Press Yes if you want to continue.\n"
-                                                                                                         "Press No to ignore.",
-                                                       QMessageBox.Yes | QMessageBox.No,
-                                                       QMessageBox.Yes)
-                    if buttonReply == QMessageBox.Yes:
-                        fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File to link from",
-                                                                       "",
-                                                                       "CSV Files (*.csv)")
-                        if fileName_cpds:
-                            df = pd.read_csv(file, index_col=header)
-                            self.reloaddata_fromfilepath(fileName_cpds)
-                            self.lineEdit_filepath.setText(fileName_cpds)
-                            df_withcpds = pd.read_csv(fileName_cpds)
-                            if header[0] not in df_withcpds.columns:
-                                print('s')
-                            if header[0] in df_withcpds.columns:
-                                boolk = df_withcpds.duplicated(subset=header[0], keep=False)
-                                df_duplicated1 = df_withcpds[boolk]
-                                if len(df_duplicated1) > 0:
-                                    QMessageBox.information(None, "Error",
-                                                            "Duplicated index. You cannot link the file.\nNo file to save.",
-                                                            QMessageBox.Ok)
-                                if len(df_duplicated1) == 0:
-                                    df_withcpds = pd.read_csv(fileName_cpds, index_col=header)
-                                    d_merged = df.merge(df_withcpds, on=header[0])
-                                    # d_merged =
-                                    t1 = os.path.dirname(file)
-                                    file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                    d_merged.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                    self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                    self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                                    QMessageBox.information(None, "File linked",
-                                                            "Successfully linked and saved the files!",
-                                                            QMessageBox.Ok)
+            self.openwindow_form_table_linkfiles()
 
-                if (len(df_duplicated) == 0):
-                    fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File to link from",
-                                                                   "",
-                                                                   "CSV Files (*.csv)")
-                    if fileName_cpds:
-                        df = pd.read_csv(file, index_col=header)
-                        self.reloaddata_fromfilepath(fileName_cpds)
-                        self.lineEdit_filepath.setText(fileName_cpds)
-                        df_withcpds = pd.read_csv(fileName_cpds)
-                        if header[0] not in df_withcpds.columns:
-                            QMessageBox.information(None, "Error",
-                                                    "The key " + str(
-                                                        header) + " does not exist in the 2nd file.\nPlease select another column to link the 2 files.",
-                                                    QMessageBox.Ok)
-                        if header[0] in df_withcpds.columns:
-                            boolk = df_withcpds.duplicated(subset=header[0], keep=False)
-                            df_duplicated = df_withcpds[boolk]
-                            if len(df_duplicated) > 0:
-                                QMessageBox.information(None, "Error",
-                                                        "You cannot link the file.\nDuplicated index in column " + str(
-                                                            header),
-                                                        QMessageBox.Ok)
-                            if len(df_duplicated) == 0:
-                                df_withcpds = pd.read_csv(fileName_cpds, index_col=header)
-                                d_merged = df.merge(df_withcpds, on=header[0])
-                                t1 = os.path.dirname(file)
-                                file_name1 = os.path.splitext(os.path.basename(file))[0]
-                                d_merged.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
-                                self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
-                                QMessageBox.information(None, "File linked",
-                                                        "Successfully linked and saved the files!",
-                                                        QMessageBox.Ok)
+        #     file = self.lineEdit_filepath.text()
+        #     df = pd.read_csv(file)
+        #     header = self.select_multicolumns()
+        #     if len(header) == 0 or len(header) > 1:
+        #         QMessageBox.information(None, "Error",
+        #                                 "You must select one column to link the 2 files.",
+        #                                 QMessageBox.Ok)
+        #     if len(header) == 1:
+        #         boolk = df.duplicated(subset=header[0], keep=False)
+        #         df_duplicated = df[boolk]
+        #         if (len(df_duplicated) > 0):
+        #             buttonReply = QMessageBox.question(None, 'Error',
+        #                                                "Duplicated index in the column " + str(header) + "\n"
+        #                                                                                                  "Press Yes if you want to continue.\n"
+        #                                                                                                  "Press No to ignore.",
+        #                                                QMessageBox.Yes | QMessageBox.No,
+        #                                                QMessageBox.Yes)
+        #             if buttonReply == QMessageBox.Yes:
+        #                 fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File to link from",
+        #                                                                "",
+        #                                                                "CSV Files (*.csv)")
+        #                 if fileName_cpds:
+        #                     df = pd.read_csv(file, index_col=header)
+        #                     self.reloaddata_fromfilepath(fileName_cpds)
+        #                     self.lineEdit_filepath.setText(fileName_cpds)
+        #                     df_withcpds = pd.read_csv(fileName_cpds)
+        #                     if header[0] not in df_withcpds.columns:
+        #                         print('s')
+        #                     if header[0] in df_withcpds.columns:
+        #                         boolk = df_withcpds.duplicated(subset=header[0], keep=False)
+        #                         df_duplicated1 = df_withcpds[boolk]
+        #                         if len(df_duplicated1) > 0:
+        #                             QMessageBox.information(None, "Error",
+        #                                                     "Duplicated index. You cannot link the file.\nNo file to save.",
+        #                                                     QMessageBox.Ok)
+        #                         if len(df_duplicated1) == 0:
+        #                             df_withcpds = pd.read_csv(fileName_cpds, index_col=header)
+        #                             d_merged = df.merge(df_withcpds, on=header[0])
+        #                             # d_merged =
+        #                             t1 = os.path.dirname(file)
+        #                             file_name1 = os.path.splitext(os.path.basename(file))[0]
+        #                             d_merged.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+        #                             self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+        #                             self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+        #                             QMessageBox.information(None, "File linked",
+        #                                                     "Successfully linked and saved the files!",
+        #                                                     QMessageBox.Ok)
+        #
+        #         if (len(df_duplicated) == 0):
+        #             fileName_cpds, _ = QFileDialog.getOpenFileName(None, "Load File to link from",
+        #                                                            "",
+        #                                                            "CSV Files (*.csv)")
+        #             if fileName_cpds:
+        #                 df = pd.read_csv(file, index_col=header)
+        #                 self.reloaddata_fromfilepath(fileName_cpds)
+        #                 self.lineEdit_filepath.setText(fileName_cpds)
+        #                 df_withcpds = pd.read_csv(fileName_cpds)
+        #                 if header[0] not in df_withcpds.columns:
+        #                     QMessageBox.information(None, "Error",
+        #                                             "The key " + str(
+        #                                                 header) + " does not exist in the 2nd file.\nPlease select another column to link the 2 files.",
+        #                                             QMessageBox.Ok)
+        #                 if header[0] in df_withcpds.columns:
+        #                     boolk = df_withcpds.duplicated(subset=header[0], keep=False)
+        #                     df_duplicated = df_withcpds[boolk]
+        #                     if len(df_duplicated) > 0:
+        #                         QMessageBox.information(None, "Error",
+        #                                                 "You cannot link the file.\nDuplicated index in column " + str(
+        #                                                     header),
+        #                                                 QMessageBox.Ok)
+        #                     if len(df_duplicated) == 0:
+        #                         df_withcpds = pd.read_csv(fileName_cpds, index_col=header)
+        #                         d_merged = df.merge(df_withcpds, on=header[0])
+        #                         t1 = os.path.dirname(file)
+        #                         file_name1 = os.path.splitext(os.path.basename(file))[0]
+        #                         d_merged.to_csv(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+        #                         self.reloaddata_fromfilepath(t1 + '\\' + 'LinkedFile_' + file_name1 + '.csv')
+        #                         self.lineEdit_filepath.setText(t1 + '/' + 'LinkedFile_' + file_name1 + '.csv')
+        #                         QMessageBox.information(None, "File linked",
+        #                                                 "Successfully linked and saved the files!",
+        #                                                 QMessageBox.Ok)
 
     def on_comboboxdropfrom_changed(self, val):
         file = self.lineEdit_filepath.text()
@@ -1777,7 +1811,13 @@ class Ui_Form_loadDataframe_tabs(object):
         self.openwindow_form_checkboxes_editincolumns()
 
     def on_addclasses_clicked(self, t):
-        self.openwindow_addclasses()
+        file = self.lineEdit_filepath.text()
+        if file == "  ":
+            QMessageBox.information(None, "Error ",
+                                    "No loaded file.\nPlease load a file first.",
+                                    QMessageBox.Ok)
+        if file != "  ":
+            self.openwindow_addclasses()
 
     def on_loadFile_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(None, "Open File",
@@ -1845,6 +1885,7 @@ class Ui_Form_loadDataframe_tabs(object):
                 b.to_csv(t1 + '\\' + 'Concatenated_File.csv', index=None)
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
+
 
 
 if __name__ == "__main__":

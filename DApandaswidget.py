@@ -1,7 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QLabel, QMenu, QVBoxLayout, \
-    QSizePolicy
+from PyQt5.QtWidgets import QFileDialog, QSizePolicy
 import pandas as pd
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
