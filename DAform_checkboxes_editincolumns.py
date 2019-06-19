@@ -15,9 +15,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form_editcolumns(object):
     def setupUi(self, Form_editcolumns):
         Form_editcolumns.setObjectName("Form_editcolumns")
-        Form_editcolumns.resize(251, 270)
+        Form_editcolumns.resize(272, 328)
         self.checkBox_renamecolumns = QtWidgets.QCheckBox(Form_editcolumns)
-        self.checkBox_renamecolumns.setGeometry(QtCore.QRect(50, 60, 151, 19))
+        self.checkBox_renamecolumns.setGeometry(QtCore.QRect(50, 100, 151, 19))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -25,7 +25,7 @@ class Ui_Form_editcolumns(object):
         self.checkBox_renamecolumns.setFont(font)
         self.checkBox_renamecolumns.setObjectName("checkBox_renamecolumns")
         self.checkBox_dropfromcolumns = QtWidgets.QCheckBox(Form_editcolumns)
-        self.checkBox_dropfromcolumns.setGeometry(QtCore.QRect(50, 100, 141, 19))
+        self.checkBox_dropfromcolumns.setGeometry(QtCore.QRect(50, 140, 141, 19))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -33,7 +33,7 @@ class Ui_Form_editcolumns(object):
         self.checkBox_dropfromcolumns.setFont(font)
         self.checkBox_dropfromcolumns.setObjectName("checkBox_dropfromcolumns")
         self.checkBox_ordercolumns = QtWidgets.QCheckBox(Form_editcolumns)
-        self.checkBox_ordercolumns.setGeometry(QtCore.QRect(50, 140, 111, 19))
+        self.checkBox_ordercolumns.setGeometry(QtCore.QRect(50, 180, 111, 19))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -41,7 +41,7 @@ class Ui_Form_editcolumns(object):
         self.checkBox_ordercolumns.setFont(font)
         self.checkBox_ordercolumns.setObjectName("checkBox_ordercolumns")
         self.checkBox_mergetwocolumns = QtWidgets.QCheckBox(Form_editcolumns)
-        self.checkBox_mergetwocolumns.setGeometry(QtCore.QRect(50, 180, 121, 19))
+        self.checkBox_mergetwocolumns.setGeometry(QtCore.QRect(50, 220, 141, 19))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -63,17 +63,21 @@ class Ui_Form_editcolumns(object):
         self.lineEdit.setFrame(False)
         self.lineEdit.setObjectName("lineEdit")
         self.pushButton_choose_editcolumns = QtWidgets.QPushButton(Form_editcolumns)
-        self.pushButton_choose_editcolumns.setGeometry(QtCore.QRect(50, 220, 71, 31))
+        self.pushButton_choose_editcolumns.setGeometry(QtCore.QRect(50, 270, 71, 31))
         font = QtGui.QFont()
         font.setPointSize(9)
         font.setBold(True)
         font.setWeight(75)
         self.pushButton_choose_editcolumns.setFont(font)
         self.pushButton_choose_editcolumns.setObjectName("pushButton_choose_editcolumns")
-        self.lineEdit_filepath_editincolumns = QtWidgets.QLineEdit(Form_editcolumns)
-        self.lineEdit_filepath_editincolumns.setGeometry(QtCore.QRect(0, 0, 251, 21))
-        self.lineEdit_filepath_editincolumns.setFrame(False)
-        self.lineEdit_filepath_editincolumns.setObjectName("lineEdit_filepath_editincolumns")
+        self.checkBox_addnewcolumn = QtWidgets.QCheckBox(Form_editcolumns)
+        self.checkBox_addnewcolumn.setGeometry(QtCore.QRect(50, 60, 131, 19))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.checkBox_addnewcolumn.setFont(font)
+        self.checkBox_addnewcolumn.setObjectName("checkBox_addnewcolumn")
 
         self.pushButton_choose_editcolumns.clicked.connect(self.on_choose_clicked)
 
@@ -88,7 +92,8 @@ class Ui_Form_editcolumns(object):
         self.checkBox_ordercolumns.setText(_translate("Form_editcolumns", "Order columns"))
         self.checkBox_mergetwocolumns.setText(_translate("Form_editcolumns", "Merge 2 columns"))
         self.lineEdit.setText(_translate("Form_editcolumns", "Edit columns"))
-        self.pushButton_choose_editcolumns.setText(_translate("Form_editcolumns", "Choose"))
+        self.pushButton_choose_editcolumns.setText(_translate("Form_editcolumns", "APPLY"))
+        self.checkBox_addnewcolumn.setText(_translate("Form_editcolumns", "Add new column"))
 
     def select_multicolumns(self):
         list_col = []
@@ -158,12 +163,50 @@ class Ui_Form_editcolumns(object):
                 df = pd.read_csv(file)
                 header = self.select_multicolumns()
                 if (len(header) < 1):
-                    QMessageBox.information(None, "Error ",
-                                            "You must select a column.\nTry again",
-                                            QMessageBox.Ok)
-                if len(header) >= 1:
-                    if self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() and not \
+                    if self.checkBox_addnewcolumn.isChecked() and not self.checkBox_dropfromcolumns.isChecked() \
+                            and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() and not \
                             self.checkBox_renamecolumns.isChecked():
+                        new_column, okPressed = QInputDialog.getText(None,
+                                                                    "new column name",
+                                                                    "Column name ",
+                                                                    QLineEdit.Normal,
+                                                                    "New column name")
+                        if okPressed:
+                            df11 = pd.read_csv(self.lineedit_file_path_to_edit)
+                            if new_column in df11:
+                                QMessageBox.information(None, "Error ",
+                                                        "The column that you are trying to add already exists in the file.\nNo file to save.",
+                                                        QMessageBox.Ok)
+                            if new_column not in df11:
+                                df11[str(new_column)] = 'nv'
+                                df11.to_csv(self.t1_new + '\\'   + self.file_name1_new + '.csv', index=None)
+                                self.reloaddata_fromfilepath(self.t1_new + '\\'   + self.file_name1_new + '.csv')
+                    else:
+                        QMessageBox.information(None, "Error ",
+                                        "You must select a column.\nTry again",
+                                        QMessageBox.Ok)
+                if len(header) >= 1:
+                    if self.checkBox_addnewcolumn.isChecked() and not self.checkBox_dropfromcolumns.isChecked() \
+                            and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() and not \
+                            self.checkBox_renamecolumns.isChecked():
+                        new_column, okPressed = QInputDialog.getText(None,
+                                                                    "new column name",
+                                                                    "Column name ",
+                                                                    QLineEdit.Normal,
+                                                                    "New column name")
+                        if okPressed:
+                            df11 = pd.read_csv(self.lineedit_file_path_to_edit)
+                            if new_column in df11:
+                                QMessageBox.information(None, "Error ",
+                                                        "The column that you are trying to add already exists in the file.\nNo file to save.",
+                                                        QMessageBox.Ok)
+                            if new_column not in df11:
+                                df11[str(new_column)] = 'nv'
+                                df11.to_csv(self.t1_new + '\\'   + self.file_name1_new + '.csv', index=None)
+                                self.reloaddata_fromfilepath(self.t1_new + '\\'   + self.file_name1_new + '.csv')
+
+                    if self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_addnewcolumn.isChecked() and not self.checkBox_mergetwocolumns.isChecked() and \
+                            not self.checkBox_ordercolumns.isChecked() and not self.checkBox_renamecolumns.isChecked():
                         df5 = pd.read_csv(self.lineedit_file_path_to_edit)
                         d_dropped = df5.drop(header, axis=1)
                         d_dropped.to_csv(self.t1_new + '\\' + self.file_name1_new + '.csv', index=None)
@@ -184,7 +227,8 @@ class Ui_Form_editcolumns(object):
                                                     header) + " have been dropped from your file!\nFile successfully saved.",
                                                 QMessageBox.Yes)
 
-                    if not self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_mergetwocolumns.isChecked() and self.checkBox_ordercolumns.isChecked() and not \
+                    if not self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_addnewcolumn.isChecked() \
+                            and not self.checkBox_mergetwocolumns.isChecked() and self.checkBox_ordercolumns.isChecked() and not \
                             self.checkBox_renamecolumns.isChecked():
                         header = self.select_multicolumns()
                         df1 = pd.read_csv(self.lineedit_file_path_to_edit)
@@ -192,7 +236,8 @@ class Ui_Form_editcolumns(object):
                         df1.to_csv(self.t1_new + '\\'   + self.file_name1_new + '.csv', index=None)
                         self.reloaddata_fromfilepath(self.t1_new + '\\'   + self.file_name1_new + '.csv')
 
-                    if not self.checkBox_dropfromcolumns.isChecked() and self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() \
+                    if not self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_addnewcolumn.isChecked() \
+                            and self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() \
                             and not self.checkBox_renamecolumns.isChecked():
                         if len(header) == 0:
                             QMessageBox.information(None, "Error",
@@ -244,7 +289,8 @@ class Ui_Form_editcolumns(object):
                                         df6.to_csv(self.t1_new + '\\'   + self.file_name1_new + '.csv', index=None)
                                         self.reloaddata_fromfilepath(self.t1_new + '\\'   + self.file_name1_new + '.csv')
 
-                    if not self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() \
+                    if not self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_addnewcolumn.isChecked() \
+                            and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() \
                             and self.checkBox_renamecolumns.isChecked():
                         new_value, okPressed = QInputDialog.getText(None, "Value to rename value in column " + str(header),
                                                                     "Column name ",
@@ -261,7 +307,8 @@ class Ui_Form_editcolumns(object):
                                 # self.lineEdit_filepath.setText(t1 + '//'   + header + file_name1 + '.csv')
                                 self.reloaddata_fromfilepath(self.t1_new + '\\'   + self.file_name1_new + '.csv')
 
-                    if not self.checkBox_dropfromcolumns.isChecked() and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() and not \
+                    if not self.checkBox_addnewcolumn.isChecked() and not self.checkBox_dropfromcolumns.isChecked() \
+                            and not self.checkBox_mergetwocolumns.isChecked() and not self.checkBox_ordercolumns.isChecked() and not \
                             self.checkBox_renamecolumns.isChecked():
                         QMessageBox.information(None, "Error",
                                                 "Please check at least one of the cases.",

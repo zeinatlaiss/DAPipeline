@@ -218,79 +218,84 @@ class Ui_form_table_addclasses(object):
             t1 = os.path.dirname(file)
             file_name1 = os.path.splitext(os.path.basename(file))[0]
             list_columnselected = self.select_multicolumns()
-            if file == '':
-                QMessageBox.information(None, "Error ",
-                                        "No loaded file.\nPlease load a file first.",
-                                        QMessageBox.Ok)
-            if file != '':
-                df = pd.read_csv(file)
-                if 'Well' in df:
-                    list_plates = list(df['Plate'])
-                    nbr_rows = len(df)
-                    self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
-                    self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
-                    df1 = df
-                    if 'Class' not in df1:
-                        # if (self.comboBox_addclass.currentText() == "Add class"):
-                        #
-                        # else:
-                            # for i in range(len(list_columnselected)):
-                        cl_nb = self.ll
-                        #     for i in range(len(list_columnselected)):
-                        df1['c'] = df1['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
-                        if df1['c'].any() == True:
-                            dff1 = df1[df1['c'] == True]
-                            dff2 = df1[df1['c'] == False]
-                            dff1['Class'] = cl_nb
-                            dff2['Class'] = ''
-                            dff_conc = pd.concat([dff1, dff2])
-                            d_dropped = dff_conc.drop('c', axis=1)
-                            d_dropped.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
-                            self.on_reloadFile_clicked(t1 + '\\' + file_name1 + '.csv')
-                            # self.comboBox_featuresfromdataframe.clear()
-                            self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
-                            d_dropped = pd.read_csv(t1 + '\\' + file_name1 + '.csv')
-                            list_descriptors = d_dropped.columns
-                            self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+            if not self.select_multicolumns():
+                print('vo')
+            if self.select_multicolumns():
+                if file == '':
+                    QMessageBox.information(None, "Error ",
+                                            "No loaded file.\nPlease load a file first.",
+                                            QMessageBox.Ok)
+                if file != '':
+                    df = pd.read_csv(file)
 
-                    df2 = df
-                    if 'Class' in df2:
-                        buttonReply = QMessageBox.question(None, 'Mean and STD',
-                                                           "The column 'Class' already exists in the file.\n"
-                                                           "Press Yes if you want to edit the Class.\n"
-                                                           "Press No to ignore.\n",
-                                                           QMessageBox.Yes | QMessageBox.No,
-                                                           QMessageBox.Yes)
-                        if buttonReply == QMessageBox.Yes:
-                            if (self.comboBox_addclass.currentText() == "Add class"):
-                                QMessageBox.information(None, "Error ",
-                                                        "Please enter a class number from the combobox.\nTry again.",
-                                                        QMessageBox.Ok)
-                            else:
-                                cl_nb = self.ll
-                                df2['c'] = df2['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
-                                if df2['c'].any() == True:
-                                    dfff1 = df2[df2['c'] == True]
-                                    dfff2 = df2[df2['c'] == False]
-                                    dfff1['Class'] = cl_nb
-                                    dff_conc1 = pd.concat([dfff1, dfff2])
-                                    d_dropped1 = dff_conc1.drop('c', axis=1)
-                                    d_dropped1.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
-                                    self.lineEdit_filepathfromdataframe.setText(t1 + '\\' + file_name1 + '.csv')
+                    if 'Well' not in df:
+                        self.lineEdit_filepathfromdataframe.setText('')
+                        QMessageBox.information(None, "Error ",
+                                                "The column Well is not in the file.\nTry again.",
+                                                QMessageBox.Ok)
+
+                    if 'Well' in df:
+                        list_plates = list(df['Plate'])
+                        nbr_rows = len(df)
+                        self.lineEdit_nbrofplates.setText(str(len(list_plates)) + ' plates')
+                        self.lineEdit_nbrofwells.setText(str(nbr_rows) + ' wells')
+                        df1 = df
+                        if 'Class' not in df1:
+                            # if (self.comboBox_addclass.currentText() == "Add class"):
+                            #
+                            # else:
+                                # for i in range(len(list_columnselected)):
+                            cl_nb = self.ll
+                            #     for i in range(len(list_columnselected)):
+                            df1['c'] = df1['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
+                            if df1['c'].any() == True:
+                                dff1 = df1[df1['c'] == True]
+                                dff2 = df1[df1['c'] == False]
+                                dff1['Class'] = cl_nb
+                                dff2['Class'] = ''
+                                dff_conc = pd.concat([dff1, dff2])
+                                d_dropped = dff_conc.drop('c', axis=1)
+                                d_dropped.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
                                 self.on_reloadFile_clicked(t1 + '\\' + file_name1 + '.csv')
-                                d_dropped1 = pd.read_csv(t1 + '\\' + file_name1 + '.csv')
-                                list_descriptors = d_dropped1.columns
+                                # self.comboBox_featuresfromdataframe.clear()
+                                self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
+                                d_dropped = pd.read_csv(t1 + '\\' + file_name1 + '.csv')
+                                list_descriptors = d_dropped.columns
                                 self.comboBox_featuresfromdataframe.addItems(list_descriptors)
 
-                if 'Well' not in df:
-                    self.lineEdit_filepathfromdataframe.setText('')
-                    QMessageBox.information(None, "Error ",
-                                            "The column Well is not in the file.\nTry again.",
-                                            QMessageBox.Ok)
-        else:
-            QMessageBox.information(None, "Error",
-                                    "File does not exist anymore.\nPlesse load a file.",
-                                    QMessageBox.Ok)
+                        df2 = df
+                        if 'Class' in df2:
+                            buttonReply = QMessageBox.question(None, 'Mean and STD',
+                                                               "The column 'Class' already exists in the file.\n"
+                                                               "Press Yes if you want to edit the Class.\n"
+                                                               "Press No to ignore.\n",
+                                                               QMessageBox.Yes | QMessageBox.No,
+                                                               QMessageBox.Yes)
+                            if buttonReply == QMessageBox.Yes:
+                                if (self.comboBox_addclass.currentText() == "Add class"):
+                                    QMessageBox.information(None, "Error ",
+                                                            "Please enter a class number from the combobox.\nTry again.",
+                                                            QMessageBox.Ok)
+                                else:
+                                    cl_nb = self.ll
+                                    df2['c'] = df2['Well'].apply(lambda x: any([k in x for k in list_columnselected]))
+                                    if df2['c'].any() == True:
+                                        dfff1 = df2[df2['c'] == True]
+                                        dfff2 = df2[df2['c'] == False]
+                                        dfff1['Class'] = cl_nb
+                                        dff_conc1 = pd.concat([dfff1, dfff2])
+                                        d_dropped1 = dff_conc1.drop('c', axis=1)
+                                        d_dropped1.to_csv(t1 + '\\' + file_name1 + '.csv', index=None)
+                                        self.lineEdit_filepathfromdataframe.setText(t1 + '\\' + file_name1 + '.csv')
+                                    self.on_reloadFile_clicked(t1 + '\\' + file_name1 + '.csv')
+                                    d_dropped1 = pd.read_csv(t1 + '\\' + file_name1 + '.csv')
+                                    list_descriptors = d_dropped1.columns
+                                    self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+
+            else:
+                QMessageBox.information(None, "Error",
+                                        "File does not exist anymore.\nPlesse load a file.",
+                                        QMessageBox.Ok)
 
     def load_dict(self, plate, desc):
         df_plate = self.df[self.df["Plate"] == plate]

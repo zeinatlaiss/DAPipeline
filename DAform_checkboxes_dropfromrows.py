@@ -92,7 +92,7 @@ class Ui_Form_CheckBoxes(object):
     def retranslateUi(self, Form_CheckBoxes):
         _translate = QtCore.QCoreApplication.translate
         Form_CheckBoxes.setWindowTitle(_translate("Form_CheckBoxes", "Edit in rows"))
-        self.checkBox_nan.setText(_translate("Form_CheckBoxes", "nan values in file"))
+        self.checkBox_nan.setText(_translate("Form_CheckBoxes", "missing values in file"))
         self.checkBox_missingvalue.setText(_translate("Form_CheckBoxes", "missing values in column "))
         self.pushButton_apply.setText(_translate("Form_CheckBoxes", "APPLY"))
         self.label_drop.setText(_translate("Form_CheckBoxes", "Drop from rows"))
@@ -105,26 +105,63 @@ class Ui_Form_CheckBoxes(object):
 
     def getncpdsbatches(self, dataframe):
         if 'CPD_ID' in dataframe.columns and 'BATCH_ID' in dataframe.columns:
-            self.label_nbcpdid_rows.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
-            self.label_nbbatchid_rows.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+            self.label_nbcpdid.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
+            self.label_nbbatchid.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+        if 'compound_id' in dataframe.columns and 'batch_id' in dataframe.columns:
+            self.label_nbcpdid.setText(str(dataframe['compound_id'].nunique()) + ' unique compound_id')
+            self.label_nbbatchid.setText(str(dataframe['batch_id'].nunique()) + ' unique batch_id')
         if 'X_CPD_ID' in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
-            self.label_nbcpdid_rows.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
-            self.label_nbbatchid_rows.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
-        if 'CPD_ID' not in dataframe.columns and 'X_CPD_ID' not in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
-            self.label_nbcpdid_rows.setText('No CPD_ID')
-            self.label_nbbatchid_rows.setText('No BATCH_ID')
+            self.label_nbcpdid.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
+            self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
+        if 'CPD_ID' not in dataframe.columns and 'X_CPD_ID' not in dataframe.columns and \
+                'BATCH_ID' not in dataframe.columns and 'compound_id' not in dataframe.columns and \
+                'batch_id' not in dataframe.columns:
+            self.label_nbcpdid.setText('No CPD_ID')
+            self.label_nbbatchid.setText('No BATCH_ID')
         if 'CPD_ID' in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
-            self.label_nbcpdid_rows.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
-            self.label_nbbatchid_rows.setText('No BATCH_ID')
+            self.label_nbcpdid.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
+            self.label_nbbatchid.setText('No BATCH_ID')
         if 'X_CPD_ID' in dataframe.columns and 'X_BATCH_ID' not in dataframe.columns:
-            self.label_nbcpdid_rows.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
-            self.label_nbbatchid_rows.setText('No X_BATCH_ID')
+            self.label_nbcpdid.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
+            self.label_nbbatchid.setText('No X_BATCH_ID')
+        if 'compound_id' in dataframe.columns and 'batch_id' not in dataframe.columns:
+            self.label_nbcpdid.setText(str(dataframe['compound_id'].nunique()) + ' unique compound_id')
+            self.label_nbbatchid.setText('No batch_id')
         if 'CPD_ID' not in dataframe.columns and 'BATCH_ID' in dataframe.columns:
-            self.label_nbcpdid_rows.setText('No CPD_ID')
-            self.label_nbbatchid_rows.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+            self.label_nbcpdid.setText('No CPD_ID')
+            self.label_nbbatchid.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
         if 'X_CPD_ID' not in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
-            self.label_nbcpdid_rows.setText('No X_CPD_ID')
-            self.label_nbbatchid_rows.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
+            self.label_nbcpdid.setText('No X_CPD_ID')
+            self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
+        if 'compound_id' not in dataframe.columns and 'batch_id' in dataframe.columns:
+            self.label_nbcpdid.setText('No compound_id')
+            self.label_nbbatchid.setText(str(dataframe['batch_id'].nunique()) + ' unique batch_id')
+        if 'X_CPD_ID' not in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
+            self.label_nbcpdid.setText('No X_CPD_ID')
+            self.label_nbbatchid.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
+
+        #
+        # if 'CPD_ID' in dataframe.columns and 'BATCH_ID' in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
+        #     self.label_nbbatchid_rows.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+        # if 'X_CPD_ID' in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
+        #     self.label_nbbatchid_rows.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
+        # if 'CPD_ID' not in dataframe.columns and 'X_CPD_ID' not in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText('No CPD_ID')
+        #     self.label_nbbatchid_rows.setText('No BATCH_ID')
+        # if 'CPD_ID' in dataframe.columns and 'BATCH_ID' not in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText(str(dataframe['CPD_ID'].nunique()) + ' unique CPD_ID')
+        #     self.label_nbbatchid_rows.setText('No BATCH_ID')
+        # if 'X_CPD_ID' in dataframe.columns and 'X_BATCH_ID' not in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText(str(dataframe['X_CPD_ID'].nunique()) + ' unique X_CPD_ID')
+        #     self.label_nbbatchid_rows.setText('No X_BATCH_ID')
+        # if 'CPD_ID' not in dataframe.columns and 'BATCH_ID' in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText('No CPD_ID')
+        #     self.label_nbbatchid_rows.setText(str(dataframe['BATCH_ID'].nunique()) + ' unique BATCH_ID')
+        # if 'X_CPD_ID' not in dataframe.columns and 'X_BATCH_ID' in dataframe.columns:
+        #     self.label_nbcpdid_rows.setText('No X_CPD_ID')
+        #     self.label_nbbatchid_rows.setText(str(dataframe['X_BATCH_ID'].nunique()) + ' unique X_BATCH_ID')
 
     def reloaddata_fromfilepath(self, file):
         df = pd.read_csv(file)
@@ -187,12 +224,19 @@ class Ui_Form_CheckBoxes(object):
                                                     "NAN values do not exist in the column " + header + "selected.",
                                                     QMessageBox.Ok)
                         if np.where(dd6.applymap(lambda x: x == '')):
-                            dd7 = dd6.dropna(how='any')
-                            QMessageBox.information(None, "NAN dropped",
-                                                    "NAN values have been dropped from all the files.",
-                                                    QMessageBox.Ok)
-                            dd7.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
-                            self.reloaddata_fromfilepath(self.t1_rows + '\\' + self.file_name1_rows + '.csv')
+                            buttonReply = QMessageBox.question(None, 'Drop from all the file',
+                                                               "You are about to delete all the data corresponding to NAN values in the file.\n"
+                                                               "Yes to continue.\n"
+                                                               "No to ignore.\n",
+                                                               QMessageBox.Yes | QMessageBox.No,
+                                                               QMessageBox.Yes)
+                            if buttonReply == QMessageBox.Yes:
+                                dd7 = dd6.dropna(how='any')
+                                QMessageBox.information(None, "NAN dropped",
+                                                        "NAN values have been dropped from all the file.",
+                                                        QMessageBox.Ok)
+                                dd7.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
+                                self.reloaddata_fromfilepath(self.t1_rows + '\\' + self.file_name1_rows + '.csv')
 
                     if not self.checkBox_nan.isChecked() and self.checkBox_missingvalue.isChecked() and not \
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_keepvalue.isChecked() and not self.checkBox_text.isChecked():
@@ -204,16 +248,25 @@ class Ui_Form_CheckBoxes(object):
                                 QMessageBox.information(None, "No missing values",
                                                         "No missing values to drop in the column " + str(
                                                             header) + ".\nNo file to save.", QMessageBox.Ok)
+
                             if any(df[header[0]] == 'missing') == True:
-                                d = df[df[header[0]] == 'missing']
-                                df.drop(df.loc[df[header[0]] == 'missing'].index, inplace=True)
-                                df.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
-                                QMessageBox.information(None, "Missing values",
-                                                        str(len(
-                                                            d)) + " empty cells have been dropped from the column " + str(
-                                                            header[0]) + "\nSaved file.",
-                                                        QMessageBox.Ok)
-                                self.reloaddata_fromfilepath(self.t1_rows + '\\' + self.file_name1_rows + '.csv')
+                                buttonReply = QMessageBox.question(None, 'Delete from rows',
+                                                                   "You are about to delete the data corresponding to missing or NAN values from the column " \
+                                                                   +str(header[0])+ " in the file.\n"
+                                                                   "Yes to continue.\n"
+                                                                   "No to ignore.\n",
+                                                                   QMessageBox.Yes | QMessageBox.No,
+                                                                   QMessageBox.Yes)
+                                if buttonReply == QMessageBox.Yes:
+                                    d = df[df[header[0]] == 'missing']
+                                    df.drop(df.loc[df[header[0]] == 'missing'].index, inplace=True)
+                                    df.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
+                                    QMessageBox.information(None, "Missing values",
+                                                            str(len(
+                                                                d)) + " rows have been dropped from the column " + str(
+                                                                header[0]) + "\nFile saved.",
+                                                            QMessageBox.Ok)
+                                    self.reloaddata_fromfilepath(self.t1_rows + '\\' + self.file_name1_rows + '.csv')
 
                         if df[header[0]].dtypes == str:
                             df[header[0]].fillna("missing", inplace=True)
@@ -234,28 +287,46 @@ class Ui_Form_CheckBoxes(object):
 
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and \
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_keepvalue.isChecked() and not self.checkBox_text.isChecked():
+                        print('f')
                         dd4 =  df
+                        print('fd')
                         value_in_rows = self.lineEdit_valuetodrop.text()
-
-                        if self.lineEdit_valuetodrop.text() not in dd4[header[0]].values:
-                            QMessageBox.information(None, "Error ",
-                                                    "The value " + str(
-                                                        self.lineEdit_valuetodrop.text()) + " does not exist in the column " + str(
-                                                        header) + ".\nTry again",
+                        # if np.where(pd.isnull(dd4[header[0]].values)):
+                        # if np.nan in dd4[header[0]].values:
+                                    # self.lineEdit_valuetodrop.text() not in dd4[header[0]].values:
+                        print('ffff')
+                        if np.where(dd4[header[0]].values.applymap(lambda x: x == '')):
+                            QMessageBox.information(None, "NAN values",
+                                                    "You have nan values in the file, please drop them first.",
                                                     QMessageBox.Ok)
-                        dd5 = df
-                        if self.lineEdit_valuetodrop.text() in dd4[header[0]].values:
-                            df_dropped = dd5.drop(dd5[(dd5[header[0]].str.contains(self.lineEdit_valuetodrop.text()))].index)
-                            df_dropped.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
-                            QMessageBox.information(None, "Value ends with " + str(value_in_rows) + "dropped",
-                                                    "All values end with " + str(
-                                                        value_in_rows) + " have been dropped from the file.",
-                                                    QMessageBox.Ok)
-                            self.reloaddata_fromfilepath(self.t1_rows + '/' + self.file_name1_rows + '.csv')
+                            # if not np.where(dd4.applymap(lambda x: x == '')):
+                        # if np.nan not in dd4[header[0]].values:
+                        if not np.where(pd.isnull(dd4[header[0]].values)):
+                            print('djfjg')
+                            print(header[0])
+                            if self.lineEdit_valuetodrop.text() not in dd4[header[0]].values:
+                                print('gggg')
+                                QMessageBox.information(None, "Error ",
+                                                        "The value " + str(
+                                                            self.lineEdit_valuetodrop.text()) + " does not exist in the column " + str(
+                                                            header) + ".\nTry again",
+                                                        QMessageBox.Ok)
+                            if self.lineEdit_valuetodrop.text() in dd4[header[0]].values:
+                                dd = dd4
+                                print('fjfklfl')
+                                df_dropped = dd.drop(dd[(dd[header[0]].str.contains(self.lineEdit_valuetodrop.text()))].index)
+                                print('g')
+                                df_dropped.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
+                                print('gg')
+                                QMessageBox.information(None, "Value ends with " + str(value_in_rows) + "dropped",
+                                                        "All values end with " + str(
+                                                            value_in_rows) + " have been dropped from the file.",
+                                                        QMessageBox.Ok)
+                                print('fff')
+                                self.reloaddata_fromfilepath(self.t1_rows + '/' + self.file_name1_rows + '.csv')
 
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not \
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_keepvalue.isChecked() and self.checkBox_text.isChecked():
-
                         dd1 = df
                         if self.lineEdit_valuetorename_text.text() in dd1[header[0]].values:
                             dd1[header[0]] = dd1[header[0]].replace(
@@ -268,40 +339,51 @@ class Ui_Form_CheckBoxes(object):
                                                     + " has been renamed.\nSaved file.",
                                                     QMessageBox.Ok)
                             self.reloaddata_fromfilepath(self.t1_rows + '\\' + self.file_name1_rows + '.csv')
-                        dd2 = df
-                        if self.lineEdit_valuetorename_text.text() not in dd2[header[0]].values:
-                            QMessageBox.information(None, "Error ",
-                                                    "The value " + str(
-                                                        self.lineEdit_valuetorename_text.text()) + " does not exist in the column " + str(
-                                                        header[0]) + ".\nTry again",
-                                                    QMessageBox.Ok)
+                        # dd2 = df
+                        # if self.lineEdit_valuetorename_text.text() not in dd2[header[0]].values:
+                        #     QMessageBox.information(None, "Error ",
+                        #                             "You cannot rename the value " + str(
+                        #                                 self.lineEdit_valuetorename_text.text()) + " because it does not exist in the column " + str(
+                        #                                 header[0]) + ".\nTry again",
+                        #                             QMessageBox.Ok)
 
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not \
                             self.checkBox_valueendswith.isChecked() and self.checkBox_keepvalue.isChecked() and not self.checkBox_text.isChecked():
+                        print('djfjfjfkkf')
                         val_keep = self.lineEdit_valuetokeep.text()
+                        print('fllflflfl')
                         if val_keep == '':
+                            print('egk')
                             QMessageBox.information(None, "Specific values",
                                                     "No value entered.\nPlease enter a value that you need to keep.",
                                                     QMessageBox.Ok)
                         if val_keep != '':
+                            print(';eee')
                             d2 = df
+                            print('efff')
                             if self.lineEdit_valuetokeep.text() not in d2[header].values:
+                                print('djfjdjf')
                                 # if np.where(d2.applymap(lambda x: x != val_keep)):
                                 QMessageBox.information(None, "Specific values",
-                                                        "The value " + str(
-                                                            self.lineEdit_valuetokeep.text()) + " does not exist in the file.\nNo file to save.",
-                                                        QMessageBox.Ok)
+                                "The value " + str(
+                                    self.lineEdit_valuetokeep.text()) + " does not exist in the file.\nNo file to save.",
+                                    QMessageBox.Ok)
                             d3 = df
+                            print('1')
                             if self.lineEdit_valuetokeep.text() in d3[header[0]].values:
+                                print('2')
                                 r = str(self.lineEdit_valuetokeep.text())
+                                print('3')
                                 d3 = d3[(d3[[header[0]]] == r).all(axis=1)]
+                                print('4')
                                 d3.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)
+                                print('5')
                                 QMessageBox.information(None, "Specific values",
                                                         "The value " + str(
                                                             r) + " have been kept in " + str(header[0]),
                                                         QMessageBox.Ok)
+                                print('6')
                                 self.reloaddata_fromfilepath(self.t1_rows + '\\' + self.file_name1_rows + '.csv')
-
             else:
                 QMessageBox.information(None, "Error",
                                         "The loaded file does not exist anymore.\nPlease load a file.",

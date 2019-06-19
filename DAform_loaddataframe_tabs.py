@@ -6,6 +6,8 @@ import seaborn as sns
 import os
 from PyQt5.QtWidgets import *
 import pandas as pd
+from DAform_checkboxes_traindl import Ui_form_checkboxes_trainDL
+from DAform_table_label import Ui_form_table_label
 from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
 from DAform_checkboxes_editincolumns import Ui_Form_editcolumns
@@ -22,6 +24,18 @@ from DApandaswidget import PandasModel
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe_tabs(object):
+
+    def openwindow_form_table_label(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui6 = Ui_form_table_label()
+        self.ui6.setupUi(self.window)
+        self.window.show()
+
+    def openwindow_form_checkboxes_traindl(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui5 = Ui_form_checkboxes_trainDL()
+        self.ui5.setupUi(self.window)
+        self.window.show()
 
     def openwindow_form_table_linkfiles(self):
         self.window = QtWidgets.QMainWindow()
@@ -90,25 +104,11 @@ class Ui_Form_loadDataframe_tabs(object):
         # self.ui.loadFile()
         self.window.show()
 
-    def closeEvent(self, event):
-        close = QtWidgets.QMessageBox.question(self,
-                                               "QUIT",
-                                               "Are you sure want to stop process?",
-                                               QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
-        if close == QtWidgets.QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore
-
     def setupUi(self, Form_loadDataframe_tabs):
         Form_loadDataframe_tabs.setObjectName("Form_loadDataframe_tabs")
         Form_loadDataframe_tabs.setWindowModality(QtCore.Qt.WindowModal)
         Form_loadDataframe_tabs.setEnabled(True)
-        Form_loadDataframe_tabs.resize(1524,1066)
-        # Form_loadDataframe_tabs.showMaximized()
-        width_wind = Form_loadDataframe_tabs.size()
-        height_wind = Form_loadDataframe_tabs.height()
-        print(width_wind, height_wind)
+        Form_loadDataframe_tabs.resize(1524, 1066)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -117,9 +117,7 @@ class Ui_Form_loadDataframe_tabs(object):
         Form_loadDataframe_tabs.setSizeIncrement(QtCore.QSize(25, 25))
         Form_loadDataframe_tabs.setStyleSheet("background-color: rgb(222, 241, 255);")
         self.tabWidget_filestatistics = QtWidgets.QTabWidget(Form_loadDataframe_tabs)
-        # width_tabs =
         self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1031))
-        # self.tabWidget_filestatistics.setGeometry(QtCore.QRect(30, 30, 1481, 1031))
         self.tabWidget_filestatistics.setStyleSheet("background-color: rgb(229, 241, 255);\n"
 "font: 10pt \"MS Shell Dlg 2\";\n"
 "font: 87 8pt \"Arial Black\";")
@@ -131,7 +129,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_file = QtWidgets.QWidget()
         self.tab_file.setObjectName("tab_file")
         self.pushButton_addclasses = QtWidgets.QPushButton(self.tab_file)
-        self.pushButton_addclasses.setGeometry(QtCore.QRect(1210, 900, 101, 31))
+        self.pushButton_addclasses.setGeometry(QtCore.QRect(1220, 900, 101, 31))
         self.pushButton_addclasses.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_addclasses.setObjectName("pushButton_addclasses")
         self.pushButton_onlinkfiles = QtWidgets.QPushButton(self.tab_file)
@@ -139,7 +137,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_onlinkfiles.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_onlinkfiles.setObjectName("pushButton_onlinkfiles")
         self.pushButton_concatfiles = QtWidgets.QPushButton(self.tab_file)
-        self.pushButton_concatfiles.setGeometry(QtCore.QRect(920, 900, 141, 31))
+        self.pushButton_concatfiles.setGeometry(QtCore.QRect(910, 900, 141, 31))
         self.pushButton_concatfiles.setStyleSheet("background-color: rgb(220, 236, 255);")
         self.pushButton_concatfiles.setObjectName("pushButton_concatfiles")
         self.pushButton_loadfile = QtWidgets.QPushButton(self.tab_file)
@@ -154,13 +152,13 @@ class Ui_Form_loadDataframe_tabs(object):
         self.tab_edit = QtWidgets.QWidget()
         self.tab_edit.setObjectName("tab_edit")
         self.pushButton_editinrows = QtWidgets.QPushButton(self.tab_edit)
-        self.pushButton_editinrows.setGeometry(QtCore.QRect(1230, 900, 100, 31))
+        self.pushButton_editinrows.setGeometry(QtCore.QRect(1219, 900, 111, 31))
         self.pushButton_editinrows.setObjectName("pushButton_editinrows")
         self.pushButton_editincolumns = QtWidgets.QPushButton(self.tab_edit)
         self.pushButton_editincolumns.setGeometry(QtCore.QRect(1350, 900, 111, 31))
         self.pushButton_editincolumns.setObjectName("pushButton_editincolumns")
         self.comboBox_duplicates = QtWidgets.QComboBox(self.tab_edit)
-        self.comboBox_duplicates.setGeometry(QtCore.QRect(1230, 940, 231, 31))
+        self.comboBox_duplicates.setGeometry(QtCore.QRect(1220, 940, 241, 31))
         self.comboBox_duplicates.setObjectName("comboBox_duplicates")
         self.comboBox_duplicates.addItem("")
         self.comboBox_duplicates.addItem("")
@@ -227,32 +225,25 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_machinelearning.addItem("")
         self.comboBox_machinelearning.addItem("")
         self.tabWidget_filestatistics.addTab(self.tab_machinelearning, "")
-        self.tab_deeplearning = QtWidgets.QWidget()
-        self.tab_deeplearning.setEnabled(False)
-        self.tab_deeplearning.setObjectName("tab_deeplearning")
-        self.pushButton_2 = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton_2.setGeometry(QtCore.QRect(880, 900, 80, 31))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton_3.setGeometry(QtCore.QRect(980, 900, 80, 31))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton_4.setGeometry(QtCore.QRect(1080, 900, 80, 31))
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton.setGeometry(QtCore.QRect(1180, 900, 80, 31))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_5 = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton_5.setGeometry(QtCore.QRect(1280, 900, 80, 31))
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.pushButton_6 = QtWidgets.QPushButton(self.tab_deeplearning)
-        self.pushButton_6.setGeometry(QtCore.QRect(1380, 900, 80, 31))
-        self.pushButton_6.setObjectName("pushButton_6")
-        self.tabWidget_filestatistics.addTab(self.tab_deeplearning, "")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.pushButton_label = QtWidgets.QPushButton(self.tab)
+        self.pushButton_label.setGeometry(QtCore.QRect(1090, 900, 80, 31))
+        self.pushButton_label.setObjectName("pushButton_label")
+        self.pushButton_train = QtWidgets.QPushButton(self.tab)
+        self.pushButton_train.setGeometry(QtCore.QRect(1190, 900, 80, 31))
+        self.pushButton_train.setObjectName("pushButton_train")
+        self.pushButton_validate = QtWidgets.QPushButton(self.tab)
+        self.pushButton_validate.setGeometry(QtCore.QRect(1290, 900, 80, 31))
+        self.pushButton_validate.setObjectName("pushButton_validate")
+        self.pushButton_predict = QtWidgets.QPushButton(self.tab)
+        self.pushButton_predict.setGeometry(QtCore.QRect(1390, 900, 80, 31))
+        self.pushButton_predict.setObjectName("pushButton_predict")
+        self.tabWidget_filestatistics.addTab(self.tab, "")
         self.tab_plot = QtWidgets.QWidget()
         self.tab_plot.setObjectName("tab_plot")
         self.comboBox_plot = QtWidgets.QComboBox(self.tab_plot)
-        self.comboBox_plot.setGeometry(QtCore.QRect(1290, 900, 171, 31))
+        self.comboBox_plot.setGeometry(QtCore.QRect(1190, 900, 271, 31))
         self.comboBox_plot.setObjectName("comboBox_plot")
         self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
@@ -308,7 +299,6 @@ class Ui_Form_loadDataframe_tabs(object):
         self.lineEdit_plate.setObjectName("lineEdit_plate")
         self.tableView_dataframe = QtWidgets.QTableView(Form_loadDataframe_tabs)
         self.tableView_dataframe.setGeometry(QtCore.QRect(40, 120, 1460, 800))
-        # self.tableView_dataframe.setGeometry(QtCore.QRect(40, 120, 1460, 800))
         self.tableView_dataframe.setStyleSheet("font: 87 8pt \"Arial Black\";\n"
 "background-color: rgb(157, 157, 157);\n"
 "color: rgb(24, 32, 177);\n"
@@ -328,6 +318,10 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_addclasses.clicked.connect(self.on_addclasses_clicked)
         self.pushButton_editincolumns.clicked.connect(self.on_editcolumns_clicked)
         self.pushButton_editinrows.clicked.connect(self.on_editrows_clicked)
+        self.pushButton_label.clicked.connect(self.on_label_clicked)
+        self.pushButton_train.clicked.connect(self.on_train_clicked)
+        self.pushButton_validate.clicked.connect(self.on_validate_clicked)
+        self.pushButton_predict.clicked.connect(self.on_predict_clicked)
         self.comboBox_duplicates.currentTextChanged.connect(self.on_comboboxduplicates_changed)
         self.comboBox_extracthits.currentTextChanged.connect(self.on_comboboxactivecompounds_changed)
         self.comboBox_removeoutliers.currentTextChanged.connect(self.on_comboboxremoveoutliers_changed)
@@ -388,13 +382,11 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_machinelearning.setItemText(0, _translate("Form_loadDataframe_tabs", "Machine learning"))
         self.comboBox_machinelearning.setItemText(1, _translate("Form_loadDataframe_tabs", "LDA"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_machinelearning), _translate("Form_loadDataframe_tabs", "Machine Learning"))
-        self.pushButton_2.setText(_translate("Form_loadDataframe_tabs", "Label"))
-        self.pushButton_3.setText(_translate("Form_loadDataframe_tabs", "Pickle"))
-        self.pushButton_4.setText(_translate("Form_loadDataframe_tabs", "Load pickle"))
-        self.pushButton.setText(_translate("Form_loadDataframe_tabs", "Train"))
-        self.pushButton_5.setText(_translate("Form_loadDataframe_tabs", "Predict"))
-        self.pushButton_6.setText(_translate("Form_loadDataframe_tabs", "Validate"))
-        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_deeplearning), _translate("Form_loadDataframe_tabs", "Deep learning"))
+        self.pushButton_label.setText(_translate("Form_loadDataframe_tabs", "Label"))
+        self.pushButton_train.setText(_translate("Form_loadDataframe_tabs", "Train"))
+        self.pushButton_validate.setText(_translate("Form_loadDataframe_tabs", "Validate"))
+        self.pushButton_predict.setText(_translate("Form_loadDataframe_tabs", "Predict"))
+        self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab), _translate("Form_loadDataframe_tabs", "Deep learning"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe_tabs", "Plot"))
         self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe_tabs", "Correlation"))
         self.comboBox_plot.setItemText(2, _translate("Form_loadDataframe_tabs", "Swarm plot with error bar"))
@@ -1886,7 +1878,17 @@ class Ui_Form_loadDataframe_tabs(object):
                 self.reloaddata_fromfilepath(t1 + '\\' + 'Concatenated_File.csv')
                 self.lineEdit_filepath.setText(t1 + '/' + 'Concatenated_File.csv')
 
+    def on_label_clicked(self):
+        self.openwindow_form_table_label()
 
+    def on_train_clicked(self):
+        self.openwindow_form_checkboxes_traindl()
+
+    def on_validate_clicked(self):
+        print('1')
+
+    def on_predict_clicked(self):
+        print('1')
 
 if __name__ == "__main__":
     import sys
