@@ -211,6 +211,7 @@ class Ui_Form_CheckBoxes(object):
                                             "You must select at least one column.\nNo file to save!",
                                             QMessageBox.Ok)
                 if len(header) >= 1:
+                    print('3')
                     if not self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not \
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_keepvalue.isChecked() and not self.checkBox_text.isChecked():
                         QMessageBox.information(None, "Error",
@@ -218,13 +219,18 @@ class Ui_Form_CheckBoxes(object):
                                                 QMessageBox.Ok)
                     if self.checkBox_nan.isChecked() and not self.checkBox_missingvalue.isChecked() and not \
                             self.checkBox_valueendswith.isChecked() and not self.checkBox_keepvalue.isChecked() and not self.checkBox_text.isChecked():
+                        print('g')
                         dd6 = df
-                        if not np.where(df.applymap(lambda x: x == '')):
+                        if np.where(pd.isnull(df[header[0]].values)):
+                            print('3333')
+                        # if not np.where(df.applymap(lambda x: x == '')):
                             QMessageBox.information(None, "Error",
                                                     "NAN values do not exist in the column " + header + "selected.",
                                                     QMessageBox.Ok)
-                        if np.where(dd6.applymap(lambda x: x == '')):
-                            buttonReply = QMessageBox.question(None, 'Drop from all the file',
+                        if  not np.where(pd.isnull(df[header[0]].values)):
+                            print('777')
+                        # if np.where(dd6.applymap(lambda x: x == '')):
+                            buttonReply = QMessageBox.question(None, 'Drop from the file',
                                                                "You are about to delete all the data corresponding to NAN values in the file.\n"
                                                                "Yes to continue.\n"
                                                                "No to ignore.\n",
@@ -250,6 +256,7 @@ class Ui_Form_CheckBoxes(object):
                                                             header) + ".\nNo file to save.", QMessageBox.Ok)
 
                             if any(df[header[0]] == 'missing') == True:
+                                print('missing values')
                                 buttonReply = QMessageBox.question(None, 'Delete from rows',
                                                                    "You are about to delete the data corresponding to missing or NAN values from the column " \
                                                                    +str(header[0])+ " in the file.\n"
@@ -373,7 +380,7 @@ class Ui_Form_CheckBoxes(object):
                             if self.lineEdit_valuetokeep.text() in d3[header[0]].values:
                                 print('2')
                                 r = str(self.lineEdit_valuetokeep.text())
-                                print('3')
+                                print('55')
                                 d3 = d3[(d3[[header[0]]] == r).all(axis=1)]
                                 print('4')
                                 d3.to_csv(self.t1_rows + '\\' + self.file_name1_rows + '.csv', index=None)

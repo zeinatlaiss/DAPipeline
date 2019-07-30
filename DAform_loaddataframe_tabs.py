@@ -1,3 +1,4 @@
+from scipy.stats import pearsonr, spearmanr, variation
 from sklearn.model_selection import train_test_split
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import numpy as np
@@ -17,19 +18,27 @@ from DApandaswidget import PandasModel
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe_tabs.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_Form_loadDataframe_tabs(object):
 
+class Ui_Form_loadDataframe_tabs(object):
     def openwindow_form_table_label(self):
         self.window = QtWidgets.QMainWindow()
         self.ui6 = Ui_form_table_label()
         self.ui6.setupUi(self.window)
-        self.window.show()
+        if self.lineEdit_filepath.text() == '  ':
+            QMessageBox.information(None, "Error ",
+                                    "Please load a file first.\nThe file does not exist anymore.",
+                                    QMessageBox.Ok)
+        if self.lineEdit_filepath.text() != '  ':
+            self.ui6.lineEdit_filepathtoload.setText(self.lineEdit_filepath.text())
+            self.ui6.loadFile_label()
+            self.window.show()
 
     def openwindow_form_checkboxes_traindl(self):
         self.window = QtWidgets.QMainWindow()
@@ -48,7 +57,7 @@ class Ui_Form_loadDataframe_tabs(object):
             self.window.show()
         else:
             QMessageBox.information(None, "Error ",
-                "Please load a file first\n.The file does not exist anymore.",
+                "Please load a file first\nThe file does not exist anymore.",
                 QMessageBox.Ok)
 
     def openwindow_form_checkboxes(self):
@@ -180,6 +189,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_statistics = QtWidgets.QComboBox(self.tab_statistics)
         self.comboBox_statistics.setGeometry(QtCore.QRect(890, 900, 271, 41))
         self.comboBox_statistics.setObjectName("comboBox_statistics")
+        self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
@@ -356,11 +366,12 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_normalize.setItemText(3, _translate("Form_loadDataframe_tabs", "Min-Max"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_normalisation), _translate("Form_loadDataframe_tabs", "Normalise"))
         self.comboBox_statistics.setItemText(0, _translate("Form_loadDataframe_tabs", "Statistics"))
-        self.comboBox_statistics.setItemText(1, _translate("Form_loadDataframe_tabs", "Z factor & Robust Z factor"))
-        self.comboBox_statistics.setItemText(2, _translate("Form_loadDataframe_tabs", "Mean and STD"))
-        self.comboBox_statistics.setItemText(3, _translate("Form_loadDataframe_tabs", "Intersection"))
-        self.comboBox_statistics.setItemText(4, _translate("Form_loadDataframe_tabs", "Union"))
-        self.comboBox_statistics.setItemText(5, _translate("Form_loadDataframe_tabs", "Merge 2 files"))
+        self.comboBox_statistics.setItemText(1, _translate("Form_loadDataframe_tabs", "Pearson and Spearman\'s correlation"))
+        self.comboBox_statistics.setItemText(2, _translate("Form_loadDataframe_tabs", "Z factor & Robust Z factor"))
+        self.comboBox_statistics.setItemText(3, _translate("Form_loadDataframe_tabs", "Mean and STD"))
+        self.comboBox_statistics.setItemText(4, _translate("Form_loadDataframe_tabs", "Intersection"))
+        self.comboBox_statistics.setItemText(5, _translate("Form_loadDataframe_tabs", "Union"))
+        self.comboBox_statistics.setItemText(6, _translate("Form_loadDataframe_tabs", "Merge 2 files"))
         self.comboBox_aggregate.setItemText(0, _translate("Form_loadDataframe_tabs", "Aggregate"))
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe_tabs", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe_tabs", "Aggregate grouping by"))
@@ -393,6 +404,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
         self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
+
 
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
@@ -438,97 +450,130 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_normalize.setCurrentText("Normalise")
 
         if (value_nor == "Median"):
-            df2 = pd.read_csv(file)
-            t1 = os.path.dirname(file)
-            if 'Plate' not in df2.columns and 'Class' not in df2.columns:
-                QMessageBox.information(None, "Error ",
-                                        "Columns 'Plate' and 'Class' do not exist in the file.\nYou cannot apply the normalisation",
-                                        QMessageBox.Ok)
-            if 'Plate' in df2.columns:
-                if 'Class' not in df2.columns:
-                    QMessageBox.information(None, "Error ",
-                                            "Column 'Class' does not exist in the file.\nYou cannot apply the normalisation",
-                                            QMessageBox.Ok)
-                if 'Class' in df2.columns:
-                    df2_grp = df2.groupby('Plate')
-                    for grp in df2_grp:
-                        for column in grp[1]._get_numeric_data():
-                            if column != 'Class' and column != 'Concentration':  # and column != 'CPD_ID' and column != 'BATCH_ID':
-                                max_a = np.max(grp[1].query('Class == 2')[column])
-                                max_b = np.max(grp[1].query('Class == 1')[column])
-                                if max_a < max_b:
-                                    max_cp = np.median(grp[1].query('Class == 1')[column])
-                                else:
-                                    max_cp = np.median(grp[1].query('Class == 2')[column])
-                                coeff = grp[1][column] / max_cp
-                                grp[1][column] = coeff
-                                grp[1].to_csv(t1 + '\\' + grp[0] + '.csv', index=None)
-                    QMessageBox.information(None, "Median normalisation",
-                                            str(len(df2_grp[
-                                                        'Plate'].nunique())) + " plates have been normalised.\nSaved files.",
-                                            QMessageBox.Ok)
-        self.comboBox_normalize.setCurrentText("Normalise")
-
-        if (value_nor == "Min-Max"):
-            QMessageBox.information(None, "Not imp",
-                                    "Not implemented yet.",
-                                    QMessageBox.Ok)
-        self.comboBox_normalize.setCurrentText("Normalise")
-
-    def on_statistics_changed(self, value_st):
-        file = self.lineEdit_filepath.text()
-        t1 = os.path.dirname(file)
-        file_name1 = os.path.splitext(os.path.basename(file))[0]
-
-        if value_st == "Merge 2 dataframes":
-            df1 = pd.read_csv(file)
-            header = self.select_multicolumns()
-            if (len(header)) == 0:
-                QMessageBox.information(None, "Error",
-                                        "You must select a column to apply the merge." + "\nNo file to save.",
-                                        QMessageBox.Ok)
-            if (len(header)) > 0:
-                fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to apply the merge",
-                                                           "",
-                                                           "CSV Files (*.csv)")
-                if fileName2:
-                    df2 = pd.read_csv(fileName2)
-                    if header not in df2.columns:
-                        QMessageBox.information(None, "Error",
-                                                "Cannot merge the 2 files. The column " + str(
-                                                    header) + " does not exist in the 2nd file." + "\nNo file to save.",
-                                                QMessageBox.Ok)
-                    if header in df2.columns:
-                        df2 = pd.read_csv(fileName2)
-                        mergedStuff = pd.merge(df1, df2, on=[header], how='inner')
-                        if len(mergedStuff) == 0:
-                            QMessageBox.information(None, "No merge",
-                                                    "You have no values in common between the 2 files.\nNo file to save.",
-                                                    QMessageBox.Ok)
-                        if len(mergedStuff) > 0:
-                            mergedStuff.to_csv(t1 + '\\' + 'merged_' + header + '_' + file_name1 + '.csv', index=None)
-                            self.reloaddata_fromfilepath(t1 + '\\' + 'merged_' + header + '_' + file_name1 + '.csv')
-                            self.lineEdit_filepath.setText(t1 + '/' + 'merged_' + header + '_' + file_name1 + '.csv')
-                            QMessageBox.information(None, "Merge",
-                                                    "Successfully merged the 2 files" + "\nSaved file.",
-                                                    QMessageBox.Ok)
-
-        if value_st == "Mean and STD":
-            if file == "  ":
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file != "  ":
+            if file != '  ':
+                df2 = pd.read_csv(file)
+                t1 = os.path.dirname(file)
+                if 'Plate' not in df2.columns and 'Class' not in df2.columns:
+                    QMessageBox.information(None, "Error ",
+                                            "Columns 'Plate' and 'Class' do not exist in the file.\nYou cannot apply the normalisation",
+                                            QMessageBox.Ok)
+                if 'Plate' in df2.columns:
+                    if 'Class' not in df2.columns:
+                        QMessageBox.information(None, "Error ",
+                                                "Column 'Class' does not exist in the file.\nYou cannot apply the normalisation",
+                                                QMessageBox.Ok)
+                    if 'Class' in df2.columns:
+                        df2_grp = df2.groupby('Plate')
+                        for grp in df2_grp:
+                            for column in grp[1]._get_numeric_data():
+                                if column != 'Class' and column != 'Concentration':  # and column != 'CPD_ID' and column != 'BATCH_ID':
+                                    max_a = np.max(grp[1].query('Class == 2')[column])
+                                    max_b = np.max(grp[1].query('Class == 1')[column])
+                                    if max_a < max_b:
+                                        max_cp = np.median(grp[1].query('Class == 1')[column])
+                                    else:
+                                        max_cp = np.median(grp[1].query('Class == 2')[column])
+                                    coeff = grp[1][column] / max_cp
+                                    grp[1][column] = coeff
+                                    grp[1].to_csv(t1 + '\\' + grp[0] + '.csv', index=None)
+                        QMessageBox.information(None, "Median normalisation",
+                                                str(len(df2_grp[
+                                                            'Plate'].nunique())) + " plates have been normalised.\nSaved files.",
+                                                QMessageBox.Ok)
+            self.comboBox_normalize.setCurrentText("Normalise")
+
+        # if (value_nor == "Min-Max"):
+        #     QMessageBox.information(None, "Not imp",
+        #                             "Not implemented yet.",
+        #                             QMessageBox.Ok)
+        # self.comboBox_normalize.setCurrentText("Normalise")
+
+    def on_statistics_changed(self, value_st):
+        file = self.lineEdit_filepath.text()
+
+        if value_st == "Pearson and Spearman's correlation":
+            if file == '  ':
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != '  ':
+                df = pd.read_csv(file)
+                header = self.select_multicolumns()
+                if len(header) > 0:
+                    columnname1 = header[0]
+                    columnname2 = header[1]
+                    data1 = df[columnname1]
+                    data2 = df[columnname2]
+                    sns.lmplot(x=columnname1, y=columnname2, data=df)
+                    plt.title("Pearson's correlation " + columnname1 + " vs " +  columnname2)
+                    plt.show()
+                    spearcorr, _ = spearmanr(data1, data2)
+                    corr, _ = pearsonr(data1, data2)
+                    QMessageBox.information(None, "Pearson and Spearman's correlation",
+                                            "Pearson's correlation between the columns ' " + str(columnname1) + "and " + str(
+                                                columnname2) + "' = " + str(corr) + "\nSpearman's correlation = " + str(spearcorr),
+                                            QMessageBox.Ok)
+
+        if value_st == "Merge 2 files":
+            if file == '  ':
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != '  ':
+                df1 = pd.read_csv(file)
+                header = self.select_multicolumns()
+                if (len(header)) == 0:
+                    QMessageBox.information(None, "Error",
+                                            "No column selected. You must select one column to apply the merge." + "\nNo file to save.",
+                                            QMessageBox.Ok)
+                if (len(header)) == 2:
+                    QMessageBox.information(None, "Error",
+                                            "You must select only one column to apply the merge." + "\nNo file to save.",
+                                            QMessageBox.Ok)
+                if (len(header)) == 1:
+                    fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to apply the merge",
+                                                               "",
+                                                               "CSV Files (*.csv)")
+                    if fileName2:
+                        df2 = pd.read_csv(fileName2)
+                        if header[0] not in df2.columns:
+                            QMessageBox.information(None, "Merge",
+                                                    "Unfortunately the 2 files can not be merged.\nThe column " + str(
+                                                        header[0]) +
+                                                    " does not exist in the 2nd file" + "\nNo file to save.",
+                                                    QMessageBox.Ok)
+                        if header[0] in df2.columns:
+                            t1 = os.path.dirname(file)
+                            file_name1 = os.path.splitext(os.path.basename(file))[0]
+                            dd = pd.merge(df1, df2, on=header[0], how='inner')
+                            QMessageBox.information(None, "Error",
+                                                    "Successfully merged the 2 files on the column " + str(
+                                                        header[0]) + "\nFile saved.",
+                                                    QMessageBox.Ok)
+                            dd.to_csv(t1 + '\\merged_on' + header[0] +   "_" + file_name1 + ".csv", index = None)
+                            self.reloaddata_fromfilepath(t1 + '\\merged_on' + header[0] + "_" + file_name1 + ".csv")
+                            self.lineEdit_filepath.setText(t1 + '\\merged_on' + header[0] +  "_" +file_name1 + ".csv")
+
+        if value_st == "Mean and STD":
+            if file == '  ':
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != '  ':
                 columnname = self.select_column()
                 df = pd.read_csv(file)
                 df['Check_if_String'] = [isinstance(x, str) for x in df[columnname]]
                 if df['Check_if_String'].any() == True:
                     QMessageBox.information(None, "Error",
-                                            "The column " + columnname + " selected contains string.\nPlease select another column.",
+                                            "Categorical variables are not allowed.\nPlease select a numerical variable.",
                                             QMessageBox.Ok)
                 if df['Check_if_String'].any() == False:
                     if df[columnname].isna().any() == True or df[columnname].isnull().any() == True:
-                        buttonReply = QMessageBox.question(None, 'Mean and STD',
+                        buttonReply = QMessageBox.question(None, 'Mean, STD, coefficient of variation',
                                                            "The column " + columnname + " selected contains nan or inf values.\n"
                                                                                         "Press Yes if you want to ignore the inf and nan values.\n"
                                                                                         "Press No to select another column.\n",
@@ -537,19 +582,24 @@ class Ui_Form_loadDataframe_tabs(object):
                         if buttonReply == QMessageBox.Yes:
                             mean_df = df[columnname].mean()
                             std_df = df[columnname].std()
+                            cv = lambda x: np.std(x) / np.mean(x)
+                            var = np.apply_along_axis(cv, axis=0, arr=df[columnname])
+                            idmax = np.argmax(var)
                             QMessageBox.information(None, "Mean and STD ",
-                                                    "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
+                                                    "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df) + "\nCoefficient of variation = " + str(idmax),
                                                     QMessageBox.Ok)
                     if df[columnname].isna().any() == False:
                         mean_df = df[columnname].mean()
                         std_df = df[columnname].std()
-                        QMessageBox.information(None, "Mean and STD ",
-                                                "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
+                        cv = lambda x: np.std(x) / np.mean(x)
+                        var = np.apply_along_axis(cv, axis=0, arr=df[columnname])
+                        idmax = np.argmax(var)
+                        QMessageBox.information(None, "Mean, STD and coefficient of variation",
+                                                "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df) + "\nCoefficient of variation = " + str(idmax),
                                                 QMessageBox.Ok)
-        self.comboBox_statistics.setCurrentText("Statistics")
+            self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Z factor & Robust Z factor":
-            file = self.lineEdit_filepath.text()
             if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
@@ -581,11 +631,11 @@ class Ui_Form_loadDataframe_tabs(object):
                                                         "The Plate is not unique.\nPlease group your data first.",
                                                         QMessageBox.Ok)
         if value_st == "Intersection":
-            if file == "  ":
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file:
+            if file != '  ':
                 fileName1 = file
                 file1 = pd.read_csv(fileName1)
                 header1 = self.select_multicolumns()
@@ -623,11 +673,11 @@ class Ui_Form_loadDataframe_tabs(object):
             self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Union":
-            if file == "  ":
+            if file == '  ':
                 QMessageBox.information(None, "Error ",
                                         "No loaded file.\nPlease load a file first.",
                                         QMessageBox.Ok)
-            if file:
+            if file != '  ':
                 fileName1 = file
                 file1 = pd.read_csv(fileName1)
                 header = self.select_multicolumns()
@@ -1095,7 +1145,7 @@ class Ui_Form_loadDataframe_tabs(object):
                         if len(data_dropped) <= 1:
                             QMessageBox.information(None, "No Outliers",
                                                     "You have no outliers"
-                                                    + " \nNo file to save",
+                                                    +"\nNo file to save",
                                                     QMessageBox.Ok)
                         if len(data_dropped) > 2:
                             t1 = os.path.dirname(file)
@@ -1898,4 +1948,3 @@ if __name__ == "__main__":
     ui.setupUi(Form_loadDataframe_tabs)
     Form_loadDataframe_tabs.show()
     sys.exit(app.exec_())
-

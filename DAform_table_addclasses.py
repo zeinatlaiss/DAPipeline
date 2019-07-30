@@ -242,7 +242,6 @@ class Ui_form_table_addclasses(object):
                         df1 = df
                         if 'Class' not in df1:
                             # if (self.comboBox_addclass.currentText() == "Add class"):
-                            #
                             # else:
                                 # for i in range(len(list_columnselected)):
                             cl_nb = self.ll
