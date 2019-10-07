@@ -442,7 +442,8 @@ class Ui_form_table_label(object):
 
     def on_comboBoxplates_changed(self):
         self.tableWidget_tolabel.clearContents()
-        self.comboBox_descriptors.setCurrentIndex(0)
+        # self.comboBox_descriptors.setCurrentIndex(0)
+        self.on_comboBoxdescriptors_changed()
 
     def on_comboBoxdescriptors_changed(self):
         self.fill_tablewidget()

@@ -1,6 +1,4 @@
-from scipy.stats import pearsonr, spearmanr, variation
-from sklearn.model_selection import train_test_split
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from scipy.stats import pearsonr, spearmanr
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -13,6 +11,7 @@ from DAform_checkboxes_dropfromrows import Ui_Form_CheckBoxes
 from DAform_table_addclasses import Ui_form_table_addclasses
 from DAform_checkboxes_editincolumns import Ui_Form_editcolumns
 from DAform_table_linkfiles import Ui_form_table_linkfiles
+from DAform_listofdescriptorsfromfile_checkboxes import Ui_form_listofdescriptorsfromfile_checkboxes
 from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
@@ -25,8 +24,36 @@ from DApandaswidget import PandasModel
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_Form_loadDataframe_tabs(object):
+    def openwindow_formselectdescriptorstoassociate(self):
+        if self.lineEdit_filepath.text() != '  ':
+            self.window = QtWidgets.QMainWindow()
+            self.ui7 = Ui_form_listofdescriptorsfromfile_checkboxes()
+            self.ui7.setupUi(self.window)
+            self.ui7.lineedit_file_path_tochooselist = self.lineEdit_filepath.text()
+            model = QtGui.QStandardItemModel()
+            df = pd.read_csv(self.lineEdit_filepath.text())
+            entries = df.columns
+            print(entries)
+            self.ui7.listView_selectdesciptors.setModel(model)
+            for i in entries:
+                item = QtGui.QStandardItem(i)
+                model.appendRow(item)
+        # if self.lineEdit_filepath.text() == '  ':
+        #     QMessageBox.information(None, "Error ",
+        #                             "Please load a file first.\nThe file does not exist anymore.",
+        #                             QMessageBox.Ok)
+        # if self.lineEdit_filepath.text() != '  ':
+        #     nnn = len(self.df2_listofcolumns)
+        #     print('3')
+        #     self.ui7.on_add_clicked(self.df2_listofcolumns)
+        #     print(nnn)
+        #     for i in range(nnn):
+        #         print('2')
+        #         self.ui7.listView_selectdesciptors.addItem(self.df2_listofcolumns)
+        #         print('3')
+            self.window.show()
+
     def openwindow_form_table_label(self):
         self.window = QtWidgets.QMainWindow()
         self.ui6 = Ui_form_table_label()
@@ -196,6 +223,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
         self.comboBox_statistics.addItem("")
+        self.comboBox_statistics.addItem("")
         self.comboBox_aggregate = QtWidgets.QComboBox(self.tab_statistics)
         self.comboBox_aggregate.setGeometry(QtCore.QRect(1190, 900, 271, 41))
         self.comboBox_aggregate.setObjectName("comboBox_aggregate")
@@ -255,6 +283,8 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot = QtWidgets.QComboBox(self.tab_plot)
         self.comboBox_plot.setGeometry(QtCore.QRect(1190, 900, 271, 31))
         self.comboBox_plot.setObjectName("comboBox_plot")
+        self.comboBox_plot.addItem("")
+        self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
         self.comboBox_plot.addItem("")
@@ -372,6 +402,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_statistics.setItemText(4, _translate("Form_loadDataframe_tabs", "Intersection"))
         self.comboBox_statistics.setItemText(5, _translate("Form_loadDataframe_tabs", "Union"))
         self.comboBox_statistics.setItemText(6, _translate("Form_loadDataframe_tabs", "Merge 2 files"))
+        self.comboBox_statistics.setItemText(7, _translate("Form_loadDataframe_tabs", "Associate 2 files"))
         self.comboBox_aggregate.setItemText(0, _translate("Form_loadDataframe_tabs", "Aggregate"))
         self.comboBox_aggregate.setItemText(1, _translate("Form_loadDataframe_tabs", "Aggregate - Min Max Mean Sum STD"))
         self.comboBox_aggregate.setItemText(2, _translate("Form_loadDataframe_tabs", "Aggregate grouping by"))
@@ -399,12 +430,13 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_predict.setText(_translate("Form_loadDataframe_tabs", "Predict"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab), _translate("Form_loadDataframe_tabs", "Deep learning"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe_tabs", "Plot"))
-        self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe_tabs", "Correlation"))
-        self.comboBox_plot.setItemText(2, _translate("Form_loadDataframe_tabs", "Swarm plot with error bar"))
-        self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
-        self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Error bar"))
+        self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe_tabs", "Distribution"))
+        self.comboBox_plot.setItemText(2, _translate("Form_loadDataframe_tabs", "Jointplot"))
+        self.comboBox_plot.setItemText(3, _translate("Form_loadDataframe_tabs", "Pearson\'s Correlation"))
+        self.comboBox_plot.setItemText(4, _translate("Form_loadDataframe_tabs", "Swarm plot with error bar"))
+        self.comboBox_plot.setItemText(5, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
+        self.comboBox_plot.setItemText(6, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
-
 
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
@@ -503,20 +535,69 @@ class Ui_Form_loadDataframe_tabs(object):
             if file != '  ':
                 df = pd.read_csv(file)
                 header = self.select_multicolumns()
-                if len(header) > 0:
+                if len(header) == 0 or len(header) == 1:
+                    QMessageBox.information(None, "Error",
+                                            "Please select at least 2 columns.",
+                                            QMessageBox.Ok)
+
+                if len(header) == 2:
                     columnname1 = header[0]
                     columnname2 = header[1]
                     data1 = df[columnname1]
                     data2 = df[columnname2]
                     sns.lmplot(x=columnname1, y=columnname2, data=df)
-                    plt.title("Pearson's correlation " + columnname1 + " vs " +  columnname2)
+                    plt.title("Pearson's correlation " + columnname1 + " vs " + columnname2)
                     plt.show()
                     spearcorr, _ = spearmanr(data1, data2)
                     corr, _ = pearsonr(data1, data2)
                     QMessageBox.information(None, "Pearson and Spearman's correlation",
-                                            "Pearson's correlation between the columns ' " + str(columnname1) + "and " + str(
-                                                columnname2) + "' = " + str(corr) + "\nSpearman's correlation = " + str(spearcorr),
+                                            "Pearson's correlation between the columns ' " + str(
+                                                columnname1) + "and " + str(
+                                                columnname2) + "' = " + str(corr) + "\nSpearman's correlation = " + str(
+                                                spearcorr),
                                             QMessageBox.Ok)
+
+        if value_st == "Associate 2 files":
+            if file == '  ':
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != '  ':
+                df1 = pd.read_csv(file)
+                header = self.select_multicolumns()
+                if (len(header)) == 0:
+                    QMessageBox.information(None, "Error",
+                                            "No column selected. You must select one column to apply the merge." + "\nNo file to save.",
+                                            QMessageBox.Ok)
+                if (len(header)) == 2:
+                    QMessageBox.information(None, "Error",
+                                            "You must select only one column to apply the merge." + "\nNo file to save.",
+                                            QMessageBox.Ok)
+                if (len(header)) == 1:
+                    fileName2, _ = QFileDialog.getOpenFileName(None, "Load 2nd file to apply the merge",
+                                                               "",
+                                                               "CSV Files (*.csv)")
+                    if fileName2:
+                        df2 = pd.read_csv(fileName2)
+                        self.df2_listofcolumns = df2.columns
+                        # if header[0] in df2.columns:
+                        #     t1 = os.path.dirname(file)
+                        #     file_name1 = os.path.splitext(os.path.basename(file))[0]
+                        #     QMessageBox.information(None, "Error",
+                        #                             "Successfully merged the 2 files on the column " + str(
+                        #                                 header[0]) + "\nFile saved.",
+                        #                             QMessageBox.Ok)
+                        #     dd.to_csv(t1 + '\\Associated_on' + header[0] + "_" + file_name1 + ".csv", index=None)
+                        # self.reloaddata_fromfilepath(t1 + '\\Associated_on' + header[0] + "_" + file_name1 + ".csv")
+                        # self.lineEdit_filepath.setText(
+                        # t1 + '\\Associated_on' + header[0] + "_" + file_name1 + ".csv")
+
+                        # if header[0] not in df2.columns:
+                        #     header_new = self.select_multicolumns()
+                        #     df1 = pd.read_csv(file, index_col=[header[0]])
+                        #     df2 = pd.read_csv(fileName2, index_col=[header_new[0]])
+                        self.openwindow_formselectdescriptorstoassociate()
+            self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Merge 2 files":
             if file == '  ':
@@ -554,9 +635,9 @@ class Ui_Form_loadDataframe_tabs(object):
                                                     "Successfully merged the 2 files on the column " + str(
                                                         header[0]) + "\nFile saved.",
                                                     QMessageBox.Ok)
-                            dd.to_csv(t1 + '\\merged_on' + header[0] +   "_" + file_name1 + ".csv", index = None)
+                            dd.to_csv(t1 + '\\merged_on' + header[0] + "_" + file_name1 + ".csv", index=None)
                             self.reloaddata_fromfilepath(t1 + '\\merged_on' + header[0] + "_" + file_name1 + ".csv")
-                            self.lineEdit_filepath.setText(t1 + '\\merged_on' + header[0] +  "_" +file_name1 + ".csv")
+                            self.lineEdit_filepath.setText(t1 + '\\merged_on' + header[0] + "_" + file_name1 + ".csv")
 
         if value_st == "Mean and STD":
             if file == '  ':
@@ -582,20 +663,17 @@ class Ui_Form_loadDataframe_tabs(object):
                         if buttonReply == QMessageBox.Yes:
                             mean_df = df[columnname].mean()
                             std_df = df[columnname].std()
-                            cv = lambda x: np.std(x) / np.mean(x)
-                            var = np.apply_along_axis(cv, axis=0, arr=df[columnname])
-                            idmax = np.argmax(var)
                             QMessageBox.information(None, "Mean and STD ",
-                                                    "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df) + "\nCoefficient of variation = " + str(idmax),
+                                                    "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
                                                     QMessageBox.Ok)
                     if df[columnname].isna().any() == False:
                         mean_df = df[columnname].mean()
                         std_df = df[columnname].std()
-                        cv = lambda x: np.std(x) / np.mean(x)
-                        var = np.apply_along_axis(cv, axis=0, arr=df[columnname])
-                        idmax = np.argmax(var)
+                        # cv = lambda x: np.std(x) / np.mean(x)
+                        # var = np.apply_along_axis(cv, axis=0, arr=df[columnname])
+                        # idmax = np.argmax(var)
                         QMessageBox.information(None, "Mean, STD and coefficient of variation",
-                                                "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df) + "\nCoefficient of variation = " + str(idmax),
+                                                "Mean = " + " " + str(mean_df) + " \n" + "STD = " + str(std_df),
                                                 QMessageBox.Ok)
             self.comboBox_statistics.setCurrentText("Statistics")
 
@@ -1070,9 +1148,11 @@ class Ui_Form_loadDataframe_tabs(object):
                 columnname = self.select_column()
                 print(columnname)
                 df_toremoveout = pd.read_csv(file)
-                if df_toremoveout[columnname].dtypes == str or df_toremoveout[columnname].dtypes == bool or df_toremoveout[columnname].dtypes == object:
+                if df_toremoveout[columnname].dtypes == str or df_toremoveout[columnname].dtypes == bool or \
+                        df_toremoveout[columnname].dtypes == object:
                     print('fmjfkkd')
-                if df_toremoveout[columnname].dtypes != str or df_toremoveout[columnname].dtypes != bool or df_toremoveout[columnname].dtypes != object:
+                if df_toremoveout[columnname].dtypes != str or df_toremoveout[columnname].dtypes != bool or \
+                        df_toremoveout[columnname].dtypes != object:
                     if columnname == 'Outliers':
                         QMessageBox.information(None, "Error ",
                                                 "Please select a column to remove the outliers\nTry again. No file to save",
@@ -1145,7 +1225,7 @@ class Ui_Form_loadDataframe_tabs(object):
                         if len(data_dropped) <= 1:
                             QMessageBox.information(None, "No Outliers",
                                                     "You have no outliers"
-                                                    +"\nNo file to save",
+                                                    + "\nNo file to save",
                                                     QMessageBox.Ok)
                         if len(data_dropped) > 2:
                             t1 = os.path.dirname(file)
@@ -1461,6 +1541,62 @@ class Ui_Form_loadDataframe_tabs(object):
 
             self.comboBox_plot.setCurrentText("Plot")
 
+        if (vl == "Jointplot"):
+            file = self.lineEdit_filepath.text()
+            if file == "  ":
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != "  ":
+                header = self.select_multicolumns()
+                df = pd.read_csv(file)
+                if len(header) < 2 or len(header) >2:
+                    QMessageBox.information(None, "Error",
+                                            "Please select at least 2 columns to plot.",
+                                            QMessageBox.Ok)
+                if len(header) == 2:
+                    columnname1 = header[0]
+                    columnname2 = header[1]
+                    df['Check_if_String1'] = [isinstance(x, str) for x in df[columnname1]]
+                    df['Check_if_String2'] = [isinstance(x, str) for x in df[columnname2]]
+                    if df['Check_if_String1'].any() == True or df['Check_if_String2'].any() == True:
+                        QMessageBox.information(None, "Error",
+                                                "Categorical variables are not allowed.\nPlease select numerical variables only to plot.",
+                                                QMessageBox.Ok)
+                    if df['Check_if_String1'].any() == False:
+                        if df['Check_if_String2'].any() == False:
+                            sns.jointplot(x=columnname1, y=columnname2, data=df)
+                            plt.show()
+                            plt.title("Jointplot distribution of " + columnname1 + " vs " + columnname2)
+
+        if (vl == "Pearson's Correlation"):
+            file = self.lineEdit_filepath.text()
+            if file == "  ":
+                QMessageBox.information(None, "Error ",
+                                        "No loaded file.\nPlease load a file first.",
+                                        QMessageBox.Ok)
+            if file != "  ":
+                header = self.select_multicolumns()
+                df = pd.read_csv(file)
+                if len(header) < 2 or len(header) > 2:
+                    QMessageBox.information(None, "Error",
+                                            "Please select only 2 columns to plot.",
+                                            QMessageBox.Ok)
+                if len(header) == 2:
+                    columnname1 = header[0]
+                    columnname2 = header[1]
+                    df['Check_if_String1'] = [isinstance(x, str) for x in df[columnname1]]
+                    df['Check_if_String2'] = [isinstance(x, str) for x in df[columnname2]]
+                    if df['Check_if_String1'].any() == True or df['Check_if_String2'].any() == True:
+                        QMessageBox.information(None, "Error",
+                                                "Categorical variables are not allowed.\nPlease select numerical variables only to plot.",
+                                                QMessageBox.Ok)
+                    if df['Check_if_String1'].any() == False:
+                        if df['Check_if_String2'].any() == False:
+                            sns.lmplot(x=columnname1, y=columnname2, data=df)
+                            plt.title("Pearson's correlation " + columnname1 + " vs " + columnname2)
+                            plt.show()
+
         if (vl == 'Swarm plot without error bar'):
             file = self.lineEdit_filepath.text()
             if file == "  ":
@@ -1471,13 +1607,9 @@ class Ui_Form_loadDataframe_tabs(object):
                 header = self.select_multicolumns()
                 df_1 = pd.read_csv(file)
 
-                if len(header) < 2:
+                if len(header) < 2 or len(header) > 5:
                     QMessageBox.information(None, "Error",
-                                            "Please select at least 3 columns to plot.",
-                                            QMessageBox.Ok)
-                if len(header) > 5:
-                    QMessageBox.information(None, "Error",
-                                            "Please select at least 3 columns or 5 columns to plot.",
+                                            "Please select at least 5 columns to plot.",
                                             QMessageBox.Ok)
                 if len(header) == 5:
                     header_xaxis = header[0]
@@ -1777,7 +1909,9 @@ class Ui_Form_loadDataframe_tabs(object):
                                             QMessageBox.Ok)
                 if (len(df[header]) - nb_unique_header > 0):
                     QMessageBox.information(None, "Number of duplicates",
-                                            "You have no duplicated values.\n" + str(nb_unique_header) + " unique values in column" + str(header) + '\n' + "",
+                                            "You have no duplicated values.\n" + str(
+                                                nb_unique_header) + " unique values in column" + str(
+                                                header) + '\n' + "",
                                             QMessageBox.Ok)
             self.comboBox_duplicates.setCurrentText('Duplicates')
 
