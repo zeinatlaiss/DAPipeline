@@ -1,3 +1,4 @@
+import threading
 import pandas as pd
 from skimage import io
 import os
@@ -7,11 +8,13 @@ import string
 
 # Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_table_label.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_form_table_label(object):
     def setupUi(self, form_table_label):
@@ -100,6 +103,9 @@ class Ui_form_table_label(object):
         self.lineEdit_filepathtoload.setText("")
         self.lineEdit_filepathtoload.setFrame(False)
         self.lineEdit_filepathtoload.setObjectName("lineEdit_filepathtoload")
+        self.lineEdit_class = QtWidgets.QLineEdit(form_table_label)
+        self.lineEdit_class.setGeometry(QtCore.QRect(20, 170, 121, 21))
+        self.lineEdit_class.setObjectName("lineEdit_class")
 
         cols = 24
         rows = 16
@@ -115,12 +121,11 @@ class Ui_form_table_label(object):
 
         self.pushButton_selectfolder.clicked.connect(self.on_selectfolder_clicked)
         self.pushButton_labelallplates.clicked.connect(self.on_labelallplates_clicked)
-        self.pushButton_apply.clicked.connect(self.on_apply_clicked)
         self.comboBox_descriptors.currentTextChanged.connect(self.on_comboBoxdescriptors_changed)
         self.comboBox_plates.currentTextChanged.connect(self.on_comboBoxplates_changed)
         self.pushButton_selectfromfile.clicked.connect(self.on_selectfile_clicked)
-        self.pushButton_labelallplates.clicked.connect(self.on_labelallplates_clicked)
-
+        # self.pushButton_labelallplates.clicked.connect(self.on_labelallplates_clicked)
+        # self.pushButton_apply.clicked.connect(self.on_apply_clicked)
         self.retranslateUi(form_table_label)
         QtCore.QMetaObject.connectSlotsByName(form_table_label)
 
@@ -144,6 +149,8 @@ class Ui_form_table_label(object):
         self.pushButton_apply.setText(_translate("form_table_label", "Apply"))
         self.pushButton_display.setText(_translate("form_table_label", "Display"))
         self.pushButton_selectfromfile.setText(_translate("form_table_label", "Select from file"))
+        self.lineEdit_class.setText(_translate("form_table_label", "Class"))
+
 
     def loadFile_label(self):
         print('Load file')
@@ -193,7 +200,7 @@ class Ui_form_table_label(object):
                         self.r_toloop = r
                         self.d_toloop = d
                         files.append(os.path.join(r, file))
-                        print(len(files))
+                        # print(len(files))
                     # self.filespath = files
                 # rr = r.split("\\")[-1]
                 # roots.append(rr)
@@ -201,7 +208,7 @@ class Ui_form_table_label(object):
                     if dir_in:
                         print(dir_in)
                         dirs.append(dir_in)
-                    print(dirs)
+                    # print(dirs)
 
         # if self.d_toloop:
         #     list_plates = list(self.d_toloop)
@@ -209,7 +216,6 @@ class Ui_form_table_label(object):
         #     self.lineEdit_nbrplates.setText(str(len(list_plates)) + ' plates')
 
     def select_multicolumns(self):
-        print('multicol')
         list_col = []
         totalColumns = self.tableWidget_tolabel.selectionModel().selectedColumns()
         for idx in totalColumns:
@@ -218,103 +224,106 @@ class Ui_form_table_label(object):
             list_col.append(column_name)
         return list_col
 
-    def on_apply_clicked(self):
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
-                self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            QMessageBox.information(None, "Error",
-                                    "Please check at least one of the above cases.",
-                                    QMessageBox.Ok)
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
-                self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('0')
+    # def on_apply_clicked(self):
+    #     self.select_multicolumns()
+    #     print('1')
 
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and not \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('1')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('2')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('3')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('4')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and not \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('5')
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('6')
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('7')
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('8')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('29')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('9')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('28')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('17')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('18')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('19')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('20')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('21')
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('22')
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('25')
-        if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('23')
-        if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('26')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('10')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('11')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('12')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('24')
-        if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('24')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('27')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
-            print('13')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('15')
-        if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
-                        not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
-            print('16')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
+        #         self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     QMessageBox.information(None, "Error",
+        #                             "Please check at least one of the above cases.",
+        #                             QMessageBox.Ok)
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
+        #         self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('0')
+        #
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and not \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('1')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('2')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('3')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('4')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and not \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('5')
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('6')
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('7')
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and not \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('8')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('29')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('9')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('28')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('17')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('18')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('19')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('20')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('21')
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('22')
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('25')
+        # if self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('23')
+        # if self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('26')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('10')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('11')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('12')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('24')
+        # if not self.checkBox_channel0.isChecked() and self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('24')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('27')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and not self.checkBox_channel4.isChecked():
+        #     print('13')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 self.checkBox_channel2.isChecked() and not self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('15')
+        # if not self.checkBox_channel0.isChecked() and not self.checkBox_channel1.isChecked() and \
+        #                 not self.checkBox_channel2.isChecked() and self.checkBox_channel3.isChecked() and self.checkBox_channel4.isChecked():
+        #     print('16')
 
     def get_filespath(self):
         print('get filepath')
@@ -459,8 +468,6 @@ class Ui_form_table_label(object):
             return dict_well
 
     def fill_tablewidget(self):
-        cols = 24
-        rows = 16
         ll1 = list(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'])
         ll2 = list(
             ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18',
@@ -477,7 +484,6 @@ class Ui_form_table_label(object):
                         value = dict_table_well[well_from_list]
                         item = QTableWidgetItem(str(value))
                         self.tableWidget_tolabel.setItem(row, col, item)
-
 
     def on_selectfile_clicked(self):
         self.tableWidget_tolabel.clearContents()
@@ -498,8 +504,6 @@ class Ui_form_table_label(object):
                                             QMessageBox.Ok)
                 if 'Well' in df:
                     df_rows = df.count()
-                    cols = 24
-                    rows = 16
                     l = list(string.ascii_uppercase)
                     number_of_rows = self.tableWidget_tolabel.rowCount()
                     number_of_columns = self.tableWidget_tolabel.columnCount()
@@ -514,6 +518,57 @@ class Ui_form_table_label(object):
                     print(list_descriptors)
                     self.comboBox_descriptors.addItems(list_descriptors)
 
+    # def loadFile_label_from_datfiles(self):
+    #     for file_name in list_files:
+    #         if 'well' not in file_name:
+    #             QMessageBox.information(None, "Error ",
+    #                                     "well does not exist.Please parse your files.\nTry again.",
+    #                                     QMessageBox.Ok)
+    #         if 'Well' in file_name:
+    #             l = list(string.ascii_uppercase)
+    #             number_of_rows = self.tableWidget_tolabel.rowCount()
+    #             number_of_columns = self.tableWidget_tolabel.columnCount()
+    #             # if 'Plate' in df.columns:
+    #             #     list_plates = list(df['Plate'].drop_duplicates(keep="first"))
+    #             #     nbr_rows = len(df)
+    #             # self.comboBox_plates.addItems((list_plates))
+    #             # self.lineEdit_nbrplates.setText(str(len(list_plates)) + ' plates')
+    #             # self.comboBox_featuresfromdataframe.addItem('Descriptor', 'ss')
+    #             # self.comboBox_featuresfromdataframe.addItems(list_descriptors)
+
+    def on_apply_clicked(self):
+        print('on apply clicked')
+        self.textedit_value = self.lineEdit_labelname.text()
+        self.class_value = self.lineEdit_class.text()
+        return self.class_value, self.textedit_value
+        # if len(list_columnselected) == 0:
+        #     QMessageBox.information(None, "Select columns",
+        #                             "Please select columns from this file.",
+        #                             QMessageBox.Ok)
+        #     if len(list_columnselected) > 0:
+        #         return list_columnselected
+         # thread_select = threading.Thread(target = self.select_multicolumns)
+        # thread_select.start()
+        # if not self.select_multicolumns():
+        #     print('The selection not finished yet')
+        # if self.select_multicolumns():
+        #     print('list of columns in apply clicked', list_columnselected)
+        #     if len(list_columnselected) > 0:
+        #         self.labelname = textedit_value
+        #         self.l_cols = list_columnselected
+        #         self.classnb = class_value
+        #         return self.l_cols, self.labelname
+
+    # def add_label_infilename(self):
+    #     for i in self.l_wells:
+    #         well_nb = int(i[1:3])
+    #         self.on_comboBoxplatesdatfiles_changed()
+    #         self.lcols = self.ui.l_cols
+    #         self.labelnames = self.ui.labelname
+    #         if well_nb in self.lcols:
+    #             os.rename('D:\PYTHON CODE\DAPipeline\FinalFiles\\' + self.platename+'\\'+'_well_'+ i + '.dat',
+    #                       'D:\PYTHON CODE\DAPipeline\FinalFiles\\'+ self.platename+'\\'+'_well_'+ self.wellname + '_label_'+ self.ui.labelname + '.dat')
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -522,4 +577,3 @@ if __name__ == "__main__":
     ui.setupUi(form_table_label)
     form_table_label.show()
     sys.exit(app.exec_())
-
