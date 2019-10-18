@@ -85,7 +85,7 @@ class Ui_Form_CheckBoxes(object):
         self.lineEdit_valuetodrop.setObjectName("lineEdit_valuetodrop")
 
         self.pushButton_apply.clicked.connect(self.on_apply_clicked)
-
+        print('1')
         self.retranslateUi(Form_CheckBoxes)
         QtCore.QMetaObject.connectSlotsByName(Form_CheckBoxes)
 

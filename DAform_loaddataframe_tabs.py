@@ -12,10 +12,11 @@ from DAform_table_addclasses import Ui_form_table_addclasses
 from DAform_checkboxes_editincolumns import Ui_Form_editcolumns
 from DAform_table_linkfiles import Ui_form_table_linkfiles
 from DAform_listofdescriptorsfromfile_checkboxes import Ui_form_listofdescriptorsfromfile_checkboxes
+from DAform_seletfilesdeeplearning_radiobuttons import Ui_Form_selectfiles
 from DApandaswidget import PandasModel
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\Zeina\Documents\QT_Pandas\form_loaddataframe_tabs.ui'
+# Form implementation generated from reading ui file 'form_loaddataframe_tabs.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -25,6 +26,12 @@ from DApandaswidget import PandasModel
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form_loadDataframe_tabs(object):
+    def openwindow_form_seletfilesdeeplearning_radiobuttons(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui8 = Ui_Form_selectfiles()
+        self.ui8.setupUi(self.window)
+        self.window.show()
+
     def openwindow_formselectdescriptorstoassociate(self):
         if self.lineEdit_filepath.text() != '  ':
             self.window = QtWidgets.QMainWindow()
@@ -34,25 +41,10 @@ class Ui_Form_loadDataframe_tabs(object):
             model = QtGui.QStandardItemModel()
             df = pd.read_csv(self.lineEdit_filepath.text())
             entries = df.columns
-            print(entries)
-            self.ui7.listView_selectdesciptors.setModel(model)
             for i in entries:
                 item = QtGui.QStandardItem(i)
-                model.appendRow(item)
-        # if self.lineEdit_filepath.text() == '  ':
-        #     QMessageBox.information(None, "Error ",
-        #                             "Please load a file first.\nThe file does not exist anymore.",
-        #                             QMessageBox.Ok)
-        # if self.lineEdit_filepath.text() != '  ':
-        #     nnn = len(self.df2_listofcolumns)
-        #     print('3')
-        #     self.ui7.on_add_clicked(self.df2_listofcolumns)
-        #     print(nnn)
-        #     for i in range(nnn):
-        #         print('2')
-        #         self.ui7.listView_selectdesciptors.addItem(self.df2_listofcolumns)
-        #         print('3')
-            self.window.show()
+                self.ui7.listWidget_selectdesciptors.addItem(item.text())
+        self.window.show()
 
     def openwindow_form_table_label(self):
         self.window = QtWidgets.QMainWindow()
@@ -184,6 +176,9 @@ class Ui_Form_loadDataframe_tabs(object):
 "font: 87 8pt \"Arial Black\";\n"
 "")
         self.pushButton_loadfile.setObjectName("pushButton_loadfile")
+        self.pushButton_exitmain = QtWidgets.QPushButton(self.tab_file)
+        self.pushButton_exitmain.setGeometry(QtCore.QRect(1350, 950, 111, 31))
+        self.pushButton_exitmain.setObjectName("pushButton_exitmain")
         self.tabWidget_filestatistics.addTab(self.tab_file, "")
         self.tab_edit = QtWidgets.QWidget()
         self.tab_edit.setObjectName("tab_edit")
@@ -277,6 +272,9 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_predict = QtWidgets.QPushButton(self.tab)
         self.pushButton_predict.setGeometry(QtCore.QRect(1390, 900, 80, 31))
         self.pushButton_predict.setObjectName("pushButton_predict")
+        self.pushButton_selectfiles = QtWidgets.QPushButton(self.tab)
+        self.pushButton_selectfiles.setGeometry(QtCore.QRect(990, 900, 80, 31))
+        self.pushButton_selectfiles.setObjectName("pushButton_selectfiles")
         self.tabWidget_filestatistics.addTab(self.tab, "")
         self.tab_plot = QtWidgets.QWidget()
         self.tab_plot.setObjectName("tab_plot")
@@ -370,6 +368,10 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_normalize.currentTextChanged.connect(self.on_comboboxnormalize_changed)
         self.comboBox_plot.currentTextChanged.connect(self.on_plot_changed)
         self.comboBox_aggregate.currentTextChanged.connect(self.on_comboboxaggregate_changed)
+        self.pushButton_exitmain.clicked.connect(self.on_exit_clicked)
+        self.pushButton_selectfiles.clicked.connect(self.openwindow_form_seletfilesdeeplearning_radiobuttons)
+
+        app.aboutToQuit.connect(self.closeEvent)
 
         self.retranslateUi(Form_loadDataframe_tabs)
         self.tabWidget_filestatistics.setCurrentIndex(0)
@@ -382,6 +384,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_onlinkfiles.setText(_translate("Form_loadDataframe_tabs", "Link 2 files"))
         self.pushButton_concatfiles.setText(_translate("Form_loadDataframe_tabs", "Concatenate Files"))
         self.pushButton_loadfile.setText(_translate("Form_loadDataframe_tabs", "Load File"))
+        self.pushButton_exitmain.setText(_translate("Form_loadDataframe_tabs", "Exit"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_file), _translate("Form_loadDataframe_tabs", "File"))
         self.pushButton_editinrows.setText(_translate("Form_loadDataframe_tabs", "Edit in rows"))
         self.pushButton_editincolumns.setText(_translate("Form_loadDataframe_tabs", "Edit in columns"))
@@ -428,6 +431,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.pushButton_train.setText(_translate("Form_loadDataframe_tabs", "Train"))
         self.pushButton_validate.setText(_translate("Form_loadDataframe_tabs", "Validate"))
         self.pushButton_predict.setText(_translate("Form_loadDataframe_tabs", "Predict"))
+        self.pushButton_selectfiles.setText(_translate("Form_loadDataframe_tabs", "Select files"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab), _translate("Form_loadDataframe_tabs", "Deep learning"))
         self.comboBox_plot.setItemText(0, _translate("Form_loadDataframe_tabs", "Plot"))
         self.comboBox_plot.setItemText(1, _translate("Form_loadDataframe_tabs", "Distribution"))
@@ -437,6 +441,7 @@ class Ui_Form_loadDataframe_tabs(object):
         self.comboBox_plot.setItemText(5, _translate("Form_loadDataframe_tabs", "Swarm plot without error bar"))
         self.comboBox_plot.setItemText(6, _translate("Form_loadDataframe_tabs", "Error bar"))
         self.tabWidget_filestatistics.setTabText(self.tabWidget_filestatistics.indexOf(self.tab_plot), _translate("Form_loadDataframe_tabs", "Plot"))
+
 
     def get_linedit(self):
         line_edit_main = self.lineEdit_filepath.text()
@@ -580,6 +585,7 @@ class Ui_Form_loadDataframe_tabs(object):
                     if fileName2:
                         df2 = pd.read_csv(fileName2)
                         self.df2_listofcolumns = df2.columns
+                        if header[0] in df2.columns:
                         # if header[0] in df2.columns:
                         #     t1 = os.path.dirname(file)
                         #     file_name1 = os.path.splitext(os.path.basename(file))[0]
@@ -596,7 +602,7 @@ class Ui_Form_loadDataframe_tabs(object):
                         #     header_new = self.select_multicolumns()
                         #     df1 = pd.read_csv(file, index_col=[header[0]])
                         #     df2 = pd.read_csv(fileName2, index_col=[header_new[0]])
-                        self.openwindow_formselectdescriptorstoassociate()
+                            self.openwindow_formselectdescriptorstoassociate()
             self.comboBox_statistics.setCurrentText("Statistics")
 
         if value_st == "Merge 2 files":
@@ -2073,6 +2079,28 @@ class Ui_Form_loadDataframe_tabs(object):
 
     def on_predict_clicked(self):
         print('1')
+        # model_learned = toy_resnet_model((256, 256, 3), 1)
+        # model_learned.load_weights(model_weight)
+        # list_files = os.listdir(path)
+        # for files in list_files:
+        #     dat = read_file(path + files)
+        #     well = files.split('_')[-1]
+        #     data = np.asarray(dat)
+        #     # val2 = np_utils.to_categorical(val2,2)
+        #     val2 = np.ones(data.shape[0])
+        #     # val2 = np.asarray(val2, dtype=int)
+        #     pred_array = model_learned.predict(data, 256, verbose=1)
+        #     # print(pred_array[0:20])
+        #     # classes = pred_array.argmax(axis=-1)
+        #     classes = np.rint(pred_array)
+        #     # print(classes[0:20])
+        #     print(accuracy_score(val2, classes))
+
+    def on_exit_clicked(self):
+        QtWidgets.qApp.quit()
+
+    def closeEvent(self):
+        QtWidgets.qApp.quit()
 
 if __name__ == "__main__":
     import sys
