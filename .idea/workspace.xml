@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="18fe3c58-5635-4a9a-9e43-b44085bc9106" name="Default Changelist" comment="commit DAform_loaddataframe_tabs">
+    <list default="true" id="18fe3c58-5635-4a9a-9e43-b44085bc9106" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAform_seletfilesdeeplearning_radiobuttons.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAform_seletfilesdeeplearning_radiobuttons.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAform_table_addclasses.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAform_table_addclasses.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DAform_table_label.py" beforeDir="false" afterPath="$PROJECT_DIR$/DAform_table_label.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,38 +38,38 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="155" />
+          <entry key="py" value="164" />
           <entry key="pyi" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="155" />
+          <entry key="Python" value="164" />
           <entry key="PythonStub" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="23" />
-          <entry key="py" value="39199" />
+          <entry key="py" value="39396" />
           <entry key="txt" value="126" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="126" />
-          <entry key="Python" value="39222" />
+          <entry key="Python" value="39419" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DAform_table_label.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="579" lean-forward="true" selection-start-line="579" selection-end-line="579" />
+            <state relative-caret-position="631">
+              <caret line="129" selection-start-line="110" selection-end-line="129" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -76,19 +78,46 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/CPD_Link.py">
+        <entry file="file://$PROJECT_DIR$/DAform_loaddataframe_tabs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
+            <state relative-caret-position="45">
+              <caret line="1322" lean-forward="true" selection-start-line="1322" selection-end-line="1322" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../DAPipeline1/DAform_table_label.py">
+        <entry file="file://$PROJECT_DIR$/DAform_seletfilesdeeplearning_radiobuttons.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="511" lean-forward="true" selection-end-line="579" />
+            <state>
+              <caret line="42" column="5" lean-forward="true" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DAform_table_addclasses.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/form_table_label.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="20" column="58" lean-forward="true" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -107,27 +136,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>descripto</find>
-      <find>qlistwi</find>
-      <find>item</find>
-      <find>additem</find>
-      <find>open</find>
-      <find>lisQListWidgetItem</find>
-      <find>dafor</find>
-      <find>associ</find>
-      <find>lineed</find>
-      <find>lineedit_file_path_to_edit</find>
-      <find>sele</find>
-      <find>selected</find>
-      <find>select</find>
-      <find>listView_selecteddescriptors</find>
-      <find>listView_selectdesciptors</find>
-      <find>path</find>
-      <find>concat</find>
-      <find>os.path</find>
-      <find>label plate bu</find>
-      <find>pushButton_labelplatebyplate</find>
-      <find>end selec</find>
       <find>reload</find>
       <find>on_com</find>
       <find>print</find>
@@ -137,6 +145,27 @@
       <find>mai</find>
       <find>main</find>
       <find>factorial_function</find>
+      <find>label&quot;</find>
+      <find>tablewi</find>
+      <find>select_multi</find>
+      <find>column</find>
+      <find>select_mult</find>
+      <find>parall</find>
+      <find>paral</find>
+      <find>parallel</find>
+      <find>apply</find>
+      <find>select_mul</find>
+      <find>select_mu</find>
+      <find>selec</find>
+      <find>select</find>
+      <find>on_selectfiles_clicked</find>
+      <find>fill_tablewidget_fromdatfiles</find>
+      <find>on_selectfile_clicked</find>
+      <find>on_apply_clicked</find>
+      <find>tableWidget_tolabel</find>
+      <find>openwindow_form_tablelabel</find>
+      <find>select_multicolumns</find>
+      <find>da870190cb6e1e694b5a8f419662f80d_Calcium_thr_110</find>
     </findStrings>
     <replaceStrings>
       <replace>column_edited_</replace>
@@ -194,7 +223,6 @@
         <option value="$USER_HOME$/Documents/QT_Pandas/form_loaddataframe_tabs.py" />
         <option value="$PROJECT_DIR$/form_checkboxes_editincolumns.py" />
         <option value="$PROJECT_DIR$/form_checkboxes_dropfromrows.py" />
-        <option value="$PROJECT_DIR$/form_table_label.py" />
         <option value="$PROJECT_DIR$/us_census.py" />
         <option value="$PROJECT_DIR$/../Keras_Network_layers/test123.py" />
         <option value="$PROJECT_DIR$/form_loaddataframe_tabs.py" />
@@ -203,18 +231,18 @@
         <option value="$PROJECT_DIR$/DAform_checkboxes_editincolumns.py" />
         <option value="$PROJECT_DIR$/DAform_checkboxes_traindl.py" />
         <option value="$PROJECT_DIR$/DAform_loaddataframe_tabs.py" />
-        <option value="$PROJECT_DIR$/DAform_table_addclasses.py" />
         <option value="$PROJECT_DIR$/DAform_table_linkfiles.py" />
         <option value="$PROJECT_DIR$/DAform_checkboxes_dropfromrows.py" />
         <option value="$PROJECT_DIR$/DAform_listofdescriptorsfromfile_checkboxes.py" />
         <option value="$PROJECT_DIR$/DAform_table_label.py" />
+        <option value="$PROJECT_DIR$/DAform_table_addclasses.py" />
+        <option value="$PROJECT_DIR$/DAform_seletfilesdeeplearning_radiobuttons.py" />
+        <option value="$PROJECT_DIR$/form_table_label.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1920" />
     <option name="height" value="1186" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -284,49 +312,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.DAform_listofdescriptorsfromfile_checkboxes">
-    <configuration name="CPD_Link" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="DAPipeline" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../Keras_Network_layers" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../Keras_Network_layers/CPD_Link.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="DAform_checkboxes_traindl" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="DAPipeline" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../DAPipeline1" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../DAPipeline1/DAform_checkboxes_traindl.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.form_table_label">
     <configuration name="DAform_listofdescriptorsfromfile_checkboxes" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DAPipeline" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -369,6 +355,48 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="DAform_seletfilesdeeplearning_radiobuttons" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DAPipeline" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DAform_seletfilesdeeplearning_radiobuttons.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="DAform_table_addclasses" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="DAPipeline" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DAform_table_addclasses.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="DAform_table_label" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DAPipeline" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -390,7 +418,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="DAform_table_linkfiles" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="form_table_label" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DAPipeline" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -402,7 +430,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DAform_table_linkfiles.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/form_table_label.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -436,18 +464,18 @@
       <item itemvalue="Python.DAform_loaddataframe_tabs" />
       <item itemvalue="Python.test123" />
       <item itemvalue="Python.DAform_table_label" />
-      <item itemvalue="Python.DAform_table_linkfiles" />
-      <item itemvalue="Python.CPD_Link" />
       <item itemvalue="Python.DAform_listofdescriptorsfromfile_checkboxes" />
-      <item itemvalue="Python.DAform_checkboxes_traindl" />
+      <item itemvalue="Python.DAform_seletfilesdeeplearning_radiobuttons" />
+      <item itemvalue="Python.DAform_table_addclasses" />
+      <item itemvalue="Python.form_table_label" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.DAform_listofdescriptorsfromfile_checkboxes" />
-        <item itemvalue="Python.DAform_checkboxes_traindl" />
+        <item itemvalue="Python.form_table_label" />
+        <item itemvalue="Python.DAform_seletfilesdeeplearning_radiobuttons" />
+        <item itemvalue="Python.DAform_table_addclasses" />
         <item itemvalue="Python.DAform_table_label" />
-        <item itemvalue="Python.CPD_Link" />
-        <item itemvalue="Python.DAform_table_linkfiles" />
+        <item itemvalue="Python.DAform_listofdescriptorsfromfile_checkboxes" />
       </list>
     </recent_temporary>
   </component>
@@ -574,7 +602,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571394493327</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="commit DAform_loaddataframe_tabs">
+      <created>1571394585493</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1571394585493</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TodoView">
@@ -587,20 +622,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1186" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1186" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4934334" visible="true" weight="0.21285564" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4934334" visible="true" weight="0.24815595" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25184405" />
       <window_info id="Favorites" order="2" sideWeight="0.5065666" side_tool="true" weight="0.23081024" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32911393" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7639621" visible="true" weight="0.40494296" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7639621" visible="true" weight="0.32224333" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.7265543" weight="0.49429658" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49947312" weight="0.32794678" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.23603794" side_tool="true" visible="true" weight="0.40494296" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.23603794" side_tool="true" visible="true" weight="0.32224333" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3298479" />
       <window_info anchor="bottom" id="Python Console" order="9" sideWeight="0.49683878" weight="0.48003802" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49947312" weight="0.32794678" />
@@ -625,14 +660,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="commit DAform_loaddataframe_tabs" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/seaborn/relational.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="141" selection-start-line="141" selection-end-line="141" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://U:/DCM_DATA/5plates_DL/analyze_DL_predictions__2.py" />
     <entry file="file://$USER_HOME$/Documents/QT_Pandas/form_table_linkfiles.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -683,7 +710,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/form_table_label.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/869442308/PyQt5/QtWidgets/QMessageBox.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -823,16 +849,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAform_loaddataframe_tabs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="2090" column="17" lean-forward="true" selection-start-line="2090" selection-start-column="17" selection-end-line="2090" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../DAPipeline1/DAform_table_addclasses.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -863,16 +879,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAform_checkboxes_dropfromrows.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="407" selection-start-line="407" selection-end-line="407" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../DAPipeline1/DAform_checkboxes_dropfromrows.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -891,23 +897,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="58" lean-forward="true" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/CPD_Link.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="25" lean-forward="true" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAform_table_addclasses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="475" selection-start-line="475" selection-end-line="475" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -931,10 +920,77 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../Keras_Network_layers/CPD_Link.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAform_checkboxes_dropfromrows.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="398" column="26" lean-forward="true" selection-start-line="398" selection-start-column="26" selection-end-line="398" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/joblib/parallel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="583" column="8" selection-start-line="583" selection-start-column="8" selection-end-line="583" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAform_loaddataframe_tabs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="1322" lean-forward="true" selection-start-line="1322" selection-end-line="1322" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAform_seletfilesdeeplearning_radiobuttons.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="42" column="5" lean-forward="true" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAform_table_addclasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="24" column="25" selection-start-line="24" selection-start-column="25" selection-end-line="24" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DAform_table_label.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="579" lean-forward="true" selection-start-line="579" selection-end-line="579" />
+        <state relative-caret-position="631">
+          <caret line="129" selection-start-line="110" selection-end-line="129" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/form_table_label.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="58" lean-forward="true" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>

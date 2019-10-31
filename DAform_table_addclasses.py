@@ -181,12 +181,7 @@ class Ui_form_table_addclasses(object):
 
         vv = ((float(val) - float(val_min)) / float(val_max)) * 255.0
         # norm = matplotlib.colors.Normalize(val_min, val_max)
-        # print(norm)
-        # # print(norm(val))
         # col = cmap(norm(val))
-        # # print(val)
-        # print(col)
-        # print(vv)
         return vv
 
     def select_multicolumns(self):

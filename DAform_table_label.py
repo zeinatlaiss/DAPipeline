@@ -23,6 +23,8 @@ class Ui_form_table_label(object):
         self.tableWidget_tolabel = QtWidgets.QTableWidget(form_table_label)
         self.tableWidget_tolabel.setGeometry(QtCore.QRect(310, 90, 1221, 351))
         self.tableWidget_tolabel.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tableWidget_tolabel.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.tableWidget_tolabel.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectColumns)
         self.tableWidget_tolabel.setColumnCount(0)
         self.tableWidget_tolabel.setObjectName("tableWidget_tolabel")
         self.tableWidget_tolabel.setRowCount(0)
@@ -124,8 +126,7 @@ class Ui_form_table_label(object):
         self.comboBox_descriptors.currentTextChanged.connect(self.on_comboBoxdescriptors_changed)
         self.comboBox_plates.currentTextChanged.connect(self.on_comboBoxplates_changed)
         self.pushButton_selectfromfile.clicked.connect(self.on_selectfile_clicked)
-        # self.pushButton_labelallplates.clicked.connect(self.on_labelallplates_clicked)
-        # self.pushButton_apply.clicked.connect(self.on_apply_clicked)
+
         self.retranslateUi(form_table_label)
         QtCore.QMetaObject.connectSlotsByName(form_table_label)
 
@@ -568,6 +569,8 @@ class Ui_form_table_label(object):
     #         if well_nb in self.lcols:
     #             os.rename('D:\PYTHON CODE\DAPipeline\FinalFiles\\' + self.platename+'\\'+'_well_'+ i + '.dat',
     #                       'D:\PYTHON CODE\DAPipeline\FinalFiles\\'+ self.platename+'\\'+'_well_'+ self.wellname + '_label_'+ self.ui.labelname + '.dat')
+
+
 
 if __name__ == "__main__":
     import sys

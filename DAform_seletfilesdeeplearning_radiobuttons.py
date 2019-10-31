@@ -17,6 +17,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form_selectfiles(object):
 
     def openwindow_form_tablelabel(self):
+        print('first')
         self.window = QtWidgets.QMainWindow()
         self.ui = Ui_form_table_label()
         self.ui.setupUi(self.window)
@@ -50,15 +51,19 @@ class Ui_Form_selectfiles(object):
         self.pushButton_selectfiles.setText(_translate("Form_selectfiles", "Select"))
 
     def select_multicolumns(self):
+        print('3')
         list_col = []
         totalColumns = self.ui.tableWidget_tolabel.selectionModel().selectedColumns()
         for idx in totalColumns:
             column_name = self.ui.tableWidget_tolabel.model().headerData(idx.column(), QtCore.Qt.Horizontal,
                                                                            QtCore.Qt.DisplayRole)
             list_col.append(column_name)
+            if len(list_col) > 0:
+                print(list_col)
         return list_col
 
     def on_selectfiles_clicked(self):
+        print('select files')
         if self.radioButton_datfiles.isChecked() and not self.radioButton_pklfiles.isChecked():
             filter = ".dat(*.dat)"
             filename, _ = QFileDialog.getOpenFileNames(None, "Select .dat files",
@@ -82,9 +87,10 @@ class Ui_Form_selectfiles(object):
                     self.l_plates = list_plates
                     self.openwindow_form_tablelabel()
                     self.fill_tablewidget_fromdatfiles()
-                    self.listcols = self.select_multicolumns()
-                    print(self.listcols)
-                    data = Parallel(n_jobs=60, verbose=50, max_nbytes=None)(delayed(self.read_file)(i) for i in self.l_files)
+                    listcols = self.select_multicolumns()
+                    print(listcols)
+
+                    # data = Parallel(n_jobs=60, verbose=50, max_nbytes=None)(delayed(self.read_file)(i) for i in self.l_files)
                     # self.read_file()
                     # if len(self.listcols)== 0:
                     #     self.listcols = self.select_multicolumns()
@@ -94,9 +100,9 @@ class Ui_Form_selectfiles(object):
                     #     print('list of columns in apply clicked', self.listcols)
                     # if len(self.listcols) == 0:
                     #     print('The selection not finished yet')
-                    return self.l_plates, self.l_files, self.l_wells
-                else:
-                    print('no file has been selected\nEmpty lists')
+                    # return self.l_plates, self.l_files, self.l_wells
+                # else:
+                #     print('no file has been selected\nEmpty lists')
 
         # if not self.radioButton_datfiles.isChecked() and self.radioButton_pklfiles.isChecked():
         #     filter = ".pkl(*.pkl)"
@@ -124,6 +130,7 @@ class Ui_Form_selectfiles(object):
         #             print('no file has been selected\nEmpty lists')
 
     def fill_tablewidget_fromdatfiles(self):
+        print('2')
         cols = 24
         rows = 16
         ll1 = list(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'])
