@@ -12,18 +12,16 @@ import string
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_form_table_label(object):
     def setupUi(self, form_table_label):
         form_table_label.setObjectName("form_table_label")
         form_table_label.resize(1548, 552)
         self.tableWidget_tolabel = QtWidgets.QTableWidget(form_table_label)
-        self.tableWidget_tolabel.setGeometry(QtCore.QRect(310, 90, 1221, 351))
+        self.tableWidget_tolabel.setGeometry(QtCore.QRect(310, 100, 1221, 351))
         self.tableWidget_tolabel.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.tableWidget_tolabel.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.tableWidget_tolabel.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
         self.tableWidget_tolabel.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectColumns)
         self.tableWidget_tolabel.setColumnCount(0)
         self.tableWidget_tolabel.setObjectName("tableWidget_tolabel")
@@ -108,18 +106,6 @@ class Ui_form_table_label(object):
         self.lineEdit_class = QtWidgets.QLineEdit(form_table_label)
         self.lineEdit_class.setGeometry(QtCore.QRect(20, 170, 121, 21))
         self.lineEdit_class.setObjectName("lineEdit_class")
-
-        cols = 24
-        rows = 16
-        ll2 = list(
-            ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18',
-             '19', '20', '21', '22', '23', '24'])
-
-        l = list(string.ascii_uppercase)
-        self.tableWidget_tolabel.setRowCount(rows)
-        self.tableWidget_tolabel.setColumnCount(cols)
-        self.tableWidget_tolabel.setVerticalHeaderLabels(l)
-        self.tableWidget_tolabel.setHorizontalHeaderLabels(ll2)
 
         self.pushButton_selectfolder.clicked.connect(self.on_selectfolder_clicked)
         self.pushButton_labelallplates.clicked.connect(self.on_labelallplates_clicked)
@@ -449,7 +435,6 @@ class Ui_form_table_label(object):
                                 list_columnselected = self.select_multicolumns()
                                 print(list_columnselected)
 
-
     def on_comboBoxplates_changed(self):
         self.tableWidget_tolabel.clearContents()
         # self.comboBox_descriptors.setCurrentIndex(0)
@@ -569,8 +554,6 @@ class Ui_form_table_label(object):
     #         if well_nb in self.lcols:
     #             os.rename('D:\PYTHON CODE\DAPipeline\FinalFiles\\' + self.platename+'\\'+'_well_'+ i + '.dat',
     #                       'D:\PYTHON CODE\DAPipeline\FinalFiles\\'+ self.platename+'\\'+'_well_'+ self.wellname + '_label_'+ self.ui.labelname + '.dat')
-
-
 
 if __name__ == "__main__":
     import sys
